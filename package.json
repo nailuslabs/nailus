@@ -31,7 +31,6 @@
     "nailus": "cli/index.mjs"
   },
   "packageManager": "pnpm@10.28.0",
-  
   "workspaces": [
     "packages-engine/*",
     "packages-integrations/*",
@@ -45,7 +44,24 @@
     "test": "test"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "rollup -c -w",
+    "build": "rollup -c",
+    "format": "prettier --write .",
+    "postversion": "git push && git push --tags",
+    "prepublishOnly": "pnpm build"
+  },
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/esm/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/cjs/index.js"
+      },
+      "types": "./dist/index.d.ts"
+    }
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^29.0.0",
