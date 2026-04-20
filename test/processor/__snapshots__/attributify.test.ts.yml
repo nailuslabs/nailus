@@ -1,4 +1,4 @@
-Tools / Attributes for medium only and large only / css / 0: |-
+Attributify Mode / Attributes for medium only and large only / css / 0: |-
   [text~="lg"] {
     font-size: 1.125rem;
     line-height: 1.75rem;
@@ -54,7 +54,7 @@ Tools / Attributes for medium only and large only / css / 0: |-
       font-weight: 300;
     }
   }
-Tools / With Prefix and disable config / css / 0: |-
+Attributify Mode / With Prefix and disable config / css / 0: |-
   [w-text~="lg"] {
     font-size: 1.125rem;
     line-height: 1.75rem;
@@ -63,7 +63,7 @@ Tools / With Prefix and disable config / css / 0: |-
     --tw-text-opacity: 1;
     color: rgba(255, 255, 255, var(--tw-text-opacity));
   }
-Tools / With Prefix config / css / 0: |-
+Attributify Mode / With Prefix config / css / 0: |-
   [w-bg~="!red-500"] {
     --tw-bg-opacity: 1 !important;
     background-color: rgba(239, 68, 68, var(--tw-bg-opacity)) !important;
@@ -88,7 +88,7 @@ Tools / With Prefix config / css / 0: |-
       background-color: rgba(220, 38, 38, var(--tw-bg-opacity));
     }
   }
-Tools / With disable config / css / 0: |-
+Attributify Mode / With disable config / css / 0: |-
   [font~="sans"] {
     font-family: ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
   }
@@ -106,7 +106,7 @@ Tools / With disable config / css / 0: |-
       background-color: rgba(59, 130, 246, var(--tw-bg-opacity));
     }
   }
-Tools / With separator config / css / 0: |-
+Attributify Mode / With separator config / css / 0: |-
   .group:hover [group-hover~="bg-red-900"] {
     --tw-bg-opacity: 1;
     background-color: rgba(127, 29, 29, var(--tw-bg-opacity));
@@ -125,14 +125,14 @@ Tools / With separator config / css / 0: |-
       background-color: rgba(239, 68, 68, var(--tw-bg-opacity));
     }
   }
-Tools / attributify order / css / 0: |-
+Attributify Mode / attributify order / css / 0: |-
   [position~="fixed"] {
     position: fixed;
   }
   [position~="relative"] {
     position: relative;
   }
-'Tools / group-hover attributify #308 / css / 0': |-
+'Attributify Mode / group-hover attributify #308 / css / 0': |-
   .group:hover [group-hover~="bg-red-900"] {
     --tw-bg-opacity: 1;
     background-color: rgba(127, 29, 29, var(--tw-bg-opacity));
@@ -153,7 +153,7 @@ Tools / attributify order / css / 0: |-
       background-color: rgba(239, 68, 68, var(--tw-bg-opacity));
     }
   }
-Tools / important test / css / 0: |-
+Attributify Mode / important test / css / 0: |-
   [bg~="!red-500"] {
     --tw-bg-opacity: 1 !important;
     background-color: rgba(239, 68, 68, var(--tw-bg-opacity)) !important;
@@ -192,7 +192,7 @@ Tools / important test / css / 0: |-
       color: rgba(229, 231, 235, var(--tw-text-opacity)) !important;
     }
   }
-Tools / long variants test / css / 0: |-
+Attributify Mode / long variants test / css / 0: |-
   [focus-visible~="bg-red-900"]:focus-visible {
     --tw-bg-opacity: 1;
     background-color: rgba(127, 29, 29, var(--tw-bg-opacity));
@@ -239,7 +239,7 @@ Tools / long variants test / css / 0: |-
       background-color: rgba(239, 68, 68, var(--tw-bg-opacity));
     }
   }
-Tools / mix utility and variant / css / 0: |-
+Attributify Mode / mix utility and variant / css / 0: |-
   [p~="x-4"] {
     padding-left: 1rem;
     padding-right: 1rem;
@@ -285,7 +285,7 @@ Tools / mix utility and variant / css / 0: |-
       padding-right: 2rem;
     }
   }
-Tools / replace default with ~ / css / 0: |-
+Attributify Mode / replace default with ~ / css / 0: |-
   [border="~"] {
     border-width: 1px;
   }
@@ -368,7 +368,7 @@ Tools / replace default with ~ / css / 0: |-
     -webkit-backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
     backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
   }
-Tools / simple attributify / css / 0: |-
+Attributify Mode / simple attributify / css / 0: |-
   [bg~="green-400"] {
     --tw-bg-opacity: 1;
     background-color: rgba(52, 211, 153, var(--tw-bg-opacity));
@@ -392,8 +392,8 @@ Tools / simple attributify / css / 0: |-
       padding: 1rem;
     }
   }
-'Tools / variant not exist #320 / css / 0': ''
-Tools / with align utility / css / 0: |-
+'Attributify Mode / variant not exist #320 / css / 0': ''
+Attributify Mode / with align utility / css / 0: |-
   [align~="items-start"] {
     -webkit-box-align: start;
     -ms-flex-align: start;
@@ -437,7 +437,7 @@ Tools / with align utility / css / 0: |-
     -webkit-align-self: flex-end;
     align-self: flex-end;
   }
-Tools / with animate appearance cursor outline pointer resize select fill stroke sr blend / css / 0: |-
+Attributify Mode / with animate appearance cursor outline pointer resize select fill stroke sr blend / css / 0: |-
   [sr~="only"] {
     position: absolute;
     width: 1px;
@@ -644,7 +644,7 @@ Tools / with animate appearance cursor outline pointer resize select fill stroke
   [blend~="color-burn"] {
     mix-blend-mode: color-burn;
   }
-Tools / with backdrop utility / css / 0: |-
+Attributify Mode / with backdrop utility / css / 0: |-
   [backdrop~="default"] {
     --tw-backdrop-blur: var(--tw-empty,/*!*/ /*!*/);
     --tw-backdrop-brightness: var(--tw-empty,/*!*/ /*!*/);
@@ -713,7 +713,7 @@ Tools / with backdrop utility / css / 0: |-
   [backdrop~="sepia"] {
     --tw-backdrop-sepia: sepia(100%);
   }
-Tools / with backface utility / css / 0: |-
+Attributify Mode / with backface utility / css / 0: |-
   [backface~="visible"] {
     -webkit-backface-visibility: visible;
     backface-visibility: visible;
@@ -722,7 +722,7 @@ Tools / with backface utility / css / 0: |-
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
   }
-Tools / with bg utility / css / 0: |-
+Attributify Mode / with bg utility / css / 0: |-
   [bg~="fixed"] {
     background-attachment: fixed;
   }
@@ -816,7 +816,7 @@ Tools / with bg utility / css / 0: |-
   [bg~="blend-hard-light"] {
     background-blend-mode: hard-light;
   }
-Tools / with border utility / css / 0: |-
+Attributify Mode / with border utility / css / 0: |-
   [border~="collapse"] {
     border-collapse: collapse;
   }
@@ -867,7 +867,7 @@ Tools / with border utility / css / 0: |-
   [border~="t-0"] {
     border-top-width: 0px;
   }
-Tools / with box utility / css / 0: |-
+Attributify Mode / with box utility / css / 0: |-
   [box~="decoration-slice"] {
     -webkit-box-decoration-break: slice;
     box-decoration-break: slice;
@@ -894,7 +894,7 @@ Tools / with box utility / css / 0: |-
     --tw-shadow-color: rgba(229, 231, 235, 1);
     --tw-shadow: var(--tw-shadow-colored);
   }
-Tools / with caret utility / css / 0: |-
+Attributify Mode / with caret utility / css / 0: |-
   [caret~="black"] {
     --tw-caret-opacity: 1;
     caret-color: rgba(0, 0, 0, var(--tw-caret-opacity));
@@ -910,7 +910,7 @@ Tools / with caret utility / css / 0: |-
   [caret~="opacity-50"] {
     --tw-caret-opacity: 0.5;
   }
-Tools / with container utility / css / 0: |-
+Attributify Mode / with container utility / css / 0: |-
   [container~="default"] {
     width: 100%;
   }
@@ -967,7 +967,7 @@ Tools / with container utility / css / 0: |-
       max-width: 1536px;
     }
   }
-Tools / with decoration utility / css / 0: |-
+Attributify Mode / with decoration utility / css / 0: |-
   [decoration~="solid"] {
     -webkit-text-decoration-style: solid;
     text-decoration-style: solid;
@@ -994,7 +994,7 @@ Tools / with decoration utility / css / 0: |-
     -webkit-text-decoration-color: rgba(107, 114, 128, var(--tw-text-decoration-opacity));
     text-decoration-color: rgba(107, 114, 128, var(--tw-text-decoration-opacity));
   }
-Tools / with display utility / css / 0: |-
+Attributify Mode / with display utility / css / 0: |-
   [display~="block"] {
     display: block;
   }
@@ -1035,7 +1035,7 @@ Tools / with display utility / css / 0: |-
       display: none;
     }
   }
-Tools / with divide utility / css / 0: |-
+Attributify Mode / with divide utility / css / 0: |-
   [divide~="y-2"] > :not([hidden]) ~ :not([hidden]) {
     --tw-divide-y-reverse: 0;
     border-top-width: calc(2px * calc(1 - var(--tw-divide-y-reverse)));
@@ -1071,7 +1071,7 @@ Tools / with divide utility / css / 0: |-
   [divide~="opacity-50"] > :not([hidden]) ~ :not([hidden]) {
     --tw-divide-opacity: 0.5;
   }
-Tools / with filter utility / css / 0: |-
+Attributify Mode / with filter utility / css / 0: |-
   [filter~="default"] {
     --tw-blur: var(--tw-empty,/*!*/ /*!*/);
     --tw-brightness: var(--tw-empty,/*!*/ /*!*/);
@@ -1143,7 +1143,7 @@ Tools / with filter utility / css / 0: |-
   [filter~="sepia"] {
     --tw-sepia: sepia(100%);
   }
-Tools / with flex utility / css / 0: |-
+Attributify Mode / with flex utility / css / 0: |-
   [flex~="default"] {
     display: -webkit-box;
     display: -ms-flexbox;
@@ -1261,7 +1261,7 @@ Tools / with flex utility / css / 0: |-
     grid-row-gap: 0.5rem;
     row-gap: 0.5rem;
   }
-Tools / with font utility / css / 0: |-
+Attributify Mode / with font utility / css / 0: |-
   [font~="sans"] {
     font-family: ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
   }
@@ -1376,7 +1376,7 @@ Tools / with font utility / css / 0: |-
   [font~="tracking-wider"] {
     letter-spacing: 0.05em;
   }
-Tools / with gradient utility / css / 0: |-
+Attributify Mode / with gradient utility / css / 0: |-
   [gradient~="none"] {
     background-image: none;
   }
@@ -1400,7 +1400,7 @@ Tools / with gradient utility / css / 0: |-
   [gradient~="to-pink-500"] {
     --tw-gradient-to: rgba(236, 72, 153, var(--tw-to-opacity, 1));
   }
-Tools / with grid utility / css / 0: |-
+Attributify Mode / with grid utility / css / 0: |-
   [grid~="default"] {
     display: -ms-grid;
     display: grid;
@@ -1482,7 +1482,7 @@ Tools / with grid utility / css / 0: |-
     -ms-grid-row-span: span 2 / span 2;
     grid-row: span 2 / span 2;
   }
-Tools / with image utility / css / 0: |-
+Attributify Mode / with image utility / css / 0: |-
   [image~="render-auto"] {
     image-rendering: auto;
   }
@@ -1496,7 +1496,7 @@ Tools / with image utility / css / 0: |-
   [image~="render-edge"] {
     image-rendering: crisp-edges;
   }
-Tools / with indent tab hyphens hyphens / css / 0: |-
+Attributify Mode / with indent tab hyphens hyphens / css / 0: |-
   [tab~="~"] {
     -moz-tab-size: 4;
     -o-tab-size: 4;
@@ -1544,14 +1544,14 @@ Tools / with indent tab hyphens hyphens / css / 0: |-
     -ms-hyphens: auto;
     hyphens: auto;
   }
-Tools / with isolation utility / css / 0: |-
+Attributify Mode / with isolation utility / css / 0: |-
   [isolation~="isolate"] {
     isolation: isolate;
   }
   [isolation~="auto"] {
     isolation: auto;
   }
-Tools / with justify utility / css / 0: |-
+Attributify Mode / with justify utility / css / 0: |-
   [justify~="items-start"] {
     justify-items: start;
   }
@@ -1609,7 +1609,7 @@ Tools / with justify utility / css / 0: |-
     -ms-grid-column-align: center;
     justify-self: center;
   }
-Tools / with list utility / css / 0: |-
+Attributify Mode / with list utility / css / 0: |-
   [list~="inside"] {
     list-style-position: inside;
   }
@@ -1625,7 +1625,7 @@ Tools / with list utility / css / 0: |-
   [list~="decimal"] {
     list-style-type: decimal;
   }
-Tools / with margin padding space_between / css / 0: |-
+Attributify Mode / with margin padding space_between / css / 0: |-
   [space~="y-2"] > :not([hidden]) ~ :not([hidden]) {
     --tw-space-y-reverse: 0;
     margin-top: calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));
@@ -1669,7 +1669,7 @@ Tools / with margin padding space_between / css / 0: |-
   [p~="r-px"] {
     padding-right: 1px;
   }
-Tools / with negative utility / css / 0: |-
+Attributify Mode / with negative utility / css / 0: |-
   [m~="-x-4"] {
     margin-left: -1rem;
     margin-right: -1rem;
@@ -1686,7 +1686,7 @@ Tools / with negative utility / css / 0: |-
       margin-bottom: 0.5rem;
     }
   }
-Tools / with object utility / css / 0: |-
+Attributify Mode / with object utility / css / 0: |-
   [object~="contain"] {
     -o-object-fit: contain;
     object-fit: contain;
@@ -1723,7 +1723,7 @@ Tools / with object utility / css / 0: |-
     -o-object-position: right top;
     object-position: right top;
   }
-Tools / with overflow utility / css / 0: |-
+Attributify Mode / with overflow utility / css / 0: |-
   [overflow~="auto"] {
     overflow: auto;
   }
@@ -1769,7 +1769,7 @@ Tools / with overflow utility / css / 0: |-
   [overflow~="y-scroll"] {
     overflow-y: scroll;
   }
-Tools / with overscroll utility / css / 0: |-
+Attributify Mode / with overscroll utility / css / 0: |-
   [overscroll~="auto"] {
     overscroll-behavior: auto;
     -ms-scroll-chaining: chained;
@@ -1800,7 +1800,7 @@ Tools / with overscroll utility / css / 0: |-
   [overscroll~="x-none"] {
     overscroll-behavior-x: none;
   }
-Tools / with perspect utility / css / 0: |-
+Attributify Mode / with perspect utility / css / 0: |-
   [perspect~="none"] {
     -webkit-perspective: none;
     perspective: none;
@@ -1817,7 +1817,7 @@ Tools / with perspect utility / css / 0: |-
     -webkit-perspective-origin: top;
     perspective-origin: top;
   }
-Tools / with place utility / css / 0: |-
+Attributify Mode / with place utility / css / 0: |-
   [place~="items-start"] {
     place-items: start;
   }
@@ -1860,7 +1860,7 @@ Tools / with place utility / css / 0: |-
     -ms-grid-column-align: center;
     place-self: center;
   }
-Tools / with placeholder utility / css / 0: |-
+Attributify Mode / with placeholder utility / css / 0: |-
   [placeholder~="transparent"]::-webkit-input-placeholder {
     color: transparent;
   }
@@ -1911,7 +1911,7 @@ Tools / with placeholder utility / css / 0: |-
   [placeholder~="opacity-50"]::placeholder {
     --tw-placeholder-opacity: 0.5;
   }
-Tools / with pos utility / css / 0: |-
+Attributify Mode / with pos utility / css / 0: |-
   [pos~="order-1"] {
     -webkit-box-ordinal-group: 2;
     -webkit-order: 1;
@@ -1993,7 +1993,7 @@ Tools / with pos utility / css / 0: |-
   [pos~="isolation-auto"] {
     isolation: auto;
   }
-Tools / with position utility / css / 0: |-
+Attributify Mode / with position utility / css / 0: |-
   [position~="absolute"] {
     position: absolute;
   }
@@ -2075,7 +2075,7 @@ Tools / with position utility / css / 0: |-
   [position~="isolation-auto"] {
     isolation: auto;
   }
-Tools / with ring utility / css / 0: |-
+Attributify Mode / with ring utility / css / 0: |-
   [ring~="default"] {
     --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
     --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(3px + var(--tw-ring-offset-width)) var(--tw-ring-color);
@@ -2123,7 +2123,7 @@ Tools / with ring utility / css / 0: |-
   [ring~="opacity-50"] {
     --tw-ring-opacity: 0.5;
   }
-Tools / with shadow utility / css / 0: |-
+Attributify Mode / with shadow utility / css / 0: |-
   [shadow~="default"] {
     --tw-shadow: 0 1px 3px 0 rgb(0 0 0/0.1),0 1px 2px -1px rgb(0 0 0/0.1);
     --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color),0 1px 2px -1px var(--tw-shadow-color);
@@ -2158,7 +2158,7 @@ Tools / with shadow utility / css / 0: |-
     --tw-shadow-color: rgba(156, 163, 175, 1);
     --tw-shadow: var(--tw-shadow-colored);
   }
-Tools / with svg utility / css / 0: |-
+Attributify Mode / with svg utility / css / 0: |-
   [svg~="fill-current"] {
     fill: currentColor;
   }
@@ -2179,7 +2179,7 @@ Tools / with svg utility / css / 0: |-
   [svg~="stroke-4"] {
     stroke-width: 4;
   }
-Tools / with table utility / css / 0: |-
+Attributify Mode / with table utility / css / 0: |-
   [table~="caption-top"] {
     caption-side: top;
   }
@@ -2228,7 +2228,7 @@ Tools / with table utility / css / 0: |-
   [table~="fixed"] {
     table-layout: fixed;
   }
-Tools / with text utility / css / 0: |-
+Attributify Mode / with text utility / css / 0: |-
   [text~="xs"] {
     font-size: 0.75rem;
     line-height: 1rem;
@@ -2536,7 +2536,7 @@ Tools / with text utility / css / 0: |-
     -ms-hyphens: auto;
     hyphens: auto;
   }
-Tools / with transform utility / css / 0: |-
+Attributify Mode / with transform utility / css / 0: |-
   [transform~="default"] {
     --tw-translate-x: 0;
     --tw-translate-y: 0;
@@ -2658,7 +2658,7 @@ Tools / with transform utility / css / 0: |-
     -webkit-perspective-origin: top;
     perspective-origin: top;
   }
-Tools / with transition utility / css / 0: |-
+Attributify Mode / with transition utility / css / 0: |-
   [transition~="none"] {
     -webkit-transition-property: none;
     -o-transition-property: none;
@@ -2760,7 +2760,7 @@ Tools / with transition utility / css / 0: |-
     -o-transition-delay: 40ms;
     transition-delay: 40ms;
   }
-Tools / with underline utility / css / 0: |-
+Attributify Mode / with underline utility / css / 0: |-
   [underline~="solid"] {
     -webkit-text-decoration-style: solid;
     text-decoration-style: solid;
@@ -2819,7 +2819,7 @@ Tools / with underline utility / css / 0: |-
   [underline~="none"] {
     text-decoration: none;
   }
-Tools / with variants / css / 0: |-
+Attributify Mode / with variants / css / 0: |-
   @media (min-width: 640px) {
     [sm~="bg-red-500"] {
       --tw-bg-opacity: 1;
@@ -2845,7 +2845,7 @@ Tools / with variants / css / 0: |-
       color: rgba(239, 68, 68, var(--tw-text-opacity));
     }
   }
-Tools / with variants and utility / css / 0: |-
+Attributify Mode / with variants and utility / css / 0: |-
   [hover-text~="sm"]:hover {
     font-size: 0.875rem;
     line-height: 1.25rem;
@@ -2888,7 +2888,7 @@ Tools / with variants and utility / css / 0: |-
       color: rgba(252, 165, 165, var(--tw-text-opacity));
     }
   }
-Tools / with width and height utility / css / 0: |-
+Attributify Mode / with width and height utility / css / 0: |-
   [h~="auto"] {
     height: auto;
   }
@@ -3006,7 +3006,7 @@ Tools / with width and height utility / css / 0: |-
       width: 100vw;
     }
   }
-Tools / with writing utility / css / 0: |-
+Attributify Mode / with writing utility / css / 0: |-
   [write~="normal"] {
     -webkit-writing-mode: horizontal-tb;
     -ms-writing-mode: lr-tb;
@@ -3034,7 +3034,7 @@ Tools / with writing utility / css / 0: |-
     -webkit-text-orientation: sideways;
     text-orientation: sideways;
   }
-Tools / with z-index width min-width max-width height min-height max-height opacity / css / 0: |-
+Attributify Mode / with z-index width min-width max-width height min-height max-height opacity / css / 0: |-
   [h~="full"] {
     height: 100%;
   }

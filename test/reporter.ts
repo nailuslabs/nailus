@@ -1,4 +1,5 @@
 import { DisplayProcessor, SpecReporter } from 'jasmine-spec-reporter';
+import type Jasmine from 'jasmine';
 
 class CustomProcessor extends DisplayProcessor {
   public displayJasmineStarted(): string {
@@ -6,13 +7,15 @@ class CustomProcessor extends DisplayProcessor {
   }
 }
 
-jasmine.getEnv().clearReporters();
-jasmine.getEnv().addReporter(
-  new SpecReporter({
-    spec: {
-      displayPending: true,
-      displayDuration: true,
-    },
-    customProcessors: [CustomProcessor],
-  })
-);
+export function setupReporter(jasmine: Jasmine): void {
+  jasmine.clearReporters();
+  jasmine.addReporter(
+    new SpecReporter({
+      spec: {
+        displayPending: true,
+        displayDuration: true,
+      },
+      customProcessors: [CustomProcessor],
+    })
+  );
+}

@@ -1,4 +1,4 @@
-Tools / add completions / completions / 0: |-
+aspect ratio plugin / add completions / completions / 0: |-
   {
     "aspectRatio": [
       "aspect-w-{float}",
@@ -6,7 +6,7 @@ Tools / add completions / completions / 0: |-
       "aspect-{fraction}"
     ]
   }
-Tools / interpret test / aspect-ratio base / 0: |-
+aspect ratio plugin / interpret test / aspect-ratio base / 0: |-
   .aspect-none {
     position: static;
     padding-bottom: 0;
@@ -59,7 +59,7 @@ Tools / interpret test / aspect-ratio base / 0: |-
     bottom: 0;
     left: 0;
   }
-Tools / works with prefix / aspect-ratio with prefix / 0: |-
+aspect ratio plugin / works with prefix / aspect-ratio with prefix / 0: |-
   .nailus-aspect-none {
     position: static;
     padding-bottom: 0;

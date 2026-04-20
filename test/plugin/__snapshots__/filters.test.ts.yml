@@ -1,4 +1,4 @@
-Tools / add completions / completions / 0: |-
+filter plugin / add completions / completions / 0: |-
   {
     "filter": [
       "blur-{static}"
@@ -10,7 +10,7 @@ Tools / add completions / completions / 0: |-
       "blur-{static}"
     ]
   }
-Tools / interpret test / css / 0: |-
+filter plugin / interpret test / css / 0: |-
   .filter-none {
     -webkit-filter: none;
     filter: none;

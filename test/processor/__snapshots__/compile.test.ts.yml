@@ -1,4 +1,4 @@
-Tools / compile / css / 0: |-
+Compilation Mode / compile / css / 0: |-
   .nailus-sarsyj {
     --tw-bg-opacity: 1;
     background-color: rgba(209, 213, 219, var(--tw-bg-opacity));
@@ -21,12 +21,7 @@ Tools / compile / css / 0: |-
       line-height: 1.75rem;
     }
   }
-Tools / compile important / important / 0: |-
-  .nailus-17we48r {
-    font-weight: 700;
-    --tw-text-opacity: 1 !important;
-    color: rgba(110, 231, 183, var(--tw-text-opacity)) !important;
-  }
+Compilation Mode / compile important / important / 0: |-
   .nailus-17we48r:hover {
     --tw-bg-opacity: 1 !important;
     background-color: rgba(239, 68, 68, var(--tw-bg-opacity)) !important;
@@ -36,7 +31,12 @@ Tools / compile important / important / 0: |-
     border-width: 1px !important;
     float: right;
   }
-Tools / compile order / css / 0: |-
+  .nailus-17we48r {
+    font-weight: 700;
+    --tw-text-opacity: 1 !important;
+    color: rgba(110, 231, 183, var(--tw-text-opacity)) !important;
+  }
+Compilation Mode / compile order / css / 0: |-
   .nailus-1kiu5fv {
     position: relative;
     position: fixed;

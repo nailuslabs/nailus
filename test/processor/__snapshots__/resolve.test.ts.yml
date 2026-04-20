@@ -1,4 +1,4 @@
-Tools / get corePlugins / list / 0: |-
+Resolve Tests / get corePlugins / list / 0: |-
   [
     "columns",
     "container",
@@ -176,12 +176,12 @@ Tools / get corePlugins / list / 0: |-
     "scrollBehavior",
     "accentColor"
   ]
-Tools / get corePlugins / list2 / 1: |-
+Resolve Tests / get corePlugins / list2 / 1: |-
   [
     "container",
     "cursor"
   ]
-Tools / get corePlugins / list3 / 2: |-
+Resolve Tests / get corePlugins / list3 / 2: |-
   [
     "columns",
     "space",
@@ -357,7 +357,7 @@ Tools / get corePlugins / list3 / 2: |-
     "scrollBehavior",
     "accentColor"
   ]
-Tools / resolve dynamic utilities / with-plugins / 1: |-
+Resolve Tests / resolve dynamic utilities / with-plugins / 1: |-
   [
     "columns",
     "container",
@@ -450,7 +450,7 @@ Tools / resolve dynamic utilities / with-plugins / 1: |-
     "line-clamp",
     "prose"
   ]
-Tools / resolve dynamic utilities / without-plugins / 0: |-
+Resolve Tests / resolve dynamic utilities / without-plugins / 0: |-
   [
     "columns",
     "container",

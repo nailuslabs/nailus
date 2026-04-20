@@ -18,8 +18,8 @@
     "typecheck": "tsc -p ./src --noEmit",
     "build": "rollup -c && pnpm tsd",
     "build:prod": "cross-env NODE_ENV=production pnpm build",
-    "test": "sucrase-node test/run.ts",
-    "test:update": "cross-env UPDATE_SNAPSHOT=true sucrase-node test/run.ts",
+    "test": "node --import ./test/register-loader.mjs ./test/run.ts",
+    "test:update": "cross-env UPDATE_SNAPSHOT=true node --import ./test/register-loader.mjs ./test/run.ts",
     "test:dts": "tsc -p ./test/dts --noEmit",
     "coverage": "nyc --nycrc-path=.nycrc.json pnpm test",
     "release": "bumpp --tag --commit --push"
@@ -27,70 +27,87 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
+      "types": "./index.d.ts",
       "import": "./index.mjs",
       "require": "./index.js"
     },
     "./colors": {
+      "types": "./colors.d.ts",
       "import": "./colors.mjs",
       "require": "./colors.js"
     },
     "./defaultConfig": {
+      "types": "./defaultConfig.d.ts",
       "import": "./defaultConfig.mjs",
       "require": "./defaultConfig.js"
     },
     "./defaultTheme": {
+      "types": "./defaultTheme.d.ts",
       "import": "./defaultTheme.mjs",
       "require": "./defaultTheme.js"
     },
     "./config": {
+      "types": "./config/index.d.ts",
       "import": "./config/index.mjs",
       "require": "./config/index.js"
     },
     "./lib": {
+      "types": "./lib/index.d.ts",
       "import": "./lib/index.mjs",
       "require": "./lib/index.js"
     },
     "./plugin": {
+      "types": "./plugin/index.d.ts",
       "import": "./plugin/index.mjs",
       "require": "./plugin/index.js"
     },
     "./plugin/aspect-ratio": {
+      "types": "./plugin/aspect-ratio/index.d.ts",
       "import": "./plugin/aspect-ratio/index.js",
       "require": "./plugin/aspect-ratio/index.js"
     },
     "./plugin/filters": {
+      "types": "./plugin/filters/index.d.ts",
       "import": "./plugin/filters/index.js",
       "require": "./plugin/filters/index.js"
     },
     "./plugin/forms": {
+      "types": "./plugin/forms/index.d.ts",
       "import": "./plugin/forms/index.js",
       "require": "./plugin/forms/index.js"
     },
     "./plugin/line-clamp": {
+      "types": "./plugin/line-clamp/index.d.ts",
       "import": "./plugin/line-clamp/index.js",
       "require": "./plugin/line-clamp/index.js"
     },
     "./plugin/typography": {
+      "types": "./plugin/typography/index.d.ts",
       "import": "./plugin/typography/index.js",
       "require": "./plugin/typography/index.js"
     },
     "./plugin/scroll-snap": {
+      "types": "./plugin/scroll-snap/index.d.ts",
       "import": "./plugin/scroll-snap/index.js",
       "require": "./plugin/scroll-snap/index.js"
     },
     "./helpers": {
+      "types": "./helpers/index.d.ts",
       "import": "./helpers/index.mjs",
       "require": "./helpers/index.js"
     },
     "./utils": {
+      "types": "./utils/index.d.ts",
       "import": "./utils/index.mjs",
       "require": "./utils/index.js"
     },
     "./utils/parser": {
+      "types": "./utils/parser/index.d.ts",
       "import": "./utils/parser/index.mjs",
       "require": "./utils/parser/index.js"
     },
     "./utils/style": {
+      "types": "./utils/style/index.d.ts",
       "import": "./utils/style/index.mjs",
       "require": "./utils/style/index.js"
     }

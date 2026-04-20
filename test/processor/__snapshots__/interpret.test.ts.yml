@@ -1,4 +1,4 @@
-Tools / generated correct css for space-x-reverse / css / 0: |-
+Interpretation Mode / generated correct css for space-x-reverse / css / 0: |-
   .space-y-4 > :not([hidden]) ~ :not([hidden]) {
     --tw-space-y-reverse: 0;
     margin-top: calc(1rem * calc(1 - var(--tw-space-y-reverse)));
@@ -7,14 +7,14 @@ Tools / generated correct css for space-x-reverse / css / 0: |-
   .space-x-reverse > :not([hidden]) ~ :not([hidden]) {
     --tw-space-x-reverse: 1;
   }
-Tools / interpert order / css / 0: |-
+Interpretation Mode / interpert order / css / 0: |-
   .fixed {
     position: fixed;
   }
   .relative {
     position: relative;
   }
-Tools / interpret / css / 1: |-
+Interpretation Mode / interpret / css / 1: |-
   .bg-cool-gray-300 {
     --tw-bg-opacity: 1;
     background-color: rgba(209, 213, 219, var(--tw-bg-opacity));
@@ -44,7 +44,7 @@ Tools / interpret / css / 1: |-
       line-height: 1.75rem;
     }
   }
-Tools / interpret / success / 0: |-
+Interpretation Mode / interpret / success / 0: |-
   [
     "font-bold",
     "text-green-300",
@@ -54,7 +54,7 @@ Tools / interpret / success / 0: |-
     "bg-cool-gray-300",
     "bg-hex-fff"
   ]
-Tools / interpret alias / css / 0: |-
+Interpretation Mode / interpret alias / css / 0: |-
   .bg-blue-400 {
     --tw-bg-opacity: 1;
     background-color: rgba(96, 165, 250, var(--tw-bg-opacity));
@@ -94,7 +94,7 @@ Tools / interpret alias / css / 0: |-
       align-items: center;
     }
   }
-Tools / interpret duplicated important / duplicated important / 0: |-
+Interpretation Mode / interpret duplicated important / duplicated important / 0: |-
   .\!hover\:bg-red-500:hover {
     --tw-bg-opacity: 1 !important;
     background-color: rgba(239, 68, 68, var(--tw-bg-opacity)) !important;
@@ -115,7 +115,7 @@ Tools / interpret duplicated important / duplicated important / 0: |-
     --tw-text-opacity: 1 !important;
     color: rgba(110, 231, 183, var(--tw-text-opacity)) !important;
   }
-Tools / interpret fractions for padding and margin / css / 0: |-
+Interpretation Mode / interpret fractions for padding and margin / css / 0: |-
   .m-4\/5 {
     margin: 80%;
   }
@@ -128,7 +128,7 @@ Tools / interpret fractions for padding and margin / css / 0: |-
   .p-1\/100 {
     padding: 1%;
   }
-Tools / interpret important / important / 0: |-
+Interpretation Mode / interpret important / important / 0: |-
   .\!hover\:bg-red-500:hover {
     --tw-bg-opacity: 1 !important;
     background-color: rgba(239, 68, 68, var(--tw-bg-opacity)) !important;
@@ -152,7 +152,7 @@ Tools / interpret important / important / 0: |-
     --tw-text-opacity: 1 !important;
     color: rgba(110, 231, 183, var(--tw-text-opacity)) !important;
   }
-Tools / interpret screen variants / screen variants / 0: |-
+Interpretation Mode / interpret screen variants / screen variants / 0: |-
   @media (min-width: 768px) {
     .md\:p-1 {
       padding: 0.25rem;
@@ -168,7 +168,7 @@ Tools / interpret screen variants / screen variants / 0: |-
       padding: 0.5rem;
     }
   }
-Tools / interpret square brackets / square brackets / 0: |-
+Interpretation Mode / interpret square brackets / square brackets / 0: |-
   .space-x-\[20cm\] > :not([hidden]) ~ :not([hidden]) {
     --tw-space-x-reverse: 0;
     margin-right: calc(20cm * var(--tw-space-x-reverse));
@@ -586,7 +586,7 @@ Tools / interpret square brackets / square brackets / 0: |-
   .backdrop-sepia-\[0\.38\] {
     --tw-backdrop-sepia: sepia(0.38);
   }
-Tools / interpret square brackets grid / square brackets grids / 0: |-
+Interpretation Mode / interpret square brackets grid / square brackets grids / 0: |-
   .grid-cols-\[1fr\2c 700px\2c 2fr\] {
     grid-template-columns: 1fr 700px 2fr;
   }
@@ -602,12 +602,12 @@ Tools / interpret square brackets grid / square brackets grids / 0: |-
   .grid-rows-\[200px_minmax\(900px\2c _1fr\)_100px\] {
     grid-template-rows: 200px minmax(900px, 1fr) 100px;
   }
-Tools / interpret square brackets grids with function / square brackets grids / 0: >-
+Interpretation Mode / interpret square brackets grids with function / square brackets grids / 0: >-
   .grid-cols-\[minmax\(200px\2c 2fr\)\2c minmax\(300px\2c 3fr\)\2c
   minmax\(100px\2c 1fr\)\] {
     grid-template-columns: minmax(200px,2fr) minmax(300px,3fr) minmax(100px,1fr);
   }
-Tools / min-bracket / css / 0: |-
+Interpretation Mode / min-bracket / css / 0: |-
   .max-h-\[100vh\] {
     max-height: 100vh;
   }

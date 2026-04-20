@@ -1,4 +1,4 @@
-Tools / simple syntax / ast / 0: |-
+Parser / simple syntax / ast / 0: |-
   {
     "block": {
       "statement_list": [

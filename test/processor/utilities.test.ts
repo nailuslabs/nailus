@@ -72,7 +72,7 @@ describe('Utilities', () => {
     expect(processor.interpret('sm:animate-ping').styleSheet.build()).toMatchSnapshot('sm:animate-ping');
   });
 
-  it('animation test', () => {
+  it('animation test with custom theme extension', () => {
     const processor = new Processor({
       theme: {
         extend: {

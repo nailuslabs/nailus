@@ -1,4 +1,4 @@
-Tools / parse / class parser / 0: |-
+ClassParser / parse / class parser / 0: |-
   [
     {
       "raw": "font-bold",
@@ -219,7 +219,7 @@ Tools / parse / class parser / 0: |-
       "important": false
     }
   ]
-Tools / parse alias / parse alias / 0: |-
+ClassParser / parse alias / parse alias / 0: |-
   [
     {
       "raw": "font-bold",
@@ -270,7 +270,7 @@ Tools / parse alias / parse alias / 0: |-
       "important": false
     }
   ]
-Tools / parse bad class / bad classes / 0: |-
+ClassParser / parse bad class / bad classes / 0: |-
   [
     {
       "raw": "css",
@@ -345,7 +345,7 @@ Tools / parse bad class / bad classes / 0: |-
       "important": false
     }
   ]
-Tools / parse bad class with bracket / bad bracket / 0: |-
+ClassParser / parse bad class with bracket / bad bracket / 0: |-
   [
     {
       "raw": "xyz()",
@@ -411,7 +411,7 @@ Tools / parse bad class with bracket / bad bracket / 0: |-
       "important": false
     }
   ]
-Tools / parse bad class with half bracket / bad half bracket / 0: |-
+ClassParser / parse bad class with half bracket / bad half bracket / 0: |-
   [
     {
       "raw": "abc(",
@@ -441,7 +441,7 @@ Tools / parse bad class with half bracket / bad half bracket / 0: |-
       "important": false
     }
   ]
-Tools / parse bad class with quotes / bad classes / 0: |-
+ClassParser / parse bad class with quotes / bad classes / 0: |-
   [
     {
       "raw": "${",
@@ -507,7 +507,7 @@ Tools / parse bad class with quotes / bad classes / 0: |-
       "important": false
     }
   ]
-Tools / parse function with parameter deconstruction / jsx function component / 0: |-
+ClassParser / parse function with parameter deconstruction / jsx function component / 0: |-
   [
     {
       "raw": "function",
@@ -600,7 +600,7 @@ Tools / parse function with parameter deconstruction / jsx function component / 
       "important": false
     }
   ]
-Tools / parse important / parse important / 0: |-
+ClassParser / parse important / parse important / 0: |-
   [
     {
       "raw": "!text-green-300",

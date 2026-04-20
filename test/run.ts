@@ -2,16 +2,16 @@
 /// <reference path="../node_modules/@types/jasmine/index.d.ts" />
 
 import Jasmine from 'jasmine';
-import { addHook } from 'pirates';
-import { resolve } from 'path';
+import { fileURLToPath } from 'node:url';
 import { compareDiff, compareSnapshot, context, finishSnapshots } from './snapshot';
-
-addHook(
-  (code, ) => code.replace(/(?<=toMatchSnapshot\([^,)]+)\)/g, ', __filename)'),
-  { exts: ['.ts'], ignoreNodeModules: true }
-);
+import { setupReporter } from './reporter';
 
 const jasmine = new Jasmine(undefined);
+const configPath = fileURLToPath(new URL('../jasmine.json', import.meta.url));
+const files = process.argv.slice(2);
+
+jasmine.exitOnCompletion = false;
+const suiteStack: string[] = [];
 
 beforeEach(() => {
   jasmine.addMatchers({
@@ -30,24 +30,29 @@ beforeEach(() => {
   });
 });
 
-const _describe = jasmine.env.describe.bind(jasmine.env);
-const _it = jasmine.env.it.bind(jasmine.env);
-jasmine.env.describe = (msg: string, fn: () => void) => _describe(msg, () => {
-  context.describe = msg;
-  context.count = 0;
-  return fn();
+jasmine.loadConfigFile(configPath);
+setupReporter(jasmine);
+jasmine.addReporter({
+  suiteStarted(result) {
+    suiteStack.push(result.description);
+  },
+  suiteDone() {
+    suiteStack.pop();
+  },
+  specStarted(result) {
+    context.describe = suiteStack.join(' / ');
+    context.it = result.description;
+    context.count = 0;
+  },
 });
-jasmine.env.it = (msg: string, fn: () => void) => _it(msg, () => {
-  context.it = msg;
-  context.count = 0;
-  return fn();
-});
-
-jasmine.loadConfigFile(resolve(__dirname, '..', 'jasmine.json'));
 jasmine.configureDefaultReporter({ showColors: true });
-jasmine.loadConfig(resolve(__dirname, '..', 'jasmine.json'));
-jasmine.onComplete((passed) => {
+
+try {
+  const result = await jasmine.execute(files.length > 0 ? files : undefined);
+  const passed = result.overallStatus === 'passed';
   finishSnapshots(passed);
-  if (!passed) setTimeout(() => process.exit(1));
-});
-jasmine.execute();
+  if (!passed) process.exitCode = 1;
+} catch (error) {
+  finishSnapshots(false);
+  throw error;
+}

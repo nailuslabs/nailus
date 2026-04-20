@@ -1,10 +1,10 @@
-Tools / !important leak out to subsequent style rules / css / 0: |-
+CSSParser / !important leak out to subsequent style rules / css / 0: |-
   .button {
     --tw-text-opacity: 1 !important;
     color: rgba(239, 68, 68, var(--tw-text-opacity)) !important;
     color: green;
   }
-Tools / @apply twice / css / 0: |-
+CSSParser / @apply twice / css / 0: |-
   .rounded-box {
     border-radius: var(--rounded-box, 1rem);
   }
@@ -14,20 +14,20 @@ Tools / @apply twice / css / 0: |-
   .artboard {
     border-radius: var(--rounded-box, 1rem);
   }
-Tools / @import url / css / 0: >-
+CSSParser / @import url / css / 0: >-
   @import
   url('https://fonts.googleapis.com/css2?family=Barlow:wght@400;500&display=swap');
 
   #app {
     color: red;
   }
-Tools / AtRule wrap properties / css / 0: |-
+CSSParser / AtRule wrap properties / css / 0: |-
   @font-face {
     font-family: Proxima Nova;
     font-weight: 400;
     src: url(/fonts/proxima-nova/400-regular.woff) format("woff");
   }
-Tools / Deep Nesting / css / 0: |-
+CSSParser / Deep Nesting / css / 0: |-
   #header {
     color: black;
   }
@@ -41,7 +41,7 @@ Tools / Deep Nesting / css / 0: |-
   #header .navigation .logo .abc {
     color: white;
   }
-Tools / Directives and Functions / css / 0: |-
+CSSParser / Directives and Functions / css / 0: |-
   @media (min-width: 640px) {
     .test {
       padding-top: 1px;
@@ -99,7 +99,7 @@ Tools / Directives and Functions / css / 0: |-
     background-color: rgba(239, 68, 68, var(--tw-bg-opacity));
     opacity: 1;
   }
-Tools / Keyframes / css / 0: |-
+CSSParser / Keyframes / css / 0: |-
   @media (min-width: 640px) {
     @media (prefers-color-scheme: dark) {
       @keyframes ping {
@@ -114,7 +114,7 @@ Tools / Keyframes / css / 0: |-
       }
     }
   }
-Tools / Nested At-Rules / css / 0: |-
+CSSParser / Nested At-Rules / css / 0: |-
   @media (min-width: 768px) {
     .test {
       width: 300px !important;
@@ -125,7 +125,7 @@ Tools / Nested At-Rules / css / 0: |-
       }
     }
   }
-Tools / Nested At-Rules and Bubbling / css / 0: |-
+CSSParser / Nested At-Rules and Bubbling / css / 0: |-
   .component {
     width: 300px;
   }
@@ -144,7 +144,7 @@ Tools / Nested At-Rules and Bubbling / css / 0: |-
       width: 800px;
     }
   }
-Tools / Nesting / css / 0: |-
+CSSParser / Nesting / css / 0: |-
   #header {
     color: black;
   }
@@ -154,10 +154,10 @@ Tools / Nesting / css / 0: |-
   #header .logo {
     width: 300px;
   }
-Tools / One line AtRule / css / 0: |-
+CSSParser / One line AtRule / css / 0: |-
   @import "library";
   @import "typo.css";
-Tools / Pseudo Classes / css / 0: |-
+CSSParser / Pseudo Classes / css / 0: |-
   #bundle .button {
     display: block;
     border: 1px solid black;
@@ -175,13 +175,13 @@ Tools / Pseudo Classes / css / 0: |-
   #bundle .logo {
     width: 300px;
   }
-Tools / Simple atRule / css / 0: |-
+CSSParser / Simple atRule / css / 0: |-
   @media (min-width: 768px) {
     .test {
       color: red;
     }
   }
-Tools / Single Level / css / 0: |-
+CSSParser / Single Level / css / 0: |-
   img, video {
     max-width: 100%;
     height: auto;
@@ -192,7 +192,7 @@ Tools / Single Level / css / 0: |-
   .logo {
     width: 300px;
   }
-Tools / animations with @apply / css / 0: |-
+CSSParser / animations with @apply / css / 0: |-
   @keyframes pulse {
     0%, 100% {
       opacity: 1;
@@ -250,7 +250,7 @@ Tools / animations with @apply / css / 0: |-
       animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
     }
   }
-Tools / apply chain / css / 0: |-
+CSSParser / apply chain / css / 0: |-
   .base {
     border-radius: 0.375rem;
     height: 2.25rem;
@@ -263,24 +263,24 @@ Tools / apply chain / css / 0: |-
     height: 2.25rem;
     width: 2.25rem;
   }
-Tools / apply hover with multiple selector / css / 0: |-
+CSSParser / apply hover with multiple selector / css / 0: |-
   .a:hover, .b:hover {
     --tw-text-opacity: 1;
     color: rgba(254, 202, 202, var(--tw-text-opacity));
   }
-Tools / apply order / css / 0: |-
+CSSParser / apply order / css / 0: |-
   .test {
     position: relative;
     position: fixed;
   }
-Tools / background-image url / css / 0: |-
+CSSParser / background-image url / css / 0: |-
   .background {
     background-image: url('https://awebsite.com/an-image.png');
   }
   .background__overlay {
     background-color: #023761;
   }
-Tools / comma separated selectors / css / 0: |-
+CSSParser / comma separated selectors / css / 0: |-
   .dark .parent h2 > a::after, .dark .parent h3 > a::after {
     color: red;
   }
@@ -293,7 +293,7 @@ Tools / comma separated selectors / css / 0: |-
   .alert ul, .alert p, .warning ul, .warning p {
     margin-left: 0;
   }
-Tools / do not change apply order / css / 0: |-
+CSSParser / do not change apply order / css / 0: |-
   .test-border {
     --tw-border-opacity: 1;
     border-color: rgba(239, 68, 68, var(--tw-border-opacity));
@@ -301,7 +301,7 @@ Tools / do not change apply order / css / 0: |-
     border-bottom-color: transparent;
     border-left-color: transparent;
   }
-Tools / keeps multiple @font-face / css / 0: |-
+CSSParser / keeps multiple @font-face / css / 0: |-
   @font-face {
     font-family: Proxima Nova;
     font-weight: 400;
@@ -312,12 +312,12 @@ Tools / keeps multiple @font-face / css / 0: |-
     font-weight: 700;
     src: url(/fonts/proxima-nova/700-regular.woff) format("woff");
   }
-Tools / last rule without semicolon / css / 0: |-
+CSSParser / last rule without semicolon / css / 0: |-
   .font-bold {
     font-weight: 700;
     display: block;
   }
-Tools / layer directive / css / 0: |-
+CSSParser / layer directive / css / 0: |-
   base {
     margin-left: auto;
   }
@@ -336,7 +336,7 @@ Tools / layer directive / css / 0: |-
   .normal {
     marign-right: auto;
   }
-Tools / layer directive with same tag name / css / 0: |-
+CSSParser / layer directive with same tag name / css / 0: |-
   h1 {
     color: green;
   }
@@ -355,28 +355,28 @@ Tools / layer directive with same tag name / css / 0: |-
   h2 {
     color: blue;
   }
-Tools / multiple line comment / css / 0: |-
+CSSParser / multiple line comment / css / 0: |-
   .box {
     border: 10px solid green;
   }
-Tools / nesting / css / 0: |-
+CSSParser / nesting / css / 0: |-
   .Comp.is-active .a, .Comp.is-active .b {
     border: 5px solid pink;
   }
-Tools / nesting self referencing / css / 0: |-
+CSSParser / nesting self referencing / css / 0: |-
   .Comp.is-active, .Comp.is-active .Comp-child {
     border: 5px solid pink;
   }
-Tools / parse data url may break / css / 0: |-
+CSSParser / parse data url may break / css / 0: |-
   @font-face {
     font-family: swiper-icons;
     src: url('data:application/font-woff;charset=utf-8;base64, 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');
   }
-Tools / single line comment / css / 0: |-
+CSSParser / single line comment / css / 0: |-
   .test-child {
     border: 10px solid green;
   }
-Tools / theme function / css / 0: |-
+CSSParser / theme function / css / 0: |-
   .btn-blue {
     background-color: #3b82f6;
   }
@@ -386,7 +386,7 @@ Tools / theme function / css / 0: |-
   .content-area2 {
     height: calc(100vh - 4rem);
   }
-Tools / variables / css / 0: |-
+CSSParser / variables / css / 0: |-
   body {
     font: 100% $font-stack;
     color: $primary-color;

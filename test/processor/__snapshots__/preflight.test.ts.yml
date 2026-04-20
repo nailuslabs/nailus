@@ -1,4 +1,4 @@
-Tools / all tags / tags / 0: |-
+Preflight / all tags / tags / 0: |-
   *, ::before, ::after {
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
@@ -197,7 +197,7 @@ Tools / all tags / tags / 0: |-
     opacity: 1;
     color: #9ca3af;
   }
-Tools / some tags / css / 1: |-
+Preflight / some tags / css / 1: |-
   a {
     color: inherit;
     text-decoration: inherit;
@@ -223,7 +223,7 @@ Tools / some tags / css / 1: |-
     margin: 0;
     padding: 0;
   }
-Tools / some tags / tags / 0: |-
+Preflight / some tags / tags / 0: |-
   *, ::before, ::after {
     -webkit-box-sizing: border-box;
     box-sizing: border-box;

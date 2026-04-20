@@ -1,4 +1,5 @@
 import { basename, dirname, join } from 'path';
+import { fileURLToPath } from 'url';
 import fs from 'fs-extra';
 import yaml from 'js-yaml';
 import colors from 'picocolors';
@@ -56,14 +57,15 @@ export function compareSnapshot(
   name: string,
   file: string
 ): jasmine.CustomMatcherResult {
+  const filename = file.startsWith('file:') ? fileURLToPath(file) : file;
   const fullname = [context.describe, context.it, name, context.count].join(
     ' / '
   );
   context.count += 1;
   const snapPath = join(
-    dirname(file),
+    dirname(filename),
     '__snapshots__',
-    basename(file) + '.yml'
+    basename(filename) + '.yml'
   );
   const snap = prepreSnapshot(snapPath);
 

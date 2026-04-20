@@ -1,4 +1,4 @@
-Tools / directions / css / 0: |-
+Variants / directions / css / 0: |-
   [dir='ltr'] .ltr\:text-lg, [dir='ltr'].ltr\:text-lg {
     font-size: 1.125rem;
     line-height: 1.75rem;
@@ -7,7 +7,7 @@ Tools / directions / css / 0: |-
     font-size: 0.875rem;
     line-height: 1.25rem;
   }
-Tools / generate screens / screens / 1: |-
+Variants / generate screens / screens / 1: |-
   [
     "print",
     "narrow",
@@ -22,7 +22,7 @@ Tools / generate screens / screens / 1: |-
     "-lg",
     "+lg"
   ]
-Tools / generate screens / vars / 0: |-
+Variants / generate screens / vars / 0: |-
   {
     "print": "@media print {\n  .test {\n    background: #1C1C1E;\n  }\n}",
     "narrow": "@media (max-width: 768px) {\n  .test {\n    background: #1C1C1E;\n  }\n}",
@@ -37,7 +37,7 @@ Tools / generate screens / vars / 0: |-
     "-lg": "@media (max-width: 1024px) {\n  .test {\n    background: #1C1C1E;\n  }\n}",
     "+lg": "@media (min-width: 1024px) {\n  .test {\n    background: #1C1C1E;\n  }\n}"
   }
-Tools / generate states / all / 0: |-
+Variants / generate states / all / 0: |-
   {
     "hover": ".test:hover {\n  background: #1C1C1E;\n}",
     "focus": ".test:focus {\n  background: #1C1C1E;\n}",
@@ -175,7 +175,7 @@ Tools / generate states / all / 0: |-
     "peer-not-root": ".peer:not(:root) ~ .test {\n  background: #1C1C1E;\n}",
     "peer-not-empty": ".peer:not(:empty) ~ .test {\n  background: #1C1C1E;\n}"
   }
-Tools / generate states / some / 1: |-
+Variants / generate states / some / 1: |-
   {
     "focus": ".test:focus {\n  background: #1C1C1E;\n}",
     "hover": ".test:hover {\n  background: #1C1C1E;\n}",
@@ -184,7 +184,7 @@ Tools / generate states / some / 1: |-
     "group-hover": ".group:hover .test {\n  background: #1C1C1E;\n}",
     "motion-safe": "@media (prefers-reduced-motion: no-preference) {\n  .test {\n    background: #1C1C1E;\n  }\n}"
   }
-Tools / generate themes with darkMode class / vars / 0: |-
+Variants / generate themes with darkMode class / vars / 0: |-
   {
     "@dark": "@media (prefers-color-scheme: dark) {\n  .test {\n    background: #1C1C1E;\n  }\n}",
     "@light": "@media (prefers-color-scheme: light) {\n  .test {\n    background: #1C1C1E;\n  }\n}",
@@ -193,7 +193,7 @@ Tools / generate themes with darkMode class / vars / 0: |-
     "dark": ".dark .test {\n  background: #1C1C1E;\n}",
     "light": ".light .test {\n  background: #1C1C1E;\n}"
   }
-Tools / generate themes with darkMode media / vars / 0: |-
+Variants / generate themes with darkMode media / vars / 0: |-
   {
     "@dark": "@media (prefers-color-scheme: dark) {\n  .test {\n    background: #1C1C1E;\n  }\n}",
     "@light": "@media (prefers-color-scheme: light) {\n  .test {\n    background: #1C1C1E;\n  }\n}",
@@ -202,12 +202,12 @@ Tools / generate themes with darkMode media / vars / 0: |-
     "dark": "@media (prefers-color-scheme: dark) {\n  .test {\n    background: #1C1C1E;\n  }\n}",
     "light": "@media (prefers-color-scheme: light) {\n  .test {\n    background: #1C1C1E;\n  }\n}"
   }
-Tools / orientation / css / 0: |-
+Variants / orientation / css / 0: |-
   {
     "portrait": "@media (orientation: portrait) {\n  .test {\n    background: #1C1C1E;\n  }\n}",
     "landscape": "@media (orientation: landscape) {\n  .test {\n    background: #1C1C1E;\n  }\n}"
   }
-Tools / resolve variants / screen / 0: |-
+Variants / resolve variants / screen / 0: |-
   [
     "sm",
     "<sm",

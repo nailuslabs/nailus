@@ -6,6 +6,7 @@ import sucrase from '@rollup/plugin-sucrase';
 import typescript from '@rollup/plugin-typescript';
 import commonjs from '@rollup/plugin-commonjs';
 import json from '@rollup/plugin-json';
+import ts from 'typescript';
 import pkg from './package.json' with { type: 'json' };
 
 const output_dir = './dist';
@@ -17,7 +18,7 @@ const ts_plugin = prod
     target: 'es5',
     include: 'src/**',
     outDir: output_dir,
-    typescript: require('typescript'),
+    typescript: ts,
   })
   : sucrase({
     exclude: ['node_modules/**'],
@@ -27,6 +28,24 @@ const ts_plugin = prod
 const dump = (file) => path.join(output_dir, file);
 
 const copy = (files) => files.forEach((file) => fs.copyFileSync(file, dump(file)));
+
+const writeRootManifest = () => {
+  return {
+    writeBundle() {
+      fs.writeFileSync(
+        dump('package.json'),
+        JSON.stringify(
+          {
+            ...pkg,
+            type: 'commonjs',
+          },
+          null,
+          '  '
+        )
+      );
+    },
+  };
+};
 
 const rmdir = (dir) =>  fs.existsSync(dir) && fs.statSync(dir).isDirectory() && fs.rmSync(dir, { recursive: true, force: true });
 
@@ -81,7 +100,8 @@ export default [
       ts_plugin,
       rmdir(output_dir),
       mkdir(output_dir),
-      copy(['package.json', 'README.md', 'LICENSE']),
+      copy(['README.md', 'LICENSE']),
+      writeRootManifest(),
       types("index.d.ts", "./types/lib", "{ Processor as default }"),
     ],
   },

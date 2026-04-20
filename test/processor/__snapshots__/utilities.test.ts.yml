@@ -1,4 +1,4 @@
-Tools / accent-color / css / 0: |-
+Utilities / accent-color / css / 0: |-
   .accent-green-500\/50 {
     accent-color: rgba(16, 185, 129, 0.5);
   }
@@ -11,7 +11,7 @@ Tools / accent-color / css / 0: |-
   .accent-red-500 {
     accent-color: rgba(239, 68, 68, 1);
   }
-Tools / animation / animation / 0: |-
+Utilities / animation / animation / 0: |-
   @keyframes spin {
     from {
       -webkit-transform: rotate(0deg);
@@ -257,7 +257,7 @@ Tools / animation / animation / 0: |-
     -webkit-backface-visibility: visible;
     backface-visibility: visible;
   }
-Tools / animation iteration count / animationIterationCount / 0: |-
+Utilities / animation iteration count / animationIterationCount / 0: |-
   .animate-loop {
     -webkit-animation-iteration-count: infinite;
     animation-iteration-count: infinite;
@@ -278,7 +278,7 @@ Tools / animation iteration count / animationIterationCount / 0: |-
     -webkit-animation-iteration-count: 13;
     animation-iteration-count: 13;
   }
-Tools / animation order / transition / 0: |-
+Utilities / animation order / transition / 0: |-
   @keyframes flash {
     from, 50%, to {
       opacity: 1;
@@ -321,7 +321,7 @@ Tools / animation order / transition / 0: |-
     -webkit-animation-iteration-count: infinite;
     animation-iteration-count: infinite;
   }
-Tools / animation static utilities / animationStatic / 0: |-
+Utilities / animation static utilities / animationStatic / 0: |-
   .animated {
     -webkit-animation-duration: 1000ms;
     -webkit-animation-fill-mode: both;
@@ -352,7 +352,7 @@ Tools / animation static utilities / animationStatic / 0: |-
     -webkit-animation-play-state: paused;
     animation-play-state: paused;
   }
-Tools / animation test / animate-ping / 0: |-
+Utilities / animation test / animate-ping / 0: |-
   @keyframes ping {
     0% {
       -webkit-transform: scale(1);
@@ -381,7 +381,7 @@ Tools / animation test / animate-ping / 0: |-
     -webkit-animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
     animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
   }
-Tools / animation test / sm:animate-ping / 1: |-
+Utilities / animation test / sm:animate-ping / 1: |-
   @keyframes ping {
     0% {
       -webkit-transform: scale(1);
@@ -412,7 +412,7 @@ Tools / animation test / sm:animate-ping / 1: |-
       animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
     }
   }
-Tools / animation test / spin-slow / 0: |-
+Utilities / animation test with custom theme extension / spin-slow / 0: |-
   @keyframes spin {
     from {
       -webkit-transform: rotate(0deg);
@@ -437,7 +437,7 @@ Tools / animation test / spin-slow / 0: |-
     -webkit-animation: spin 3s linear infinite;
     animation: spin 3s linear infinite;
   }
-Tools / animationDelay / animationDelay / 0: |-
+Utilities / animationDelay / animationDelay / 0: |-
   .animate-delay {
     -webkit-animation-delay: 500ms;
     animation-delay: 500ms;
@@ -470,7 +470,7 @@ Tools / animationDelay / animationDelay / 0: |-
     -webkit-animation-delay: 200ms;
     animation-delay: 200ms;
   }
-Tools / animationDuration / animationDuration / 0: |-
+Utilities / animationDuration / animationDuration / 0: |-
   .animate-duration {
     -webkit-animation-duration: 1000ms;
     animation-duration: 1000ms;
@@ -503,7 +503,7 @@ Tools / animationDuration / animationDuration / 0: |-
     -webkit-animation-duration: 200ms;
     animation-duration: 200ms;
   }
-Tools / animationTimingFunction / animationTimingFunction / 0: |-
+Utilities / animationTimingFunction / animationTimingFunction / 0: |-
   .animate-ease {
     -webkit-animation-timing-function: ease;
     animation-timing-function: ease;
@@ -528,11 +528,11 @@ Tools / animationTimingFunction / animationTimingFunction / 0: |-
     -webkit-animation-timing-function: cubic-bezier(0.25,0.1,0.25,1);
     animation-timing-function: cubic-bezier(0.25,0.1,0.25,1);
   }
-Tools / backgroundImage config test / Background Image / 0: |-
+Utilities / backgroundImage config test / Background Image / 0: |-
   .bg-home-pattern {
     background-image: url('./src/assets/home.svg');
   }
-Tools / border radius fraction / css / 0: |-
+Utilities / border radius fraction / css / 0: |-
   .rounded-1\/2 {
     border-radius: 50%;
   }
@@ -542,7 +542,7 @@ Tools / border radius fraction / css / 0: |-
   .rounded-1\/4 {
     border-radius: 25%;
   }
-Tools / border top/left/bottom/right color / css / 0: |-
+Utilities / border top/left/bottom/right color / css / 0: |-
   .border-green-200 {
     --tw-border-opacity: 1;
     border-color: rgba(167, 243, 208, var(--tw-border-opacity));
@@ -566,7 +566,7 @@ Tools / border top/left/bottom/right color / css / 0: |-
   .border-t-green-200\/50 {
     border-top-color: rgba(167, 243, 208, 0.5);
   }
-Tools / border width shouldn't infer / css / 0: |-
+Utilities / border width shouldn't infer / css / 0: |-
   .border-gray-200 {
     --tw-border-opacity: 1;
     border-color: rgba(229, 231, 235, var(--tw-border-opacity));
@@ -577,7 +577,7 @@ Tools / border width shouldn't infer / css / 0: |-
   .border-t-4 {
     border-top-width: 4px;
   }
-Tools / border x and y / css / 0: |-
+Utilities / border x and y / css / 0: |-
   .border-t-1 {
     border-top-width: 1px;
   }
@@ -598,7 +598,7 @@ Tools / border x and y / css / 0: |-
     border-left-width: 6px;
     border-right-width: 6px;
   }
-Tools / box shadows & box shadow color / css / 0: |-
+Utilities / box shadows & box shadow color / css / 0: |-
   .shadow-2xl {
     --tw-shadow: 0 25px 50px -12px rgb(0 0 0/0.25);
     --tw-shadow-colored: 0 25px 50px -12px var(--tw-shadow-color);
@@ -613,7 +613,7 @@ Tools / box shadows & box shadow color / css / 0: |-
     --tw-shadow-color: rgba(153, 27, 27, 0.5);
     --tw-shadow: var(--tw-shadow-colored);
   }
-Tools / caret color / css / 0: |-
+Utilities / caret color / css / 0: |-
   .caret-auto {
     caret-color: auto;
   }
@@ -627,7 +627,7 @@ Tools / caret color / css / 0: |-
   .caret-opacity-80 {
     --tw-caret-opacity: 0.8;
   }
-Tools / color opacity group utilities / css / 0: |-
+Utilities / color opacity group utilities / css / 0: |-
   .divide-green-500\/50 > :not([hidden]) ~ :not([hidden]) {
     --tw-divide-opacity: 0.5;
     border-color: rgba(16, 185, 129, var(--tw-divide-opacity));
@@ -696,7 +696,7 @@ Tools / color opacity group utilities / css / 0: |-
     -webkit-text-decoration-color: rgba(16, 185, 129, var(--tw-line-opacity));
     text-decoration-color: rgba(16, 185, 129, var(--tw-line-opacity));
   }
-Tools / columns & break-after & break-before & break-inside / css / 0: |-
+Utilities / columns & break-after & break-before & break-inside / css / 0: |-
   .columns-1 {
     columns: 1;
   }
@@ -745,7 +745,7 @@ Tools / columns & break-after & break-before & break-inside / css / 0: |-
   .break-inside-avoid-column {
     break-inside: avoid-column;
   }
-Tools / container max-width test / container / 0: |-
+Utilities / container max-width test / container / 0: |-
   .container {
     width: 100%;
   }
@@ -777,7 +777,7 @@ Tools / container max-width test / container / 0: |-
   .max-w-md {
     max-width: 28rem;
   }
-Tools / container max-width test / reponsive container / 1: |-
+Utilities / container max-width test / reponsive container / 1: |-
   .container {
     width: 100%;
   }
@@ -842,7 +842,7 @@ Tools / container max-width test / reponsive container / 1: |-
       max-width: 28rem;
     }
   }
-Tools / container padding / container padding / 0: |-
+Utilities / container padding / container padding / 0: |-
   .container {
     width: 100%;
     padding-left: 2px;
@@ -873,7 +873,7 @@ Tools / container padding / container padding / 0: |-
       max-width: 1536px;
     }
   }
-Tools / content pseudo elements / css / 0: |-
+Utilities / content pseudo elements / css / 0: |-
   .before\:contents::before {
     content: "";
     display: contents;
@@ -882,7 +882,7 @@ Tools / content pseudo elements / css / 0: |-
     content: "";
     display: contents;
   }
-Tools / content utilities / css / 0: |-
+Utilities / content utilities / css / 0: |-
   .content-👍 {
     content: "👍";
   }
@@ -895,15 +895,15 @@ Tools / content utilities / css / 0: |-
   .after\:content-\[attr\(value\)\]::after {
     content: attr(value);
   }
-Tools / content utilities false / css / 0: ''
-Tools / fill-none and stroke-none is wrong / css / 0: |-
+Utilities / content utilities false / css / 0: ''
+Utilities / fill-none and stroke-none is wrong / css / 0: |-
   .fill-none {
     fill: none;
   }
   .stroke-none {
     stroke: none;
   }
-Tools / flex-basis / css / 0: |-
+Utilities / flex-basis / css / 0: |-
   .basis-auto {
     flex-basis: auto;
   }
@@ -922,7 +922,7 @@ Tools / flex-basis / css / 0: |-
   .basis-full {
     flex-basis: 100%;
   }
-Tools / fontsize config test / fontSize / 0: |-
+Utilities / fontsize config test / fontSize / 0: |-
   .text-main {
     font-size: 1.25rem;
   }
@@ -934,7 +934,7 @@ Tools / fontsize config test / fontSize / 0: |-
     font-size: 1.25rem;
     line-height: 2rem;
   }
-Tools / from via to opacity / css / 0: |-
+Utilities / from via to opacity / css / 0: |-
   .from-opacity-50 {
     --tw-from-opacity: 0.5;
   }
@@ -959,14 +959,14 @@ Tools / from via to opacity / css / 0: |-
   .text-stroke-opacity-50 {
     --tw-ring-offset-opacity: 0.5;
   }
-Tools / gradient colors / gradient / 0: |-
+Utilities / gradient colors / gradient / 0: |-
   .bg-gradient-1 {
     background-image: linear-gradient(135deg, #FDEB71 10%, #F8D800 100%);
   }
   .bg-gradient-60 {
     background-image: linear-gradient(135deg, #FF96F9 10%, #C32BAC 100%);
   }
-'Tools / gradient current and transparent #317 / css / 0': |-
+'Utilities / gradient current and transparent #317 / css / 0': |-
   .from-current {
     --tw-gradient-from: currentColor;
     --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
@@ -997,7 +997,7 @@ Tools / gradient colors / gradient / 0: |-
   .to-red-500 {
     --tw-gradient-to: rgba(239, 68, 68, var(--tw-to-opacity, 1));
   }
-Tools / grid template test / grid template / 0: |-
+Utilities / grid template test / grid template / 0: |-
   .grid-cols-list {
     grid-template-columns: repeat(auto-fit, minmax(16em, 1fr));
   }
@@ -1013,7 +1013,7 @@ Tools / grid template test / grid template / 0: |-
   .grid-rows-4 {
     grid-template-rows: repeat(4, minmax(0, 1fr));
   }
-Tools / list style type / css / 0: |-
+Utilities / list style type / css / 0: |-
   .list-disc {
     list-style-type: disc;
   }
@@ -1023,7 +1023,7 @@ Tools / list style type / css / 0: |-
   .list-zero-decimal {
     list-style-type: decimal-leading-zero;
   }
-Tools / more color opacity group utilities / css / 0: |-
+Utilities / more color opacity group utilities / css / 0: |-
   .from-green-500\/50 {
     --tw-gradient-from: rgba(16, 185, 129, 0.5);
     --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
@@ -1054,7 +1054,7 @@ Tools / more color opacity group utilities / css / 0: |-
     --tw-text-stroke-opacity: 0.5;
     -webkit-text-stroke-color: rgba(16, 185, 129, var(--tw-text-stroke-opacity));
   }
-Tools / outline width & color & style & offset / css / 0: |-
+Utilities / outline width & color & style & offset / css / 0: |-
   .outline-offset-1 {
     outline-offset: 1px;
   }
@@ -1088,7 +1088,7 @@ Tools / outline width & color & style & offset / css / 0: |-
   .outline-dashed {
     outline-style: dashed;
   }
-Tools / prespective and perspective origin / css / 0: |-
+Utilities / prespective and perspective origin / css / 0: |-
   .perspect-none {
     -webkit-perspective: none;
     perspective: none;
@@ -1125,7 +1125,7 @@ Tools / prespective and perspective origin / css / 0: |-
     -webkit-perspective-origin: -170%;
     perspective-origin: -170%;
   }
-Tools / ring opacity / css / 0: |-
+Utilities / ring opacity / css / 0: |-
   .ring-transparent {
     --tw-ring-color: transparent;
   }
@@ -1133,14 +1133,14 @@ Tools / ring opacity / css / 0: |-
     --tw-ring-opacity: 1;
     --tw-ring-color: rgba(91, 33, 182, var(--tw-ring-opacity));
   }
-Tools / scroll-behavior / css / 0: |-
+Utilities / scroll-behavior / css / 0: |-
   .scroll-auto {
     scroll-behavior: auto;
   }
   .scroll-smooth {
     scroll-behavior: smooth;
   }
-Tools / stroke svg / css / 0: |-
+Utilities / stroke svg / css / 0: |-
   .stroke-gray-200 {
     --tw-stroke-opacity: 1;
     stroke: rgba(229, 231, 235, var(--tw-stroke-opacity));
@@ -1160,7 +1160,7 @@ Tools / stroke svg / css / 0: |-
   .stroke-offset-2 {
     stroke-dashoffset: 2;
   }
-Tools / tab size / css / 0: |-
+Utilities / tab size / css / 0: |-
   .tab {
     -moz-tab-size: 4;
     -o-tab-size: 4;
@@ -1186,7 +1186,7 @@ Tools / tab size / css / 0: |-
     -o-tab-size: 13px;
     tab-size: 13px;
   }
-Tools / text decoration color & opacity & length & offset / css / 0: |-
+Utilities / text decoration color & opacity & length & offset / css / 0: |-
   .decoration-solid {
     -webkit-text-decoration-style: solid;
     text-decoration-style: solid;
@@ -1301,7 +1301,7 @@ Tools / text decoration color & opacity & length & offset / css / 0: |-
   .no-underline {
     text-decoration: none;
   }
-Tools / text indent / css / 0: |-
+Utilities / text indent / css / 0: |-
   .indent {
     text-indent: 1.5rem;
   }
@@ -1323,7 +1323,7 @@ Tools / text indent / css / 0: |-
   .indent-1\/2 {
     text-indent: 50%;
   }
-Tools / text shadow / css / 0: |-
+Utilities / text shadow / css / 0: |-
   .text-shadow {
     text-shadow: 0px 0px 1px rgb(0 0 0 / 20%), 0px 0px 1px rgb(1 0 5 / 10%);
   }
@@ -1336,7 +1336,7 @@ Tools / text shadow / css / 0: |-
   .text-shadow-lg {
     text-shadow: 3px 3px 6px rgb(0 0 0 / 26%), 0 0 5px rgb(15 3 86 / 22%);
   }
-Tools / text stroke width & stroke color / css / 0: |-
+Utilities / text stroke width & stroke color / css / 0: |-
   .text-stroke {
     -webkit-text-stroke-color: #e5e7eb;
     -webkit-text-stroke-width: medium;
@@ -1360,7 +1360,7 @@ Tools / text stroke width & stroke color / css / 0: |-
   .text-stroke-3px {
     -webkit-text-stroke-width: 3px;
   }
-Tools / touch-action / css / 0: |-
+Utilities / touch-action / css / 0: |-
   .touch-auto {
     touch-action: auto;
   }
@@ -1391,7 +1391,7 @@ Tools / touch-action / css / 0: |-
   .touch-manipulation {
     touch-action: manipulation;
   }
-Tools / transform 3d / css / 0: |-
+Utilities / transform 3d / css / 0: |-
   .transform {
     --tw-translate-x: 0;
     --tw-translate-y: 0;
@@ -1473,7 +1473,7 @@ Tools / transform 3d / css / 0: |-
   .-translate-z-6 {
     --tw-translate-z: -1.5rem;
   }
-Tools / transform rotateY / css / 0: |-
+Utilities / transform rotateY / css / 0: |-
   .transform {
     --tw-translate-x: 0;
     --tw-translate-y: 0;
@@ -1500,7 +1500,7 @@ Tools / transform rotateY / css / 0: |-
   .-rotate-y-45 {
     --tw-rotate-y: -45deg;
   }
-Tools / transition time handler / transition / 0: |-
+Utilities / transition time handler / transition / 0: |-
   .duration-100ms {
     -webkit-transition-duration: 100ms;
     -o-transition-duration: 100ms;
@@ -1521,7 +1521,7 @@ Tools / transition time handler / transition / 0: |-
     -o-transition-delay: 2.5s;
     transition-delay: 2.5s;
   }
-Tools / will-change / css / 0: |-
+Utilities / will-change / css / 0: |-
   .will-change-auto {
     will-change: auto;
   }
@@ -1534,7 +1534,7 @@ Tools / will-change / css / 0: |-
   .will-change-transform {
     will-change: transform;
   }
-Tools / wrap container / small container / 0: |-
+Utilities / wrap container / small container / 0: |-
   @media (min-width: 640px) {
     .sm\:container {
       width: 100%;

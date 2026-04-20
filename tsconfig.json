@@ -15,5 +15,5 @@
     "ignoreDeprecations": "6.0"
   },
   "include": ["./src", "./test", "./test-dts", "./example"],
-  "exclude": ["./test/assets", "./test/helpers", "dist"]
+  "exclude": ["./test/assets", "./test/helpers", "./test/esm-loader.mjs", "./test/register-loader.mjs", "dist"]
 }

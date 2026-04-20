@@ -1,4 +1,4 @@
-Tools / sort / query / 0: |-
+sortMediaQuery / sort / query / 0: |-
   [
     "@media (min-width: 320px) and (max-width: 767px)",
     "@media (min-height: 480px)",

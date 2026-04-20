@@ -1,4 +1,4 @@
-Tools / add completions / completions / 0: |-
+typography plugin / add completions / completions / 0: |-
   {
     "typography": [
       "prose",
@@ -36,7 +36,7 @@ Tools / add completions / completions / 0: |-
       "prose-blue-gray"
     ]
   }
-Tools / customize dark mode / media / 0: |-
+typography plugin / customize dark mode / media / 0: |-
   .prose {
     color: #374151;
     max-width: 65ch;
@@ -402,7 +402,7 @@ Tools / customize dark mode / media / 0: |-
   .dark .prose tbody tr {
     border-bottom-color: #292524;
   }
-Tools / dark class interpret test / class / 0: |-
+typography plugin / dark class interpret test / class / 0: |-
   .prose {
     color: #374151;
     max-width: 65ch;
@@ -767,7 +767,7 @@ Tools / dark class interpret test / class / 0: |-
   .dark .prose tbody tr {
     border-bottom-color: #292524;
   }
-Tools / dark media interpret test / media / 0: |-
+typography plugin / dark media interpret test / media / 0: |-
   .prose {
     color: #374151;
     max-width: 65ch;
@@ -1134,7 +1134,7 @@ Tools / dark media interpret test / media / 0: |-
       border-bottom-color: #292524;
     }
   }
-Tools / interpret test / css / 0: |-
+typography plugin / interpret test / css / 0: |-
   .prose {
     color: #374151;
     max-width: 65ch;
@@ -2244,14 +2244,14 @@ Tools / interpret test / css / 0: |-
   .prose-red a code {
     color: #dc2626;
   }
-Tools / prose with customize colors / css / 0: |-
+typography plugin / prose with customize colors / css / 0: |-
   .prose-deep-blush a {
     color: #d46691;
   }
   .prose-deep-blush a code {
     color: #d46691;
   }
-Tools / rtl interpret test / rtl / 0: |-
+typography plugin / rtl interpret test / rtl / 0: |-
   .prose {
     color: #374151;
     max-width: 65ch;
@@ -3546,7 +3546,7 @@ Tools / rtl interpret test / rtl / 0: |-
   .prose-red a code {
     color: #dc2626;
   }
-Tools / with extend / css / 0: |-
+typography plugin / with extend / css / 0: |-
   .prose {
     color: red;
     max-width: 65ch;
@@ -3850,7 +3850,7 @@ Tools / with extend / css / 0: |-
   .prose > :last-child {
     margin-bottom: 0;
   }
-Tools / with multi selector / css / 0: |-
+typography plugin / with multi selector / css / 0: |-
   .prose {
     color: #1f2937;
     max-width: 65ch;

@@ -1,4 +1,4 @@
-Tools / should load all plugins correctly / css / 0: |-
+Load Plugin / should load all plugins correctly / css / 0: |-
   .container {
     width: 100%;
   }

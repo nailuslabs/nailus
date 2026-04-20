@@ -1,4 +1,4 @@
-Tools / simple syntax / js / 0: |-
+Transformer / simple syntax / js / 0: |-
   __import__("typo.css");
   __import__("style.css");
   import "module1";

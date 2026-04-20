@@ -6,7 +6,7 @@ import { CSSParser } from '../../src/utils/parser';
 import type { colorObject } from '../../src/interfaces';
 import aspectRatio from '../../src/plugin/aspect-ratio';
 
-const configPath = resolve('./test/assets/nailus.config.js');
+const configPath = resolve('./test/assets/nailus.config.cjs');
 const userConfig = require(configPath);
 
 describe('Config', () => {

@@ -457,7 +457,12 @@ describe('Plugin Method', () => {
       ],
     });
     const js = processor.dumpConfig();
-    const config = eval(js);
+    const config = eval(`(() => {
+      const module = { exports: {} };
+      const exports = module.exports;
+      ${js}
+      return module.exports;
+    })()`);
     const newProcessor = new Processor(config);
     expect(newProcessor.interpret('bg-nord0').styleSheet.build()).toMatchSnapshot('css');
   });

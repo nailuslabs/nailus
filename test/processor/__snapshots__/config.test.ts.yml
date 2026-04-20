@@ -1,4 +1,4 @@
-Tools / allows to use prefix with shortcuts / shortcuts with prefix / 0: |-
+Config / allows to use prefix with shortcuts / shortcuts with prefix / 0: |-
   .nailus-btn {
     border-radius: 0.5rem;
     font-weight: 600;
@@ -21,7 +21,7 @@ Tools / allows to use prefix with shortcuts / shortcuts with prefix / 0: |-
     --tw-bg-opacity: 1;
     background-color: rgba(4, 120, 87, var(--tw-bg-opacity));
   }
-Tools / animation config test / animate / 0: |-
+Config / animation config test / animate / 0: |-
   @keyframes skbounce {
     0%, 100% {
       -webkit-transform: scale(0.0);
@@ -46,63 +46,63 @@ Tools / animation config test / animate / 0: |-
     -webkit-animation: skbounce 2.0s infinite ease-in-out;
     animation: skbounce 2.0s infinite ease-in-out;
   }
-Tools / change separator test / - / 2: |-
+Config / change separator test / - / 2: |-
   @media (min-width: 640px) {
     .sm-bg-gray-200 {
       --tw-bg-opacity: 1;
       background-color: rgba(229, 231, 235, var(--tw-bg-opacity));
     }
   }
-Tools / change separator test / -- / 3: |-
+Config / change separator test / -- / 3: |-
   @media (min-width: 640px) {
     .sm--bg-gray-200 {
       --tw-bg-opacity: 1;
       background-color: rgba(229, 231, 235, var(--tw-bg-opacity));
     }
   }
-Tools / change separator test / --- / 4: |-
+Config / change separator test / --- / 4: |-
   @media (min-width: 640px) {
     .sm---bg-gray-200 {
       --tw-bg-opacity: 1;
       background-color: rgba(229, 231, 235, var(--tw-bg-opacity));
     }
   }
-Tools / change separator test / . / 7: |-
+Config / change separator test / . / 7: |-
   @media (min-width: 640px) {
     .sm\.bg-gray-200 {
       --tw-bg-opacity: 1;
       background-color: rgba(229, 231, 235, var(--tw-bg-opacity));
     }
   }
-'Tools / change separator test / :: / 1': |-
+'Config / change separator test / :: / 1': |-
   @media (min-width: 640px) {
     .sm\:\:bg-gray-200 {
       --tw-bg-opacity: 1;
       background-color: rgba(229, 231, 235, var(--tw-bg-opacity));
     }
   }
-Tools / change separator test / _ / 0: |-
+Config / change separator test / _ / 0: |-
   @media (min-width: 640px) {
     .sm_bg-gray-200 {
       --tw-bg-opacity: 1;
       background-color: rgba(229, 231, 235, var(--tw-bg-opacity));
     }
   }
-Tools / change separator test / _ / 5: |-
+Config / change separator test / _ / 5: |-
   @media (min-width: 640px) {
     .sm_bg-gray-200 {
       --tw-bg-opacity: 1;
       background-color: rgba(229, 231, 235, var(--tw-bg-opacity));
     }
   }
-Tools / change separator test / __ / 6: |-
+Config / change separator test / __ / 6: |-
   @media (min-width: 640px) {
     .sm__bg-gray-200 {
       --tw-bg-opacity: 1;
       background-color: rgba(229, 231, 235, var(--tw-bg-opacity));
     }
   }
-Tools / color config test / css / 0: |-
+Config / color config test / css / 0: |-
   .bg-darkTheme-600 {
     --tw-bg-opacity: 1;
     background-color: rgba(38, 42, 52, var(--tw-bg-opacity));
@@ -116,7 +116,7 @@ Tools / color config test / css / 0: |-
   .bg-on-frame-active {
     background-color: var(--on-frame-active);
   }
-Tools / config with brackets / css / 0: |-
+Config / config with brackets / css / 0: |-
   .font-bold {
     font-weight: 700;
   }
@@ -127,7 +127,7 @@ Tools / config with brackets / css / 0: |-
     font-size: 1.125rem;
     line-height: 1.75rem;
   }
-Tools / confuses color with font-size if keys are the same / css / 0: |-
+Config / confuses color with font-size if keys are the same / css / 0: |-
   .text-base {
     font-size: 125%;
   }
@@ -139,7 +139,7 @@ Tools / confuses color with font-size if keys are the same / css / 0: |-
     --tw-text-opacity: 1;
     color: rgba(89, 174, 144, var(--tw-text-opacity));
   }
-Tools / container with screens / css / 0: |-
+Config / container with screens / css / 0: |-
   .container {
     width: 100%;
   }
@@ -149,7 +149,7 @@ Tools / container with screens / css / 0: |-
       background-color: rgba(0, 0, 0, var(--tw-bg-opacity));
     }
   }
-Tools / dashify / css / 0: |-
+Config / dashify / css / 0: |-
   .foo {
     --tw-bg-opacity: 1;
   }
@@ -159,7 +159,7 @@ Tools / dashify / css / 0: |-
   .caps {
     test-css: 1;
   }
-Tools / different colors / colors / 0: |-
+Config / different colors / colors / 0: |-
   .bg-name {
     --tw-bg-opacity: 1;
     background-color: rgba(0, 0, 255, var(--tw-bg-opacity));
@@ -200,7 +200,7 @@ Tools / different colors / colors / 0: |-
     --tw-bg-opacity: 1;
     background-color: rgba(178, 82, 82, var(--tw-bg-opacity));
   }
-Tools / extend black / css / 0: |-
+Config / extend black / css / 0: |-
   .bg-black-300 {
     --tw-bg-opacity: 1;
     background-color: rgba(28, 28, 30, var(--tw-bg-opacity));
@@ -213,11 +213,11 @@ Tools / extend black / css / 0: |-
     --tw-bg-opacity: 1;
     background-color: rgba(34, 0, 0, var(--tw-bg-opacity));
   }
-Tools / extend fontFamily with array / css / 0: |-
+Config / extend fontFamily with array / css / 0: |-
   .font-sans {
     font-family: Graphik,sans-serif;
   }
-Tools / handle colors test / css / 0: |-
+Config / handle colors test / css / 0: |-
   .bg-discord {
     --tw-bg-opacity: 1;
     background-color: rgba(114, 137, 218, var(--tw-bg-opacity));
@@ -242,7 +242,7 @@ Tools / handle colors test / css / 0: |-
     --tw-text-opacity: 1;
     color: rgba(255, 0, 0, var(--tw-text-opacity));
   }
-Tools / handle nest colors / colors / 0: |-
+Config / handle nest colors / colors / 0: |-
   .bg-my-custom-red {
     --tw-bg-opacity: 1;
     background-color: rgba(255, 0, 0, var(--tw-bg-opacity));
@@ -259,19 +259,19 @@ Tools / handle nest colors / colors / 0: |-
     --tw-text-opacity: 1;
     color: rgba(255, 255, 255, var(--tw-text-opacity));
   }
-Tools / important string test / css / 0: |-
+Config / important string test / css / 0: |-
   @media (min-width: 640px) {
     #app .sm\:bg-black {
       --tw-bg-opacity: 1;
       background-color: rgba(0, 0, 0, var(--tw-bg-opacity));
     }
   }
-Tools / important string test / css / 1: |-
+Config / important string test / css / 1: |-
   .dark #app .dark\:bg-white {
     --tw-bg-opacity: 1;
     background-color: rgba(255, 255, 255, var(--tw-bg-opacity));
   }
-Tools / resolveConfig should extend correctly / order / 0: |-
+Config / resolveConfig should extend correctly / order / 0: |-
   {
     "1": "1",
     "2": "2",
@@ -290,7 +290,7 @@ Tools / resolveConfig should extend correctly / order / 0: |-
     "none": "0",
     "lg": "44"
   }
-Tools / resolveConfig should not overwrite theme function / extend-colors-red / 1: |-
+Config / resolveConfig should not overwrite theme function / extend-colors-red / 1: |-
   {
     "50": "#fef2f2",
     "100": "#fee2e2",
@@ -304,7 +304,7 @@ Tools / resolveConfig should not overwrite theme function / extend-colors-red / 
     "900": "#7f1d1d",
     "custom": "#ea1851"
   }
-Tools / resolveConfig should not overwrite theme function / extend-width / 0: |-
+Config / resolveConfig should not overwrite theme function / extend-width / 0: |-
   {
     "0": "0px",
     "1": "0.25rem",
@@ -396,7 +396,7 @@ Tools / resolveConfig should not overwrite theme function / extend-width / 0: |-
     "5/7": "71%",
     "6/7": "85%"
   }
-Tools / shortcuts config object / shortcuts object / 0: |-
+Config / shortcuts config object / shortcuts object / 0: |-
   .btn {
     color: white;
     border-radius: 0.5rem;
@@ -411,7 +411,7 @@ Tools / shortcuts config object / shortcuts object / 0: |-
     background-color: rgba(4, 120, 87, var(--tw-bg-opacity));
     color: black;
   }
-Tools / shortcuts config string / shortcuts string / 0: |-
+Config / shortcuts config string / shortcuts string / 0: |-
   .btn {
     border-radius: 0.5rem;
     font-weight: 600;
@@ -448,7 +448,7 @@ Tools / shortcuts config string / shortcuts string / 0: |-
       box-shadow: var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow);
     }
   }
-'Tools / support color callback function #75 #256 / css / 0': |-
+'Config / support color callback function #75 #256 / css / 0': |-
   .bg-transparent {
     background-color: transparent;
   }
@@ -464,7 +464,7 @@ Tools / shortcuts config string / shortcuts string / 0: |-
     --tw-text-opacity: 1;
     color: hsla(var(--pc, 0 0% 100%) / var(--tw-text-opacity));
   }
-Tools / transition property / css / 0: |-
+Config / transition property / css / 0: |-
   .btn {
     -webkit-transition-property: background-color;
     -o-transition-property: background-color;
@@ -476,7 +476,7 @@ Tools / transition property / css / 0: |-
     -o-transition-duration: 150ms;
     transition-duration: 150ms;
   }
-Tools / variables theme config / css / 0: |-
+Config / variables theme config / css / 0: |-
   :root {
     --primary: #6366f1;
   }

@@ -1,4 +1,4 @@
-Tools / generate / bounce / 1: |-
+Keyframes / generate / bounce / 1: |-
   @keyframes bounce {
     0%, 100% {
       -webkit-transform: translateY(-25%);
@@ -27,7 +27,7 @@ Tools / generate / bounce / 1: |-
       animation-timing-function: cubic-bezier(0,0,0.2,1);
     }
   }
-Tools / generate / spin / 0: |-
+Keyframes / generate / spin / 0: |-
   @keyframes spin {
     from {
       -webkit-transform: rotate(0deg);

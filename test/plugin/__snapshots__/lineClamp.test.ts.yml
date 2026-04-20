@@ -1,11 +1,11 @@
-Tools / add completions / completions / 0: |-
+line clamp plugin / add completions / completions / 0: |-
   {
     "lineClamp": [
       "line-clamp-none",
       "line-clamp-{int}"
     ]
   }
-Tools / customize test / line-clamp customized / 0: |-
+line clamp plugin / customize test / line-clamp customized / 0: |-
   .line-clamp-1 {
     overflow: hidden;
     display: -webkit-box;
@@ -30,7 +30,7 @@ Tools / customize test / line-clamp customized / 0: |-
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 6;
   }
-Tools / interpret test / line-clamp / 0: |-
+line clamp plugin / interpret test / line-clamp / 0: |-
   .line-clamp-1 {
     overflow: hidden;
     display: -webkit-box;
@@ -54,7 +54,7 @@ Tools / interpret test / line-clamp / 0: |-
       -webkit-line-clamp: unset;
     }
   }
-Tools / works with prefix / line-clamp with prefix / 0: |-
+line clamp plugin / works with prefix / line-clamp with prefix / 0: |-
   .nailus-line-clamp-1 {
     overflow: hidden;
     display: -webkit-box;
