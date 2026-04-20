@@ -1,0 +1,156 @@
+{
+  "name": "nailuscss",
+  "version": "1.0.0",
+  "type": "module",
+  "packageManager": "pnpm@7.0.1",
+  "description": "Next generation utility-first CSS framework.",
+  "main": "index.js",
+  "module": "index.mjs",
+  "types": "index.d.ts",
+  "bin": {
+    "nailuscss": "cli/index.js"
+  },
+  "scripts": {
+    "dev": "rollup -cw",
+    "tsd": "tsc -p ./src --emitDeclarationOnly",
+    "lint": "eslint . --ext .ts",
+    "lint:fix": "npm run lint -- --fix",
+    "typecheck": "tsc -p ./src --noEmit",
+    "build": "rollup -c && pnpm tsd",
+    "build:prod": "cross-env NODE_ENV=production pnpm build",
+    "test": "sucrase-node test/run.ts",
+    "test:update": "cross-env UPDATE_SNAPSHOT=true sucrase-node test/run.ts",
+    "test:dts": "tsc -p ./test/dts --noEmit",
+    "coverage": "nyc --nycrc-path=.nycrc.json pnpm test",
+    "release": "bumpp --tag --commit --push"
+  },
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "import": "./index.mjs",
+      "require": "./index.js"
+    },
+    "./colors": {
+      "import": "./colors.mjs",
+      "require": "./colors.js"
+    },
+    "./defaultConfig": {
+      "import": "./defaultConfig.mjs",
+      "require": "./defaultConfig.js"
+    },
+    "./defaultTheme": {
+      "import": "./defaultTheme.mjs",
+      "require": "./defaultTheme.js"
+    },
+    "./config": {
+      "import": "./config/index.mjs",
+      "require": "./config/index.js"
+    },
+    "./lib": {
+      "import": "./lib/index.mjs",
+      "require": "./lib/index.js"
+    },
+    "./plugin": {
+      "import": "./plugin/index.mjs",
+      "require": "./plugin/index.js"
+    },
+    "./plugin/aspect-ratio": {
+      "import": "./plugin/aspect-ratio/index.js",
+      "require": "./plugin/aspect-ratio/index.js"
+    },
+    "./plugin/filters": {
+      "import": "./plugin/filters/index.js",
+      "require": "./plugin/filters/index.js"
+    },
+    "./plugin/forms": {
+      "import": "./plugin/forms/index.js",
+      "require": "./plugin/forms/index.js"
+    },
+    "./plugin/line-clamp": {
+      "import": "./plugin/line-clamp/index.js",
+      "require": "./plugin/line-clamp/index.js"
+    },
+    "./plugin/typography": {
+      "import": "./plugin/typography/index.js",
+      "require": "./plugin/typography/index.js"
+    },
+    "./plugin/scroll-snap": {
+      "import": "./plugin/scroll-snap/index.js",
+      "require": "./plugin/scroll-snap/index.js"
+    },
+    "./helpers": {
+      "import": "./helpers/index.mjs",
+      "require": "./helpers/index.js"
+    },
+    "./utils": {
+      "import": "./utils/index.mjs",
+      "require": "./utils/index.js"
+    },
+    "./utils/parser": {
+      "import": "./utils/parser/index.mjs",
+      "require": "./utils/parser/index.js"
+    },
+    "./utils/style": {
+      "import": "./utils/style/index.mjs",
+      "require": "./utils/style/index.js"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nailuscss/nailuscss.git"
+  },
+  "keywords": [
+    "nailuscss",
+    "tailwindcss",
+    "css",
+    "compiler"
+  ],
+  "engines": {
+    "node": ">= 12"
+  },
+  "author": "Veritas Raven",
+  "license": "MIT",
+  "homepage": "https://github.com/nailuscss/nailuscss",
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^29.0.2",
+    "@rollup/plugin-json": "^6.1.0",
+    "@rollup/plugin-node-resolve": "^16.0.3",
+    "@rollup/plugin-replace": "^6.0.3",
+    "@rollup/plugin-sucrase": "^5.1.0",
+    "@rollup/plugin-typescript": "^12.3.0",
+    "@types/color-string": "^1.5.5",
+    "@types/diff": "^7.0.2",
+    "@types/fs-extra": "^11.0.4",
+    "@types/jasmine": "^6.0.0",
+    "@types/js-yaml": "^4.0.9",
+    "@types/lodash.merge": "^4.6.9",
+    "@types/minimatch": "^5.1.2",
+    "@types/node": "^25.6.0",
+    "@types/react": "^19.2.14",
+    "@typescript-eslint/eslint-plugin": "^8.59.0",
+    "@typescript-eslint/parser": "^8.59.0",
+    "arg": "^5.0.2",
+    "bumpp": "^11.0.1",
+    "caller-path": "^4.0.0",
+    "color-string": "^2.1.4",
+    "cross-env": "^10.1.0",
+    "diff": "^9.0.0",
+    "domhandler": "^6.0.1",
+    "eslint": "^10.2.1",
+    "fast-glob": "^3.3.3",
+    "fs-extra": "^11.3.4",
+    "jasmine": "^6.2.0",
+    "jasmine-spec-reporter": "^7.0.0",
+    "js-yaml": "^4.1.1",
+    "mini-svg-data-uri": "^1.4.4",
+    "minimatch": "^10.2.5",
+    "nyc": "^18.0.0",
+    "picocolors": "^1.1.1",
+    "pirates": "^4.0.7",
+    "rollup": "^4.60.2",
+    "sucrase": "^3.35.1",
+    "tosource": "^2.0.0-alpha.3",
+    "tslib": "^2.8.1",
+    "typescript": "^6.0.3"
+  }
+}

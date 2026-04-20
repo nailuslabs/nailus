@@ -1,0 +1,14 @@
+{
+  "name": "example-project",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Diptesh Choudhuri",
+  "license": "MIT",
+  "devDependencies": {
+    "chokidar-cli": "^3.0.0"
+  },
+  "scripts": {
+    "build": "node ../dist/cli/index.js -to nailus.css --dev -f nailus.config.js --style",
+    "dev": "chokidar -d 1000 '../dist/**/*' -c \"npm run build\""
+  }
+}
