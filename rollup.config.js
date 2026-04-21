@@ -157,7 +157,7 @@ const writeRootManifest = () => {
       if (fs.existsSync('src/plugin')) {
         const plugins = fs.readdirSync('src/plugin')
           .filter(dir => fs.statSync(`src/plugin/${dir}`).isDirectory());
-        
+
         plugins.forEach(plugin => {
           exports[`./plugin/${plugin}`] = {
             types: `./plugin/${plugin}/index.d.ts`,
@@ -207,7 +207,7 @@ const pack = (dir) => {
       if (!fs.existsSync(dirPath)) {
         fs.mkdirSync(dirPath, { recursive: true });
       }
-      
+
       fs.writeFileSync(
         `${dirPath}/package.json`,
         JSON.stringify({
@@ -233,7 +233,7 @@ const types = (dest = "index.d.ts", src = "../types/index", module = "*") => {
       if (!fs.existsSync(destDir)) {
         fs.mkdirSync(destDir, { recursive: true });
       }
-      
+
       fs.writeFileSync(destPath, `export ${module} from "${src}";`);
     },
   };
@@ -271,7 +271,7 @@ const standardOutputs = (basePath, options = {}) => {
 // ============================================================================
 
 export default [
-  
+
   // --------------------------------------------------------------------------
   // BUNDLE PRINCIPAL (ENTRY POINT)
   // --------------------------------------------------------------------------
@@ -443,12 +443,14 @@ export default [
   // --------------------------------------------------------------------------
   {
     input: 'src/cli/index.ts',
+    input: 'src/cli/index.ts',
     output: [
       // ESM version
       {
         file: dump('cli/index.js'),
         banner: '#!/usr/bin/env node',
         format: 'esm',
+        inlineDynamicImports: true,  // ← AJOUTER CETTE LIGNE
         paths: (id) =>
           id.match(/\/src\/(lib|utils|plugin|config|colors)/) &&
           `../${path.dirname(path.relative('./src', id))}/index.js`,
@@ -458,6 +460,7 @@ export default [
         file: dump('cli/index.cjs'),
         banner: '#!/usr/bin/env node',
         format: 'cjs',
+        inlineDynamicImports: true,  // ← AJOUTER CETTE LIGNE
         paths: (id) =>
           id.match(/\/src\/(lib|utils|plugin|config|colors)/) &&
           `../${path.dirname(path.relative('./src', id))}/index.cjs`,
@@ -484,7 +487,7 @@ export default [
           if (!fs.existsSync(cliDir)) {
             fs.mkdirSync(cliDir, { recursive: true });
           }
-          
+
           fs.writeFileSync(
             path.join(cliDir, 'package.json'),
             JSON.stringify({
@@ -494,7 +497,7 @@ export default [
               types: './index.d.ts',
             }, null, '  ')
           );
-          
+
           // Rend le fichier exécutable sur Unix
           try {
             fs.chmodSync(dump('cli/index.js'), 0o755);
