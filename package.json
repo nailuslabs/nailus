@@ -1,14 +1,35 @@
 {
   "name": "nailuscss",
   "version": "1.0.0",
+  "packageManager": "pnpm@10.28.0",
+  "description": "moteur atomique de generation css, des composants, fonts, icons instantaner a la demande",
+  "keywords": [
+    "nailus",
+    "nailuscss",
+    "taiwindcss",
+    "unocss",
+    "windicss",
+    "pandacss"
+  ],
+  "homepage": "https://github.com/nailuslabs/nailus#readme",
+  "bugs": {
+    "url": "https://github.com/nailuslabs/nailus/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nailuslabs/nailus.git"
+  },
+  "engines": {
+    "node": ">= 20"
+  },
+  "license": "MIT",
+  "author": "nsounda nsilulu naïloth esdras",
   "type": "module",
-  "packageManager": "pnpm@7.0.1",
-  "description": "Next generation utility-first CSS framework.",
-  "main": "index.js",
-  "module": "index.mjs",
-  "types": "index.d.ts",
+  "main": "./index.cjs",
+  "module": "./index.js",
+  "types": "./index.d.ts",
   "bin": {
-    "nailuscss": "cli/index.js"
+    "nailuscss": "./cli/index.js"
   },
   "scripts": {
     "dev": "rollup -cw",
@@ -28,106 +49,95 @@
     "./package.json": "./package.json",
     ".": {
       "types": "./index.d.ts",
-      "import": "./index.mjs",
-      "require": "./index.js"
+      "import": "./index.js",
+      "require": "./index.cjs"
     },
     "./colors": {
       "types": "./colors.d.ts",
-      "import": "./colors.mjs",
-      "require": "./colors.js"
+      "import": "./colors.js",
+      "require": "./colors.cjs"
     },
     "./defaultConfig": {
       "types": "./defaultConfig.d.ts",
-      "import": "./defaultConfig.mjs",
-      "require": "./defaultConfig.js"
+      "import": "./defaultConfig.js",
+      "require": "./defaultConfig.cjs"
     },
     "./defaultTheme": {
       "types": "./defaultTheme.d.ts",
-      "import": "./defaultTheme.mjs",
-      "require": "./defaultTheme.js"
+      "import": "./defaultTheme.js",
+      "require": "./defaultTheme.cjs"
+    },
+    "./resolveConfig": {
+      "types": "./resolveConfig.d.ts",
+      "import": "./resolveConfig.js",
+      "require": "./resolveConfig.cjs"
     },
     "./config": {
       "types": "./config/index.d.ts",
-      "import": "./config/index.mjs",
-      "require": "./config/index.js"
+      "import": "./config/index.js",
+      "require": "./config/index.cjs"
     },
     "./lib": {
       "types": "./lib/index.d.ts",
-      "import": "./lib/index.mjs",
-      "require": "./lib/index.js"
+      "import": "./lib/index.js",
+      "require": "./lib/index.cjs"
+    },
+    "./helpers": {
+      "types": "./helpers/index.d.ts",
+      "import": "./helpers/index.js",
+      "require": "./helpers/index.cjs"
+    },
+    "./utils": {
+      "types": "./utils/index.d.ts",
+      "import": "./utils/index.js",
+      "require": "./utils/index.cjs"
+    },
+    "./utils/parser": {
+      "types": "./utils/parser/index.d.ts",
+      "import": "./utils/parser/index.js",
+      "require": "./utils/parser/index.cjs"
+    },
+    "./utils/style": {
+      "types": "./utils/style/index.d.ts",
+      "import": "./utils/style/index.js",
+      "require": "./utils/style/index.cjs"
     },
     "./plugin": {
       "types": "./plugin/index.d.ts",
-      "import": "./plugin/index.mjs",
-      "require": "./plugin/index.js"
+      "import": "./plugin/index.js",
+      "require": "./plugin/index.cjs"
     },
     "./plugin/aspect-ratio": {
       "types": "./plugin/aspect-ratio/index.d.ts",
       "import": "./plugin/aspect-ratio/index.js",
-      "require": "./plugin/aspect-ratio/index.js"
+      "require": "./plugin/aspect-ratio/index.cjs"
     },
     "./plugin/filters": {
       "types": "./plugin/filters/index.d.ts",
       "import": "./plugin/filters/index.js",
-      "require": "./plugin/filters/index.js"
+      "require": "./plugin/filters/index.cjs"
     },
     "./plugin/forms": {
       "types": "./plugin/forms/index.d.ts",
       "import": "./plugin/forms/index.js",
-      "require": "./plugin/forms/index.js"
+      "require": "./plugin/forms/index.cjs"
     },
     "./plugin/line-clamp": {
       "types": "./plugin/line-clamp/index.d.ts",
       "import": "./plugin/line-clamp/index.js",
-      "require": "./plugin/line-clamp/index.js"
+      "require": "./plugin/line-clamp/index.cjs"
     },
     "./plugin/typography": {
       "types": "./plugin/typography/index.d.ts",
       "import": "./plugin/typography/index.js",
-      "require": "./plugin/typography/index.js"
+      "require": "./plugin/typography/index.cjs"
     },
     "./plugin/scroll-snap": {
       "types": "./plugin/scroll-snap/index.d.ts",
       "import": "./plugin/scroll-snap/index.js",
-      "require": "./plugin/scroll-snap/index.js"
-    },
-    "./helpers": {
-      "types": "./helpers/index.d.ts",
-      "import": "./helpers/index.mjs",
-      "require": "./helpers/index.js"
-    },
-    "./utils": {
-      "types": "./utils/index.d.ts",
-      "import": "./utils/index.mjs",
-      "require": "./utils/index.js"
-    },
-    "./utils/parser": {
-      "types": "./utils/parser/index.d.ts",
-      "import": "./utils/parser/index.mjs",
-      "require": "./utils/parser/index.js"
-    },
-    "./utils/style": {
-      "types": "./utils/style/index.d.ts",
-      "import": "./utils/style/index.mjs",
-      "require": "./utils/style/index.js"
+      "require": "./plugin/scroll-snap/index.cjs"
     }
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/nailuscss/nailuscss.git"
-  },
-  "keywords": [
-    "nailuscss",
-    "tailwindcss",
-    "css",
-    "compiler"
-  ],
-  "engines": {
-    "node": ">= 12"
-  },
-  "author": "Veritas Raven",
-  "license": "MIT",
-  "homepage": "https://github.com/nailuscss/nailuscss",
   "devDependencies": {
     "@rollup/plugin-commonjs": "^29.0.2",
     "@rollup/plugin-json": "^6.1.0",
