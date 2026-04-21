@@ -410,6 +410,15 @@ export default [
           id.match(/\/src\/(lib|utils|plugin|config|colors)/) &&
           `../${path.dirname(path.relative('./src', id))}/index.js`,
       },
+      // Ajout du format ESM pour la CLI
+      {
+        file: dump('cli/index.mjs'),
+        banner: '#!/usr/bin/env node',  // Shebang pour exécution directe (ESM)
+        format: 'esm',                  // ES Modules pour les environnements modernes
+        paths: (id) =>
+          id.match(/\/src\/(lib|utils|plugin|config|colors)/) &&
+          `../${path.dirname(path.relative('./src', id))}/index.mjs`,
+      },
     ],
     onwarn: (warning) => {
       // Ignore les avertissements de dépendance circulaire (courant dans les CLI)
@@ -426,6 +435,31 @@ export default [
       ts_plugin,
       resolve(),
       commonjs(),
+      // Ajout d'un plugin pour créer le package.json dans le dossier cli
+      {
+        name: 'create-cli-package-json',
+        writeBundle() {
+          const cliDir = dump('cli');
+          if (!fs.existsSync(cliDir)) {
+            fs.mkdirSync(cliDir, { recursive: true });
+          }
+          
+          fs.writeFileSync(
+            path.join(cliDir, 'package.json'),
+            JSON.stringify({
+              type: 'commonjs',     // Force CommonJS pour la compatibilité Node.js
+              main: './index.js',
+              module: './index.mjs',
+              types: './index.d.ts',
+              bin: {
+                'nailuscss': './index.js'
+              }
+            }, null, '  ')
+          );
+        }
+      },
+      // Génération des types TypeScript pour la CLI
+      types(`cli/index.d.ts`, `../types/cli/index`),
     ],
   },
 
