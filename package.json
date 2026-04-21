@@ -149,6 +149,7 @@
     "arg": "^5.0.2",
     "bumpp": "^11.0.1",
     "caller-path": "^4.0.0",
+    "chokidar-cli": "^3.0.0",
     "color-string": "^2.1.4",
     "cross-env": "^10.1.0",
     "diff": "^9.0.0",
