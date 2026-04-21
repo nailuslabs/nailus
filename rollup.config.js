@@ -1,16 +1,14 @@
 /**
- * Rollup Configuration File
+ * Rollup Configuration File - ESM First
  * 
- * Cette configuration génère une bibliothèque multi-formats (CJS, ESM) avec
- * des définitions TypeScript complètes. Elle est optimisée pour les projets
- * modernes comme Tailwind CSS et UnoCSS.
+ * Cette configuration génère une bibliothèque multi-formats avec ESM comme format par défaut.
+ * Convention moderne : .js = ESM, .cjs = CommonJS
  * 
  * Fonctionnalités principales :
- * - Génération de bundles ESM (.mjs) et CommonJS (.js)
+ * - ESM par défaut (type: "module")
+ * - Génération de bundles ESM (.js) et CommonJS (.cjs)
  * - Génération automatique des fichiers de définition TypeScript (.d.ts)
- * - Support des sous-modules (plugin/, utils/, etc.)
- * - Optimisation pour le développement et la production
- * - Gestion des dépendances externes et des chemins relatifs
+ * - Support complet des sous-modules avec ESM et CJS
  */
 
 import fs from 'fs';
@@ -28,24 +26,20 @@ import pkg from './package.json' with { type: 'json' };
 // CONSTANTES ET CONFIGURATION GLOBALE
 // ============================================================================
 
-/** Dossier de sortie pour tous les fichiers générés */
 const output_dir = './dist';
-
-/** Mode production (optimisé) ou développement (rapide) */
 const prod = process.env.NODE_ENV === 'production';
 
 /**
- * Plugin TypeScript configuré selon le mode
- * - Production : Compilation complète avec typescript
- * - Développement : Transpilation rapide avec sucrase
+ * Configuration TypeScript optimisée pour ESM
  */
 const ts_plugin = prod
   ? typescript({
-    target: 'es2020',        // Cible moderne pour les bundles ESM
+    target: 'es2022',               // ES2022 pour les features modernes
+    module: 'esnext',               // Garde la syntaxe ESM intacte
     include: 'src/**',
     outDir: output_dir,
     typescript: ts,
-    declaration: true,        // Génère les fichiers .d.ts
+    declaration: true,
     declarationDir: output_dir,
   })
   : sucrase({
@@ -54,20 +48,11 @@ const ts_plugin = prod
   });
 
 // ============================================================================
-// FONCTIONS UTILITAIRES POUR LA GESTION DES FICHIERS
+// FONCTIONS UTILITAIRES
 // ============================================================================
 
-/**
- * Construit un chemin complet vers le dossier de sortie
- * @param {string} file - Nom du fichier ou chemin relatif
- * @returns {string} Chemin complet dans le dossier dist
- */
 const dump = (file) => path.join(output_dir, file);
 
-/**
- * Copie une liste de fichiers vers le dossier de sortie
- * @param {string[]} files - Liste des noms de fichiers à copier
- */
 const copy = (files) => {
   return {
     name: 'copy-files',
@@ -82,13 +67,9 @@ const copy = (files) => {
 };
 
 // ============================================================================
-// PLUGINS ROLLUP PERSONNALISÉS (HOOKS DE BUILD)
+// PLUGINS ROLLUP PERSONNALISÉS
 // ============================================================================
 
-/**
- * Nettoie le dossier de sortie avant le build
- * CORRECTION: Retourne un objet plugin Rollup valide
- */
 const cleanOutputDir = () => {
   return {
     name: 'clean-output-dir',
@@ -102,44 +83,110 @@ const cleanOutputDir = () => {
 };
 
 /**
- * Écrit le package.json racine avec le type "commonjs"
- * pour assurer la compatibilité avec les anciens environnements
+ * Écrit le package.json racine avec ESM comme format par défaut
  */
 const writeRootManifest = () => {
   return {
     name: 'write-root-manifest',
     writeBundle() {
+      // Génération dynamique des exports basée sur la structure du projet
+      const exports = {
+        '.': {
+          types: './index.d.ts',
+          import: './index.js',      // ESM par défaut (.js = ESM)
+          require: './index.cjs',    // CommonJS explicite (.cjs)
+        },
+        './colors': {
+          types: './colors.d.ts',
+          import: './colors.js',
+          require: './colors.cjs',
+        },
+        './defaultConfig': {
+          types: './defaultConfig.d.ts',
+          import: './defaultConfig.js',
+          require: './defaultConfig.cjs',
+        },
+        './defaultTheme': {
+          types: './defaultTheme.d.ts',
+          import: './defaultTheme.js',
+          require: './defaultTheme.cjs',
+        },
+        './resolveConfig': {
+          types: './resolveConfig.d.ts',
+          import: './resolveConfig.js',
+          require: './resolveConfig.cjs',
+        },
+        './plugin': {
+          types: './plugin/index.d.ts',
+          import: './plugin/index.js',
+          require: './plugin/index.cjs',
+        },
+        './config': {
+          types: './config/index.d.ts',
+          import: './config/index.js',
+          require: './config/index.cjs',
+        },
+        './lib': {
+          types: './lib/index.d.ts',
+          import: './lib/index.js',
+          require: './lib/index.cjs',
+        },
+        './helpers': {
+          types: './helpers/index.d.ts',
+          import: './helpers/index.js',
+          require: './helpers/index.cjs',
+        },
+        './utils': {
+          types: './utils/index.d.ts',
+          import: './utils/index.js',
+          require: './utils/index.cjs',
+        },
+        './utils/parser': {
+          types: './utils/parser/index.d.ts',
+          import: './utils/parser/index.js',
+          require: './utils/parser/index.cjs',
+        },
+        './utils/style': {
+          types: './utils/style/index.d.ts',
+          import: './utils/style/index.js',
+          require: './utils/style/index.cjs',
+        },
+      };
+
+      // Ajout dynamique des plugins
+      if (fs.existsSync('src/plugin')) {
+        const plugins = fs.readdirSync('src/plugin')
+          .filter(dir => fs.statSync(`src/plugin/${dir}`).isDirectory());
+        
+        plugins.forEach(plugin => {
+          exports[`./plugin/${plugin}`] = {
+            types: `./plugin/${plugin}/index.d.ts`,
+            import: `./plugin/${plugin}/index.js`,
+            require: `./plugin/${plugin}/index.cjs`,
+          };
+        });
+      }
+
       fs.writeFileSync(
         dump('package.json'),
         JSON.stringify(
           {
-            ...pkg,
-            type: 'commonjs',      // Force le mode CommonJS par défaut
-            main: './index.js',    // Point d'entrée principal (CJS)
-            module: './index.mjs', // Point d'entrée ESM
-            types: './index.d.ts', // Types TypeScript
-            exports: {
-              '.': {
-                import: './index.mjs',
-                require: './index.js',
-                types: './index.d.ts'
-              },
-              './colors': {
-                import: './colors.mjs',
-                require: './colors.js',
-                types: './colors.d.ts'
-              },
-              './plugin': {
-                import: './plugin/index.mjs',
-                require: './plugin/index.js',
-                types: './plugin/index.d.ts'
-              },
-              './utils/*': {
-                import: './utils/*/index.mjs',
-                require: './utils/*/index.js',
-                types: './utils/*/index.d.ts'
-              }
-            }
+            name: pkg.name,
+            version: pkg.version,
+            description: pkg.description,
+            type: 'module',               // ESM par défaut !
+            main: './index.cjs',          // Point d'entrée CommonJS (fallback)
+            module: './index.js',         // Point d'entrée ESM (principal)
+            types: './index.d.ts',
+            bin: {
+              'nailuscss': './cli/index.js'
+            },
+            exports,
+            repository: pkg.repository,
+            keywords: pkg.keywords,
+            author: pkg.author,
+            license: pkg.license,
+            engines: pkg.engines,
           },
           null,
           '  '
@@ -150,26 +197,12 @@ const writeRootManifest = () => {
 };
 
 /**
- * Crée un package.json pour un sous-dossier (plugin, utils, etc.)
- * Cela permet les imports comme `import { x } from 'mon-package/plugin'`
- * 
- * @param {string} dir - Nom du sous-dossier
- * @param {boolean} mjs - Si true, génère aussi un point d'entrée ESM
+ * Crée un package.json pour un sous-dossier avec ESM par défaut
  */
-const pack = (dir, mjs = true) => {
+const pack = (dir) => {
   return {
     name: `pack-${dir}`,
     writeBundle() {
-      const pkgJson = {
-        main: './index.js',
-        types: './index.d.ts',
-      };
-      
-      // Ajoute le point d'entrée module uniquement si ESM est supporté
-      if (mjs) {
-        pkgJson.module = './index.mjs';
-      }
-      
       const dirPath = dump(dir);
       if (!fs.existsSync(dirPath)) {
         fs.mkdirSync(dirPath, { recursive: true });
@@ -177,24 +210,24 @@ const pack = (dir, mjs = true) => {
       
       fs.writeFileSync(
         `${dirPath}/package.json`,
-        JSON.stringify(pkgJson, null, '  ')
+        JSON.stringify({
+          type: 'module',           // ESM par défaut
+          main: './index.cjs',      // CommonJS fallback
+          module: './index.js',     // ESM principal
+          types: './index.d.ts',
+        }, null, '  ')
       );
     },
   };
 };
 
 /**
- * Génère un fichier de définition TypeScript qui ré-exporte depuis le dossier types
- * 
- * @param {string} dest - Chemin de destination du fichier .d.ts
- * @param {string} src - Chemin source depuis le dossier types
- * @param {string} module - Type d'export (ex: "{ default }", "*")
+ * Génère un fichier de définition TypeScript
  */
 const types = (dest = "index.d.ts", src = "../types/index", module = "*") => {
   return {
     name: `generate-types-${dest}`,
     writeBundle() {
-      // Crée le dossier parent si nécessaire
       const destPath = dump(dest);
       const destDir = path.dirname(destPath);
       if (!fs.existsSync(destDir)) {
@@ -207,6 +240,33 @@ const types = (dest = "index.d.ts", src = "../types/index", module = "*") => {
 };
 
 // ============================================================================
+// FONCTION HELPER POUR GÉNÉRER LES OUTPUTS ESM + CJS
+// ============================================================================
+
+/**
+ * Génère les configurations de sortie standard (ESM .js + CJS .cjs)
+ * @param {string} basePath - Chemin de base pour le fichier
+ * @param {object} options - Options additionnelles
+ */
+const standardOutputs = (basePath, options = {}) => {
+  const outputs = [
+    // ESM - Format par défaut (extension .js)
+    {
+      file: dump(`${basePath}.js`),
+      format: 'esm',
+      ...options.esm,
+    },
+    // CommonJS - Format fallback (extension .cjs)
+    {
+      file: dump(`${basePath}.cjs`),
+      format: 'cjs',
+      ...options.cjs,
+    },
+  ];
+  return outputs;
+};
+
+// ============================================================================
 // CONFIGURATION DES BUNDLES
 // ============================================================================
 
@@ -214,26 +274,21 @@ export default [
   
   // --------------------------------------------------------------------------
   // BUNDLE PRINCIPAL (ENTRY POINT)
-  // Génère le point d'entrée principal de la bibliothèque
   // --------------------------------------------------------------------------
   {
     input: 'src/index.ts',
-    output: [
-      {
-        file: dump('index.js'),
-        format: 'cjs',              // Format CommonJS pour Node.js
-        exports: 'default',
+    output: standardOutputs('index', {
+      esm: {
         paths: (id) => `./${path.relative('./src', id)}/index.js`,
       },
-      {
-        file: dump('index.mjs'),
-        format: 'esm',              // Format ES Modules pour les bundlers modernes
-        paths: (id) => `./${path.relative('./src', id)}/index.mjs`,
+      cjs: {
+        exports: 'default',
+        paths: (id) => `./${path.relative('./src', id)}/index.cjs`,
       },
-    ],
-    external: (id) => id.startsWith('./'),  // Considère les imports relatifs comme externes
+    }),
+    external: (id) => id.startsWith('./'),
     plugins: [
-      cleanOutputDir(),             // Nettoie et crée le dossier de sortie
+      cleanOutputDir(),
       ts_plugin,
       copy(['README.md', 'LICENSE']),
       writeRootManifest(),
@@ -243,23 +298,18 @@ export default [
 
   // --------------------------------------------------------------------------
   // MODULE COLORS
-  // Exporte la configuration des couleurs (palette)
   // --------------------------------------------------------------------------
   {
     input: 'src/colors.ts',
-    output: [
-      {
-        file: dump('colors.js'),
-        format: 'cjs',
-        exports: 'default',
+    output: standardOutputs('colors', {
+      esm: {
         paths: (id) => `./${path.relative('./src', id)}/index.js`,
       },
-      {
-        file: dump('colors.mjs'),
-        format: 'esm',
-        paths: (id) => `./${path.relative('./src', id)}/index.mjs`,
+      cjs: {
+        exports: 'default',
+        paths: (id) => `./${path.relative('./src', id)}/index.cjs`,
       },
-    ],
+    }),
     external: (id) => id.startsWith('./'),
     plugins: [
       ts_plugin,
@@ -269,23 +319,18 @@ export default [
 
   // --------------------------------------------------------------------------
   // MODULE DEFAULTCONFIG
-  // Exporte la configuration par défaut de la bibliothèque
   // --------------------------------------------------------------------------
   {
     input: 'src/defaultConfig.ts',
-    output: [
-      {
-        file: dump('defaultConfig.js'),
-        format: 'cjs',
-        exports: 'default',
+    output: standardOutputs('defaultConfig', {
+      esm: {
         paths: (id) => `./${path.relative('./src', id)}/index.js`,
       },
-      {
-        file: dump('defaultConfig.mjs'),
-        format: 'esm',
-        paths: (id) => `./${path.relative('./src', id)}/index.mjs`,
+      cjs: {
+        exports: 'default',
+        paths: (id) => `./${path.relative('./src', id)}/index.cjs`,
       },
-    ],
+    }),
     external: (id) => id.startsWith('./'),
     plugins: [
       ts_plugin,
@@ -295,23 +340,18 @@ export default [
 
   // --------------------------------------------------------------------------
   // MODULE DEFAULT THEME
-  // Exporte le thème par défaut
   // --------------------------------------------------------------------------
   {
     input: 'src/defaultTheme.ts',
-    output: [
-      {
-        file: dump('defaultTheme.js'),
-        format: 'cjs',
-        exports: 'default',
+    output: standardOutputs('defaultTheme', {
+      esm: {
         paths: (id) => `./${path.relative('./src', id)}/index.js`,
       },
-      {
-        file: dump('defaultTheme.mjs'),
-        format: 'esm',
-        paths: (id) => `./${path.relative('./src', id)}/index.mjs`,
+      cjs: {
+        exports: 'default',
+        paths: (id) => `./${path.relative('./src', id)}/index.cjs`,
       },
-    ],
+    }),
     external: (id) => id.startsWith('./'),
     plugins: [
       ts_plugin,
@@ -321,23 +361,18 @@ export default [
 
   // --------------------------------------------------------------------------
   // MODULE RESOLVECONFIG
-  // Utilitaire pour résoudre et fusionner les configurations
   // --------------------------------------------------------------------------
   {
     input: 'src/resolveConfig.ts',
-    output: [
-      {
-        file: dump('resolveConfig.js'),
-        format: 'cjs',
-        exports: 'default',
+    output: standardOutputs('resolveConfig', {
+      esm: {
         paths: (id) => `./${path.relative('./src', id)}/index.js`,
       },
-      {
-        file: dump('resolveConfig.mjs'),
-        format: 'esm',
-        paths: (id) => `./${path.relative('./src', id)}/index.mjs`,
+      cjs: {
+        exports: 'default',
+        paths: (id) => `./${path.relative('./src', id)}/index.cjs`,
       },
-    ],
+    }),
     external: (id) => id.startsWith('./'),
     plugins: [
       ts_plugin,
@@ -347,81 +382,88 @@ export default [
 
   // --------------------------------------------------------------------------
   // MODULE PLUGIN (ENTRY POINT)
-  // Point d'entrée principal pour le système de plugins
   // --------------------------------------------------------------------------
   {
     input: 'src/plugin/index.ts',
-    output: [
-      {
-        file: dump('plugin/index.js'),
+    output: standardOutputs('plugin/index', {
+      cjs: {
         exports: 'default',
-        format: 'cjs',
       },
-      {
-        file: dump('plugin/index.mjs'),
-        format: 'esm',
-      },
-    ],
+    }),
     plugins: [
       ts_plugin,
-      resolve(),                    // Résout les modules node_modules
+      resolve(),
       pack('plugin'),
       types(`plugin/index.d.ts`, `../types/plugin/index`, "{ default }"),
     ],
   },
 
   // --------------------------------------------------------------------------
-  // SOUS-MODULES DE PLUGIN (GÉNÉRATION DYNAMIQUE)
-  // Génère automatiquement des bundles pour chaque sous-dossier de plugin/
+  // SOUS-MODULES DE PLUGIN (AVEC ESM + CJS)
   // --------------------------------------------------------------------------
   ...fs.readdirSync('src/plugin')
     .filter(dir => fs.statSync(`src/plugin/${dir}`).isDirectory())
-    .map((dir) => ({
-      input: `src/plugin/${dir}/index.ts`,
-      output: [
-        {
-          file: dump(`plugin/${dir}/index.js`),
-          exports: 'default',
-          format: 'cjs',
-        },
-        // Note: Pas de sortie ESM pour les sous-plugins profonds
-        // (peut être ajouté si nécessaire)
-      ],
-      plugins: [
-        ts_plugin,
-        resolve(),
-        commonjs(),                 // Convertit les modules CommonJS en ESM
-        types(`plugin/${dir}/index.d.ts`, `../../types/plugin/${dir}/index`, "{ default }"),
-      ],
-    })),
+    .flatMap((dir) => [
+      // Configuration ESM
+      {
+        input: `src/plugin/${dir}/index.ts`,
+        output: [
+          {
+            file: dump(`plugin/${dir}/index.js`),
+            format: 'esm',
+          },
+        ],
+        plugins: [
+          ts_plugin,
+          resolve(),
+          commonjs(),
+          types(`plugin/${dir}/index.d.ts`, `../../types/plugin/${dir}/index`, "{ default }"),
+        ],
+      },
+      // Configuration CJS
+      {
+        input: `src/plugin/${dir}/index.ts`,
+        output: [
+          {
+            file: dump(`plugin/${dir}/index.cjs`),
+            format: 'cjs',
+            exports: 'default',
+          },
+        ],
+        plugins: [
+          ts_plugin,
+          resolve(),
+          commonjs(),
+        ],
+      },
+    ]),
 
   // --------------------------------------------------------------------------
-  // CLI (COMMAND LINE INTERFACE)
-  // Bundle exécutable pour l'outil en ligne de commande
+  // CLI (ESM + CJS)
   // --------------------------------------------------------------------------
   {
     input: 'src/cli/index.ts',
     output: [
+      // ESM version
       {
         file: dump('cli/index.js'),
-        banner: '#!/usr/bin/env node',  // Shebang pour exécution directe
-        format: 'cjs',                  // CommonJS pour compatibilité Node.js
+        banner: '#!/usr/bin/env node',
+        format: 'esm',
         paths: (id) =>
           id.match(/\/src\/(lib|utils|plugin|config|colors)/) &&
           `../${path.dirname(path.relative('./src', id))}/index.js`,
       },
-      // Ajout du format ESM pour la CLI
+      // CJS version (fallback)
       {
-        file: dump('cli/index.mjs'),
-        banner: '#!/usr/bin/env node',  // Shebang pour exécution directe (ESM)
-        format: 'esm',                  // ES Modules pour les environnements modernes
+        file: dump('cli/index.cjs'),
+        banner: '#!/usr/bin/env node',
+        format: 'cjs',
         paths: (id) =>
           id.match(/\/src\/(lib|utils|plugin|config|colors)/) &&
-          `../${path.dirname(path.relative('./src', id))}/index.mjs`,
+          `../${path.dirname(path.relative('./src', id))}/index.cjs`,
       },
     ],
     onwarn: (warning) => {
-      // Ignore les avertissements de dépendance circulaire (courant dans les CLI)
       if (warning.code === 'CIRCULAR_DEPENDENCY') return;
     },
     external: (id) =>
@@ -429,13 +471,12 @@ export default [
     plugins: [
       replace({
         preventAssignment: true,
-        __NAME__: pkg.name,         // Injecte le nom du package
-        __VERSION__: pkg.version,   // Injecte la version
+        __NAME__: pkg.name,
+        __VERSION__: pkg.version,
       }),
       ts_plugin,
       resolve(),
       commonjs(),
-      // Ajout d'un plugin pour créer le package.json dans le dossier cli
       {
         name: 'create-cli-package-json',
         writeBundle() {
@@ -447,43 +488,37 @@ export default [
           fs.writeFileSync(
             path.join(cliDir, 'package.json'),
             JSON.stringify({
-              type: 'commonjs',     // Force CommonJS pour la compatibilité Node.js
-              main: './index.js',
-              module: './index.mjs',
+              type: 'module',           // ESM par défaut
+              main: './index.cjs',      // Fallback CJS
+              module: './index.js',     // Principal ESM
               types: './index.d.ts',
-              bin: {
-                'nailuscss': './index.js'
-              }
             }, null, '  ')
           );
+          
+          // Rend le fichier exécutable sur Unix
+          try {
+            fs.chmodSync(dump('cli/index.js'), 0o755);
+            fs.chmodSync(dump('cli/index.cjs'), 0o755);
+          } catch (e) {
+            // Ignore les erreurs sur Windows
+          }
         }
       },
-      // Génération des types TypeScript pour la CLI
       types(`cli/index.d.ts`, `../types/cli/index`),
     ],
   },
 
   // --------------------------------------------------------------------------
-  // MODULES UTILITAIRES PRINCIPAUX (GÉNÉRATION DYNAMIQUE)
-  // Génère des bundles pour config/, lib/, utils/, helpers/
+  // MODULES UTILITAIRES PRINCIPAUX
   // --------------------------------------------------------------------------
   ...fs.readdirSync('src/')
     .filter((dir) => ['config', 'lib', 'utils', 'helpers'].includes(dir) && fs.statSync(`src/${dir}`).isDirectory())
     .map((dir) => ({
       input: `src/${dir}/index.ts`,
-      output: [
-        {
-          file: dump(`${dir}/index.js`),
-          format: 'cjs',
-        },
-        {
-          file: dump(`${dir}/index.mjs`),
-          format: 'esm',
-        },
-      ],
+      output: standardOutputs(`${dir}/index`),
       plugins: [
         ts_plugin,
-        json(),                     // Support pour l'import de fichiers JSON
+        json(),
         resolve(),
         commonjs(),
         pack(dir),
@@ -492,8 +527,7 @@ export default [
     })),
 
   // --------------------------------------------------------------------------
-  // SOUS-MODULES D'UTILITAIRES (GÉNÉRATION DYNAMIQUE)
-  // Génère des bundles pour chaque sous-dossier de utils/ (sauf algorithm/)
+  // SOUS-MODULES D'UTILITAIRES
   // --------------------------------------------------------------------------
   ...fs.readdirSync('src/utils')
     .filter(
@@ -502,16 +536,7 @@ export default [
     )
     .map((dir) => ({
       input: `src/utils/${dir}/index.ts`,
-      output: [
-        {
-          file: dump(`utils/${dir}/index.js`),
-          format: 'cjs',
-        },
-        {
-          file: dump(`utils/${dir}/index.mjs`),
-          format: 'esm',
-        },
-      ],
+      output: standardOutputs(`utils/${dir}/index`),
       plugins: [
         ts_plugin,
         json(),
