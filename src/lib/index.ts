@@ -48,19 +48,201 @@ import type {
 
 import type { Utility } from './utilities/handler';
 
+interface OptimisedProcessorCache {
+  count: number;
+  html: Set<string>;
+  attrs: Set<string>;
+  classes: Set<string>;
+  utilities: Set<string>;
+  variants: string[];          // gardé en array car itéré souvent
+  variantSet: Set<string>;     // lookup O(1)
+}
+
+class LRUCache<K, V> {
+  private _map = new Map<K, V>();
+  private _max: number;
+
+  constructor(max = 5000) {
+    this._max = max;
+  }
+
+  get(key: K): V | undefined {
+    const value = this._map.get(key);
+    if (value !== undefined) {
+      // Rafraîchir l'ordre LRU
+      this._map.delete(key);
+      this._map.set(key, value);
+    }
+    return value;
+  }
+
+  set(key: K, value: V): void {
+    if (this._map.has(key)) {
+      this._map.delete(key);
+    } else if (this._map.size >= this._max) {
+      // Supprimer l'entrée la plus ancienne
+      this._map.delete(this._map.keys().next().value as K);
+    }
+    this._map.set(key, value);
+  }
+
+  has(key: K): boolean {
+    return this._map.has(key);
+  }
+
+  clear(): void {
+    this._map.clear();
+  }
+}
+
+type AttrTransformer = (utility: string) => string;
+
+const ATTR_TRANSFORMERS: Record<string, AttrTransformer> = {
+  w: (u) => {
+    if (['w-min', 'w-max', 'w-min-content', 'w-max-content'].includes(u)) return u.slice(0, 5);
+    if (u.startsWith('w-min')) return 'min-w' + u.slice(5);
+    if (u.startsWith('w-max')) return 'max-w' + u.slice(5);
+    return u;
+  },
+  h: (u) => {
+    if (['h-min', 'h-max', 'h-min-content', 'h-max-content'].includes(u)) return u.slice(0, 5);
+    if (u.startsWith('h-min')) return 'min-h' + u.slice(5);
+    if (u.startsWith('h-max')) return 'max-h' + u.slice(5);
+    return u;
+  },
+  flex: (u) => {
+    if (u === 'flex-default') return 'flex';
+    if (u === 'flex-inline') return 'inline-flex';
+    if (/^flex-gap-/.test(u)) return u.slice(5);
+    return u;
+  },
+  grid: (u) => {
+    if (u === 'grid-default') return 'grid';
+    if (u === 'grid-inline') return 'inline-grid';
+    if (/^grid-(auto|gap|col|row)-/.test(u)) return u.slice(5);
+    return u;
+  },
+  justify: (u) => {
+    if (u.startsWith('justify-content-')) return 'justify-' + u.slice(16);
+    return u;
+  },
+  align: (u) => {
+    if (/^align-(items|self|content)-/.test(u)) return u.slice(6);
+    return 'content-' + u.slice(6);
+  },
+  place: (u) => {
+    if (!/^place-(items|self|content)-/.test(u)) return 'place-content-' + u.slice(6);
+    return u;
+  },
+  font: (u) => {
+    if (
+      /^font-(tracking|leading)-/.test(u) ||
+      ['font-italic','font-not-italic','font-antialiased','font-subpixel-antialiased',
+       'font-normal-nums','font-ordinal','font-slashed-zero','font-lining-nums',
+       'font-oldstyle-nums','font-proportional-nums','font-tabular-nums',
+       'font-diagonal-fractions','font-stacked-fractions'].includes(u)
+    ) return u.slice(5);
+    return u;
+  },
+  text: (u) => {
+    if (['text-baseline','text-top','text-middle','text-bottom','text-text-top',
+         'text-text-bottom','text-sub','text-super'].includes(u)) return 'align-' + u.slice(5);
+    if (u.startsWith('text-placeholder') || u.startsWith('text-underline') ||
+        u.startsWith('text-tab') || u.startsWith('text-indent') ||
+        u.startsWith('text-hyphens') || u.startsWith('text-write')) return u.slice(5);
+    if (['text-underline','text-overline','text-line-through','text-no-underline',
+         'text-uppercase','text-lowercase','text-capitalize','text-normal-case',
+         'text-truncate','text-overflow-ellipsis','text-text-ellipsis','text-text-clip',
+         'text-break-normal','text-break-words','text-break-all'].includes(u)) return u.slice(5);
+    if (u.startsWith('text-space')) return 'white' + u.slice(5);
+    return u;
+  },
+  underline: (u) => {
+    if (u === 'underline-none') return 'no-underline';
+    if (u === 'underline-line-through') return 'line-through';
+    return u;
+  },
+  svg: (u) => {
+    if (u.startsWith('svg-fill') || u.startsWith('svg-stroke')) return u.slice(4);
+    return u;
+  },
+  border: (u) => {
+    if (u.startsWith('border-rounded')) return u.slice(7);
+    return u;
+  },
+  gradient: (u) => {
+    if (u === 'gradient-none') return 'bg-none';
+    if (/^gradient-to-[trbl]{1,2}$/.test(u)) return 'bg-' + u;
+    if (/^gradient-(from|via|to)-/.test(u)) return u.slice(9);
+    return u;
+  },
+  display:    (u) => u.slice(8),
+  pos:        (u) => u.slice(4),
+  position:   (u) => u.slice(9),
+  box: (u) => {
+    if (/^box-(decoration|shadow)/.test(u)) return u.slice(4);
+    return u;
+  },
+  filter: (u) => {
+    if (u !== 'filter-none' && u !== 'filter') return u.slice(7);
+    return u;
+  },
+  backdrop: (u) => {
+    if (u === 'backdrop') return 'backdrop-filter';
+    if (u === 'backdrop-none') return 'backdrop-filter-none';
+    return u;
+  },
+  transition: (u) => {
+    if (/transition-(duration|ease|delay)-/.test(u)) return u.slice(11);
+    return u;
+  },
+  transform: (u) => {
+    if (!['transform-gpu','transform-none','transform'].includes(u)) return u.slice(10);
+    return u;
+  },
+  isolation: (u) => {
+    if (u === 'isolation-isolate') return 'isolate';
+    return u;
+  },
+  table: (u) => {
+    if (u === 'table-inline') return 'inline-table';
+    if (u.startsWith('table-caption-') || u.startsWith('table-empty-cells')) return u.slice(6);
+    return u;
+  },
+  pointer:  (u) => 'pointer-events' + u.slice(7),
+  resize:   (u) => u === 'resize-both' ? 'resize' : u,
+  ring:     (u) => u,
+  blend:    (u) => 'mix-' + u,
+  sr:       (u) => u === 'sr-not-only' ? 'not-sr-only' : u,
+};
+
 export class Processor {
   private _config: Config;
   private _theme: Config['theme'];
   private _variants: ResolvedVariants = {};
-  private _cache: ProcessorCache = {
+
+  // Cache optimisé : Sets pour O(1), LRU pour le parsing
+  private _cache: OptimisedProcessorCache = {
     count: 0,
-    html: [],
-    attrs: [],
-    classes: [],
-    utilities: [],
+    html: new Set<string>(),
+    attrs: new Set<string>(),
+    classes: new Set<string>(),
+    utilities: new Set<string>(),
     variants: [],
+    variantSet: new Set<string>(),
   };
+
+  // Cache LRU pour le parsing de classes — évite de re-parser les mêmes classes
+  private _parseCache = new LRUCache<string, Element[]>(8000);
+
+  // Cache pour extract() — même classe → même Style
+  private _extractCache = new LRUCache<string, Style | Style[] | undefined>(8000);
+
+  // Cache pour la résolution de thème (lazy)
+  private _themeResolutionCache = new Map<string, unknown>();
+
   public _handler: HandlerCreator;
+
   readonly _plugin: PluginCache = {
     static: {},
     dynamic: {},
@@ -73,16 +255,16 @@ export class Processor {
   };
 
   public pluginUtils: PluginUtils = {
-    addDynamic: (...args) => this.addDynamic(...args),
-    addUtilities: (...args) => this.addUtilities(...args),
+    addDynamic:    (...args) => this.addDynamic(...args),
+    addUtilities:  (...args) => this.addUtilities(...args),
     addComponents: (...args) => this.addComponents(...args),
-    addBase: (...args) => this.addBase(...args),
-    addVariant: (...args) => this.addVariant(...args),
-    e: (...args) => this.e(...args),
-    prefix: (...args) => this.prefix(...args),
-    config: (...args) => this.config(...args),
-    theme: (...args) => this.theme(...args),
-    variants: (...args) => this.variants(...args),
+    addBase:       (...args) => this.addBase(...args),
+    addVariant:    (...args) => this.addVariant(...args),
+    e:             (...args) => this.e(...args),
+    prefix:        (...args) => this.prefix(...args),
+    config:        (...args) => this.config(...args),
+    theme:         (...args) => this.theme(...args),
+    variants:      (...args) => this.variants(...args),
   };
 
   public variantUtils: VariantUtils = {
@@ -91,11 +273,11 @@ export class Processor {
         modifier({
           className: /^[.#]/.test(selector) ? selector.substring(1) : selector,
         })),
-    atRule: (name) => new Style().atRule(name),
-    pseudoClass: (name) => new Style().pseudoClass(name),
-    pseudoElement: (name) => new Style().pseudoElement(name),
-    parent: (name) => new Style().parent(name),
-    child: (name) => new Style().child(name),
+    atRule:       (name) => new Style().atRule(name),
+    pseudoClass:  (name) => new Style().pseudoClass(name),
+    pseudoElement:(name) => new Style().pseudoElement(name),
+    parent:       (name) => new Style().parent(name),
+    child:        (name) => new Style().child(name),
   };
 
   constructor(config?: Config) {
@@ -112,7 +294,11 @@ export class Processor {
     }
   }
 
-  private _resolveConfig(userConfig: Config, presets: Config = {}) {
+  // -------------------------------------------------------------------------
+  // Résolution de config
+  // -------------------------------------------------------------------------
+
+  private _resolveConfig(userConfig: Config, presets: Config = {}): Config {
     if (userConfig.presets) {
       const resolved = this._resolvePresets(userConfig.presets);
       presets = this._resolveConfig(resolved, presets);
@@ -132,7 +318,7 @@ export class Processor {
     return { ...presets, ...userConfig, theme };
   }
 
-  private _reduceFunction(theme: Record<string, ThemeType>, extendTheme: Theme) {
+  private _reduceFunction(theme: Record<string, ThemeType>, extendTheme: Theme): void {
     for (const [key, value] of Object.entries(extendTheme)) {
       const themeValue = theme[key];
       switch (typeof themeValue) {
@@ -143,7 +329,11 @@ export class Processor {
         );
         break;
       case 'object':
-        theme[key] = (theme, { negative, breakpoints }) => combineConfig(themeValue, (typeof value === 'function' ? value(theme, { negative, breakpoints }) : value ?? {}), 0 /* prevent fontfamily merge */);
+        theme[key] = (theme, { negative, breakpoints }) => combineConfig(
+          themeValue,
+          (typeof value === 'function' ? value(theme, { negative, breakpoints }) : value ?? {}),
+          0,
+        );
         break;
       default:
         theme[key] = value;
@@ -151,7 +341,7 @@ export class Processor {
     }
   }
 
-  private _resolvePresets(presets: Config[]) {
+  private _resolvePresets(presets: Config[]): Config {
     let config: Config = {};
     const extend: Config = {};
     presets.forEach(p => {
@@ -169,24 +359,54 @@ export class Processor {
     return config;
   }
 
-  private _resolveFunction(config: Config) {
+  private _resolveFunction(config: Config): Config {
     if (!config.theme) return config;
     const theme = (path: string, defaultValue?: unknown) => this.theme(path, defaultValue);
     for (const dict of [config.theme, 'extend' in config.theme ? config.theme.extend ?? {} : {}]) {
       for (const [key, value] of Object.entries(dict)) {
         if (typeof value === 'function') {
-          (dict as Record<string, ThemeType>)[key] = value(theme, {
-            negative,
-            breakpoints,
-          }) as ConfigUtil;
+          (dict as Record<string, ThemeType>)[key] = value(theme, { negative, breakpoints }) as ConfigUtil;
         }
       }
     }
     return config;
   }
 
-  private _replaceStyleVariants(styles: Style[]) {
-    // @screen sm -> @screen (min-width: 640px)
+  // -------------------------------------------------------------------------
+  // Lazy theme proxy — résout uniquement ce qui est accédé
+  // -------------------------------------------------------------------------
+  private _buildThemeProxy(rawTheme: Record<string, ThemeType>): Record<string, ThemeType> {
+    const cache = this._themeResolutionCache;
+    const themeGetter = (path: string, defaultValue?: unknown) => this.theme(path, defaultValue);
+
+    return new Proxy(rawTheme, {
+      get(target, key: string) {
+        if (cache.has(key)) return cache.get(key);
+        const value = target[key];
+        if (value === undefined) return undefined;
+        const resolved = typeof value === 'function'
+          ? value(themeGetter, { negative, breakpoints })
+          : value;
+        cache.set(key, resolved);
+        return resolved;
+      },
+      set(target, key: string, value) {
+        cache.delete(key); // invalider le cache si la valeur change
+        target[key] = value;
+        return true;
+      },
+    }) as Record<string, ThemeType>;
+  }
+
+  private _invalidateThemeCache(): void {
+    this._themeResolutionCache.clear();
+  }
+
+  // -------------------------------------------------------------------------
+  // Helpers internes
+  // -------------------------------------------------------------------------
+
+  private _replaceStyleVariants(styles: Style[]): void {
     styles.forEach(style => {
       style.atRules = style.atRules?.map(i => {
         if (i.match(/@screen/)) {
@@ -199,47 +419,108 @@ export class Processor {
     });
   }
 
-  private _addPluginProcessorCache(type: AddPluginType, key: string, styles: Style | Style[]) {
+  private _addPluginProcessorCache(type: AddPluginType, key: string, styles: Style | Style[]): void {
     styles = toArray(styles);
     this._plugin[type][key] = key in this._plugin[type]
       ? [...this._plugin[type][key], ...styles]
       : styles;
   }
 
-  private _loadVariables() {
+  private _loadVariables(): void {
     const config = this.theme('vars') as NestObject | undefined;
     if (!config) return;
-    this.addBase({ ':root': Object.assign({}, ...Object.keys(config).map(i => ({ [`--${i}`]: config[i] }))) as NestObject });
+    this.addBase({
+      ':root': Object.assign(
+        {},
+        ...Object.keys(config).map(i => ({ [`--${i}`]: config[i] }))
+      ) as NestObject,
+    });
   }
+
+  // -------------------------------------------------------------------------
+  // Parsing avec cache LRU
+  // -------------------------------------------------------------------------
+  private _parse(classNames: string, separator: string): Element[] {
+    const cacheKey = classNames + '\0' + separator;
+    const cached = this._parseCache.get(cacheKey);
+    if (cached) return cached;
+    const result = new ClassParser(classNames, separator, this._cache.variants).parse();
+    this._parseCache.set(cacheKey, result);
+    return result;
+  }
+
+  // -------------------------------------------------------------------------
+  // extract() avec cache LRU
+  // -------------------------------------------------------------------------
+  private _cachedExtract(className: string, addComment = false, prefix?: string): Style | Style[] | undefined {
+    // Ne mettre en cache que sans commentaire (le cas le plus fréquent)
+    if (addComment) return extract(this, className, addComment, prefix);
+    const cacheKey = className + '\0' + (prefix ?? '');
+    const cached = this._extractCache.get(cacheKey);
+    if (cached !== undefined || this._extractCache.has(cacheKey)) return cached;
+    const result = extract(this, className, false, prefix);
+    this._extractCache.set(cacheKey, result);
+    return result;
+  }
+
+  // Invalider les caches de style quand la config change
+  private _invalidateStyleCaches(): void {
+    this._extractCache.clear();
+    this._parseCache.clear();
+  }
+
+  // -------------------------------------------------------------------------
+  // API publique — chargement de config
+  // -------------------------------------------------------------------------
 
   loadConfig(config?: Config): Config {
     this._config = this.resolveConfig(config, baseConfig);
-    this._theme = this._config.theme;
+    // _theme est déjà proxifié par resolveConfig — pas de réassignation nécessaire
     this._handler = createHandler(this._config.handlers);
     this._config.shortcuts && this.loadShortcuts(this._config.shortcuts);
     this._config.alias && this.loadAlias(this._config.alias);
+    this._invalidateStyleCaches();
+    this._invalidateThemeCache();
     return this._config;
   }
 
   resolveConfig(config: Config | undefined, presets: Config): Config {
-    this._config = this._resolveConfig({ ...deepCopy(config ? config : {}), exclude: config?.exclude }, deepCopy(presets)); // deep copy
-    this._theme = this._config.theme; // update theme to make sure theme() function works.
-    this._config.plugins?.map(i => typeof i === 'function' ? ('__isOptionsFunction' in i ? this.loadPluginWithOptions(i): this.loadPlugin(plugin(i))) : this.loadPlugin(i));
+    // Cloner uniquement config (sera muté), pas presets (lecture seule)
+    this._config = this._resolveConfig(
+      { ...((config && typeof config === 'object') ? structuredClone(config) : {}), exclude: config?.exclude },
+      presets, // pas de clone — presets est traité en lecture seule
+    );
+    this._theme = this._config.theme
+      ? this._buildThemeProxy(this._config.theme as Record<string, ThemeType>)
+      : this._config.theme;
+    this._config.plugins?.map(i =>
+      typeof i === 'function'
+        ? ('__isOptionsFunction' in i ? this.loadPluginWithOptions(i) : this.loadPlugin(plugin(i)))
+        : this.loadPlugin(i)
+    );
     this._config = this._resolveFunction(this._config);
-    this._variants = { ...this._variants, ... this.resolveVariants() };
-    this._cache.variants = Object.keys(this._variants);
+    this._variants = { ...this._variants, ...this.resolveVariants() };
+
+    // Mettre à jour les caches de variants
+    const variantKeys = Object.keys(this._variants);
+    this._cache.variants = variantKeys;
+    this._cache.variantSet = new Set(variantKeys);
+
     this._loadVariables();
-    if (this._config.corePlugins) this._plugin.core = Array.isArray(this._config.corePlugins) ? Object.assign({}, ...(this._config.corePlugins as string[]).map(i => ({ [i]: true }))) : { ...Object.assign({}, ...Object.keys(pluginOrder).slice(Object.keys(pluginOrder).length/2).map(i => ({ [i]: true }))), ...this._config.corePlugins };
+    if (this._config.corePlugins) {
+      this._plugin.core = Array.isArray(this._config.corePlugins)
+        ? Object.assign({}, ...(this._config.corePlugins as string[]).map(i => ({ [i]: true })))
+        : {
+          ...Object.assign({}, ...Object.keys(pluginOrder).slice(Object.keys(pluginOrder).length / 2).map(i => ({ [i]: true }))),
+          ...this._config.corePlugins,
+        };
+    }
     return this._config;
   }
 
-  resolveVariants(
-    type?: VariantTypes
-  ): ResolvedVariants {
+  resolveVariants(type?: VariantTypes): ResolvedVariants {
     const variants = resolveVariants(this._config);
-    if (type) {
-      return variants[type];
-    }
+    if (type) return variants[type];
     return { ...variants.screen, ...variants.theme, ...variants.state, ...variants.orientation };
   }
 
@@ -247,7 +528,7 @@ export class Processor {
     const staticStyles: StyleArrayObject = {};
     for (const key in staticUtilities) {
       const style = generateStaticStyle(this, key, true);
-      if (style) staticStyles[key] = [ style ];
+      if (style) staticStyles[key] = [style];
     }
     if (!includePlugins) return staticStyles;
     return { ...staticStyles, ...this._plugin.utilities, ...this._plugin.components };
@@ -257,6 +538,10 @@ export class Processor {
     if (!includePlugins) return dynamicUtilities;
     return { ...dynamicUtilities, ...this._plugin.dynamic };
   }
+
+  // -------------------------------------------------------------------------
+  // Getters
+  // -------------------------------------------------------------------------
 
   get allConfig(): DefaultConfig {
     return this._config as unknown as DefaultConfig;
@@ -270,28 +555,35 @@ export class Processor {
     return this._cache.variants;
   }
 
+  // -------------------------------------------------------------------------
+  // wrapWithVariants — sans objets intermédiaires inutiles
+  // -------------------------------------------------------------------------
   wrapWithVariants(variants: string[], styles: Style | Style[]): Style[] | undefined {
-    // apply variant to style
     if (!Array.isArray(styles)) styles = [styles];
     if (variants.length === 0) return styles;
 
+    // Pré-calculer les variant styles une seule fois (pas dans la map)
+    const variantStyleObjects = variants
+      .filter(i => this._variants?.[i])
+      .map(i => this._variants[i]());
+
     return styles.map(style => {
       if (style instanceof Keyframes) return style;
-      const atrules:string[] = [];
-      let wrapped = variants
-        .filter(i => this._variants?.[i])
-        .map(i => this._variants[i]())
-        .reduce((previousValue: Style, currentValue: Style) => {
-          const output = previousValue.extend(currentValue);
-          if (previousValue.isAtrule) atrules.push((previousValue.atRules as string[])[0]);
-          return output;
-        }, new Style())
-        .extend(style);
+      const atrules: string[] = [];
+      let wrapped = variantStyleObjects.reduce((prev: Style, curr: Style) => {
+        const output = prev.extend(curr);
+        if (prev.isAtrule) atrules.push((prev.atRules as string[])[0]);
+        return output;
+      }, new Style()).extend(style);
       if (style instanceof Container) wrapped = new Container().extend(wrapped);
       if (atrules.length > 0) wrapped.meta.variants = atrules;
       return wrapped;
     });
   }
+
+  // -------------------------------------------------------------------------
+  // Utilitaires publics
+  // -------------------------------------------------------------------------
 
   removePrefix(className: string): string {
     const prefix = this.config('prefix') as string | undefined;
@@ -306,7 +598,7 @@ export class Processor {
         style.parent(important);
       } else {
         style.important = true;
-        style.property.forEach(i => i.important = true);
+        style.property.forEach(i => (i.important = true));
       }
     }
     return style;
@@ -325,35 +617,39 @@ export class Processor {
     includeBase = true,
     includeGlobal = true,
     includePlugins = true,
-    ignoreProcessed = false
+    ignoreProcessed = false,
   ): StyleSheet {
-    let id;
+    let id: string | undefined;
     if (html) {
       id = hash(html);
-      if (ignoreProcessed && this._cache.html.includes(id)) return new StyleSheet();
+      if (ignoreProcessed && this._cache.html.has(id)) return new StyleSheet();
     }
-    id && ignoreProcessed && this._cache.html.push(id);
+    if (id && ignoreProcessed) this._cache.html.add(id);
     return preflight(this, html, includeBase, includeGlobal, includePlugins);
   }
 
+  // -------------------------------------------------------------------------
+  // interpret() — avec cache Set O(1) + parsing LRU
+  // -------------------------------------------------------------------------
   interpret(
     classNames: string,
     ignoreProcessed = false,
-    handleIgnored?: (ignored:string) => Style | Style[] | undefined
+    handleIgnored?: (ignored: string) => Style | Style[] | undefined,
   ): { success: string[]; ignored: string[]; styleSheet: StyleSheet } {
-    const ast = new ClassParser(classNames, this.config('separator', ':') as string, this._cache.variants).parse();
+    const separator = this.config('separator', ':') as string;
+    const ast = this._parse(classNames, separator);
     const success: string[] = [];
     const ignored: string[] = [];
     const styleSheet = new StyleSheet();
+    const pluginMap = { ...this._plugin.utilities, ...this._plugin.components };
 
-    const _hIgnored = (className:string) => {
+    const _hIgnored = (className: string) => {
       if (handleIgnored) {
         const style = handleIgnored(className);
         if (style) {
           styleSheet.add(style);
           success.push(className);
-        } else {
-          ignored.push(className);
+          return;
         }
       }
       ignored.push(className);
@@ -367,26 +663,26 @@ export class Processor {
       prefix?: string,
     ) => {
       if (this._config.exclude && testRegexr(selector, this._config.exclude)) {
-        // filter exclude className
         ignored.push(selector);
         return;
       }
-      if (variants[0] && selector in { ...this._plugin.utilities, ...this._plugin.components }) {
-        // handle special selector that conflict with class parser, such as 'hover:abc'
+      if (variants[0] && selector in pluginMap) {
         success.push(selector);
         styleSheet.add(deepCopy(this._plugin.utilities[selector]));
         return;
       }
-      let result = this.extract(baseClass, false, prefix);
+      let result = this._cachedExtract(baseClass, false, prefix);
       if (result) {
+        // Cloner seulement si nécessaire (le résultat du cache ne doit pas être muté)
+        result = Array.isArray(result) ? result.map(s => s.clone()) : result.clone();
         const escapedSelector = '.' + cssEscape(selector);
         if (result instanceof Style) {
-          if(!result.meta.respectSelector) result.selector = escapedSelector;
+          if (!result.meta.respectSelector) result.selector = escapedSelector;
           this.markAsImportant(result, important);
         } else if (Array.isArray(result)) {
           result = result.map(i => {
             if (i instanceof Keyframes) return i;
-            if(!i.meta.respectSelector) i.selector = escapedSelector;
+            if (!i.meta.respectSelector) i.selector = escapedSelector;
             this.markAsImportant(i, important);
             return i;
           });
@@ -410,12 +706,7 @@ export class Processor {
         } else if (u.type === 'alias' && (u.content as string) in this._plugin.alias) {
           this._plugin.alias[u.content as string].forEach(i => _eval(i));
         } else {
-          // utility
-          const variants = [
-            ...parentVariants,
-            ...obj.variants,
-            ...u.variants,
-          ];
+          const variants = [...parentVariants, ...obj.variants, ...u.variants];
           const important = obj.important || u.important;
           const selector = (important ? '!' : '') + [...variants, u.content].join(':');
           typeof u.content === 'string' &&
@@ -427,8 +718,8 @@ export class Processor {
 
     const _gAst = (ast: Element[]) => {
       ast.forEach(obj => {
-        if (!(ignoreProcessed && this._cache.utilities.includes(obj.raw))) {
-          if (ignoreProcessed) this._cache.utilities.push(obj.raw);
+        if (!(ignoreProcessed && this._cache.utilities.has(obj.raw))) {
+          if (ignoreProcessed) this._cache.utilities.add(obj.raw);
           if (obj.type === 'utility') {
             if (Array.isArray(obj.content)) {
               // #functions stuff
@@ -449,7 +740,6 @@ export class Processor {
     _gAst(ast);
 
     if (!this.config('prefixer')) styleSheet.prefixer = false;
-
     return {
       success,
       ignored,
@@ -457,25 +747,20 @@ export class Processor {
     };
   }
 
+  // -------------------------------------------------------------------------
+  // validate() — lookup O(1) via variantSet
+  // -------------------------------------------------------------------------
   validate(classNames: string): { success: Validata[]; ignored: Validata[] } {
-    const ast = new ClassParser(classNames, this.config('separator', ':') as string, this._cache.variants).parse();
+    const separator = this.config('separator', ':') as string;
+    const ast = this._parse(classNames, separator);
     const success: Validata[] = [];
     const ignored: Validata[] = [];
 
     const _hSuccess = (className: string, self: Element, parent?: Element) => {
-      success.push({
-        className,
-        ...self,
-        parent,
-      });
+      success.push({ className, ...self, parent });
     };
-
     const _hIgnored = (className: string, self: Element, parent?: Element) => {
-      ignored.push({
-        className,
-        ...self,
-        parent,
-      });
+      ignored.push({ className, ...self, parent });
     };
 
     const _gStyle = (
@@ -487,16 +772,15 @@ export class Processor {
       prefix?: string,
     ) => {
       if (this._config.exclude && testRegexr(selector, this._config.exclude)) {
-        // filter exclude className
         _hIgnored(selector, self, parent);
         return;
       }
       if (variants[0] && selector in { ...this._plugin.utilities, ...this._plugin.components }) {
-        // handle special selector that conflict with class parser, such as 'hover:abc'
         _hSuccess(selector, self, parent);
         return;
       }
-      if (this.test(baseClass, prefix) && variants.filter(i => !(i in this._variants)).length === 0) {
+      // O(1) lookup via variantSet
+      if (this.test(baseClass, prefix) && variants.filter(i => !this._cache.variantSet.has(i)).length === 0) {
         _hSuccess(selector, self, parent);
       } else {
         _hIgnored(selector, self, parent);
@@ -510,12 +794,7 @@ export class Processor {
         } else if (u.type === 'alias' && (u.content as string) in this._plugin.alias) {
           this._plugin.alias[u.content as string].forEach(i => _eval(i, u));
         } else {
-          // utility
-          const variants = [
-            ...parentVariants,
-            ...obj.variants,
-            ...u.variants,
-          ];
+          const variants = [...parentVariants, ...obj.variants, ...u.variants];
           const important = obj.important || u.important;
           const selector = (important ? '!' : '') + [...variants, u.content].join(':');
           typeof u.content === 'string' &&
@@ -544,42 +823,41 @@ export class Processor {
     };
 
     _gAst(ast);
-
-    return {
-      success,
-      ignored,
-    };
+    return { success, ignored };
   }
 
+  // -------------------------------------------------------------------------
+  // compile() — avec Set O(1)
+  // -------------------------------------------------------------------------
   compile(
     classNames: string,
     prefix = 'nailus-',
     showComment = false,
     ignoreGenerated = false,
-    handleIgnored?: (ignored:string) => Style | Style[] | undefined,
-    outputClassName?: string
+    handleIgnored?: (ignored: string) => Style | Style[] | undefined,
+    outputClassName?: string,
   ): {
     success: string[];
     ignored: string[];
     className?: string;
     styleSheet: StyleSheet;
   } {
-    const ast = new ClassParser(classNames, this.config('separator', ':') as string, this._cache.variants).parse();
+    const separator = this.config('separator', ':') as string;
+    const ast = this._parse(classNames, separator);
     const success: string[] = [];
     const ignored: string[] = [];
     const styleSheet = new StyleSheet();
     let className: string | undefined = outputClassName ?? prefix + hash(classNames.trim().split(/\s+/g).join(' '));
-    if (ignoreGenerated && this._cache.classes.includes(className)) return { success, ignored, styleSheet, className };
+    if (ignoreGenerated && this._cache.classes.has(className)) return { success, ignored, styleSheet, className };
     const buildSelector = '.' + className;
 
-    const _hIgnored = (className:string) => {
+    const _hIgnored = (className: string) => {
       if (handleIgnored) {
         const style = handleIgnored(className);
         if (style) {
           styleSheet.add(style);
           success.push(className);
-        } else {
-          ignored.push(className);
+          return;
         }
       }
       ignored.push(className);
@@ -589,15 +867,13 @@ export class Processor {
       baseClass: string,
       variants: string[],
       selector: string,
-      important = false
+      important = false,
     ) => {
       if (this._config.exclude && testRegexr(selector, this._config.exclude)) {
-        // filter exclude className
         ignored.push(selector);
         return;
       }
       if (variants[0] && selector in { ...this._plugin.utilities, ...this._plugin.components }) {
-        // handle special selector that conflict with class parser, such as 'hover:abc'
         success.push(selector);
         styleSheet.add(deepCopy(this._plugin.utilities[selector]));
         return;
@@ -631,16 +907,11 @@ export class Processor {
 
     const _hGroup = (obj: Element, parentVariants: string[] = []) => {
       Array.isArray(obj.content) &&
-        obj.content.forEach((u) => {
+        obj.content.forEach(u => {
           if (u.type === 'group') {
             _hGroup(u, obj.variants);
           } else {
-            // utility
-            const variants = [
-              ...parentVariants,
-              ...obj.variants,
-              ...u.variants,
-            ];
+            const variants = [...parentVariants, ...obj.variants, ...u.variants];
             const selector = [...variants, u.content].join(':');
             typeof u.content === 'string' &&
               _gStyle(this.removePrefix(u.content), variants, selector, obj.important || u.important);
@@ -648,7 +919,7 @@ export class Processor {
         });
     };
 
-    ast.forEach((obj) => {
+    ast.forEach(obj => {
       if (obj.type === 'utility') {
         if (Array.isArray(obj.content)) {
           // #functions stuff
@@ -663,7 +934,7 @@ export class Processor {
     });
 
     className = success.length > 0 ? className : undefined;
-    if (ignoreGenerated && className) this._cache.classes.push(className);
+    if (ignoreGenerated && className) this._cache.classes.add(className);
     if (!this.config('prefixer')) styleSheet.prefixer = false;
     return {
       success,
@@ -673,11 +944,24 @@ export class Processor {
     };
   }
 
-  attributify(attrs: { [ key:string ]: string | string[] }, ignoreProcessed = false): { success: string[]; ignored: string[]; styleSheet: StyleSheet } {
+  // -------------------------------------------------------------------------
+  // attributify() — table de dispatch au lieu du switch géant
+  // -------------------------------------------------------------------------
+  attributify(
+    attrs: { [key: string]: string | string[] },
+    ignoreProcessed = false,
+  ): { success: string[]; ignored: string[]; styleSheet: StyleSheet } {
     const success: string[] = [];
     const ignored: string[] = [];
     const styleSheet = new StyleSheet();
-    const { prefix, separator, disable }: { prefix?: string, separator?: string, disable?: string[] } = (this._config.attributify && typeof this._config.attributify === 'boolean') ? {} : this._config.attributify || {};
+    const {
+      prefix,
+      separator,
+      disable,
+    }: { prefix?: string; separator?: string; disable?: string[] } =
+      this._config.attributify && typeof this._config.attributify === 'boolean'
+        ? {}
+        : this._config.attributify || {};
 
     const _gStyle = (
       key: string,
@@ -686,8 +970,8 @@ export class Processor {
       notAllow = false,
       ignoreProcessed = false,
     ) => {
-      const buildSelector = `[${this.e((prefix || '') + key)}${equal?'=':'~='}"${value}"]`;
-      if (notAllow || (ignoreProcessed && this._cache.attrs.includes(buildSelector))) {
+      const buildSelector = `[${this.e((prefix || '') + key)}${equal ? '=' : '~='}"${value}"]`;
+      if (notAllow || (ignoreProcessed && this._cache.attrs.has(buildSelector))) {
         ignored.push(buildSelector);
         return;
       }
@@ -705,197 +989,33 @@ export class Processor {
       if (lastKey in this._variants && lastKey !== 'svg') {
         variants = [...keys, ...variants];
       } else if (id in this._variants && id !== 'svg') {
-        // sm = ... || sm:hover = ... || sm-hover = ...
         const matches = key.match(/[@<\w]+/g);
-        if (!matches) {
-          ignored.push(buildSelector);
-          return;
-        }
+        if (!matches) { ignored.push(buildSelector); return; }
         variants = [...matches, ...variants];
       } else {
-        // text = ... || sm:text = ... || sm-text = ... || sm-hover-text = ...
-        if (!keys) {
-          ignored.push(buildSelector);
-          return;
-        }
+        if (!keys) { ignored.push(buildSelector); return; }
         if (keys.length === 1) keys = key.split('-');
-        let last;
-        // handle min-h || max-w ...
+        let last: string;
         if (['min', 'max'].includes(keys.slice(-2, -1)[0])) {
           variants = [...keys.slice(0, -2), ...variants];
-          last = keys.slice(-2,).join('-');
+          last = keys.slice(-2).join('-');
         } else {
           variants = [...keys.slice(0, -1), ...variants];
           last = keys[keys.length - 1];
         }
-        // handle negative, such as m = -x-2
-        const negative = utility.charAt(0) === '-';
-        if (negative) utility = utility.slice(1,);
-        utility = ['m', 'p'].includes(last) && ['t', 'l', 'b', 'r', 'x', 'y'].includes(utility.charAt(0)) ? last + utility : last + '-' + utility;
-        if (negative) utility = '-' + utility;
+        const isNegative = utility.charAt(0) === '-';
+        if (isNegative) utility = utility.slice(1);
+        utility = ['m', 'p'].includes(last) && ['t', 'l', 'b', 'r', 'x', 'y'].includes(utility.charAt(0))
+          ? last + utility
+          : last + '-' + utility;
+        if (isNegative) utility = '-' + utility;
         utility !== 'cursor-default' && (utility = utility.replace(/-(~|default)$/, ''));
-        // handle special cases
-        switch(last) {
-        case 'w':
-          if (['w-min', 'w-max', 'w-min-content', 'w-max-content'].includes(utility)) {
-            utility = utility.slice(0, 5);
-          } else if (utility.startsWith('w-min')) {
-            utility = 'min-w' + utility.slice(5);
-          } else if (utility.startsWith('w-max')) {
-            utility = 'max-w' + utility.slice(5);
-          }
-          break;
-        case 'h':
-          if (['h-min', 'h-max', 'h-min-content', 'h-max-content'].includes(utility)) {
-            utility = utility.slice(0, 5);
-          } else if (utility.startsWith('h-min')) {
-            utility = 'min-h' + utility.slice(5);
-          } else if (utility.startsWith('h-max')) {
-            utility = 'max-h' + utility.slice(5);
-          }
-          break;
-        case 'flex':
-          switch (utility) {
-          case 'flex-default':
-            utility = 'flex';
-            break;
-          case 'flex-inline':
-            utility = 'inline-flex';
-            break;
-          default:
-            if (/^flex-gap-/.test(utility)) utility = utility.slice(5);
-          }
-          break;
-        case 'grid':
-          switch(utility) {
-          case 'grid-default':
-            utility = 'grid';
-            break;
-          case 'grid-inline':
-            utility = 'inline-grid';
-            break;
-          default:
-            if (/^grid-(auto|gap|col|row)-/.test(utility)) utility = utility.slice(5);
-          }
-          break;
-        case 'justify':
-          if (utility.startsWith('justify-content-')) {
-            utility = 'justify-' + utility.slice(16);
-          }
-          break;
-        case 'align':
-          if (/^align-(items|self|content)-/.test(utility)) {
-            utility = utility.slice(6);
-          } else {
-            utility = 'content-' + utility.slice(6);
-          }
-          break;
-        case 'place':
-          if (!/^place-(items|self|content)-/.test(utility)) {
-            utility = 'place-content-' + utility.slice(6);
-          }
-          break;
-        case 'font':
-          if (/^font-(tracking|leading)-/.test(utility) || ['font-italic', 'font-not-italic', 'font-antialiased', 'font-subpixel-antialiased', 'font-normal-nums', 'font-ordinal', 'font-slashed-zero', 'font-lining-nums', 'font-oldstyle-nums', 'font-proportional-nums', 'font-tabular-nums', 'font-diagonal-fractions', 'font-stacked-fractions'].includes(utility))
-            utility = utility.slice(5);
-          break;
-        case 'text':
-          if (['text-baseline', 'text-top', 'text-middle', 'text-bottom', 'text-text-top', 'text-text-bottom', 'text-sub', 'text-super'].includes(utility)) {
-            utility = 'align-' + utility.slice(5);
-          } else if (utility.startsWith('text-placeholder') || utility.startsWith('text-underline') || utility.startsWith('text-tab') || utility.startsWith('text-indent') || utility.startsWith('text-hyphens') || utility.startsWith('text-write')) {
-            utility = utility.slice(5);
-          } else if (['text-underline', 'text-overline', 'text-line-through', 'text-no-underline', 'text-uppercase', 'text-lowercase', 'text-capitalize', 'text-normal-case', 'text-truncate', 'text-overflow-ellipsis', 'text-text-ellipsis', 'text-text-clip', 'text-break-normal', 'text-break-words', 'text-break-all'].includes(utility)) {
-            utility = utility.slice(5);
-          } else if (utility.startsWith('text-space')) {
-            utility = 'white' + utility.slice(5);
-          }
-          break;
-        case 'underline':
-          if (utility === 'underline-none') {
-            utility = 'no-underline';
-          } else if (utility === 'underline-line-through') {
-            utility = 'line-through';
-          }
-          break;
-        case 'svg':
-          if (utility.startsWith('svg-fill') || utility.startsWith('svg-stroke')) utility = utility.slice(4);
-          break;
-        case 'border':
-          if (utility.startsWith('border-rounded')) {
-            utility = utility.slice(7);
-          }
-          break;
-        case 'gradient':
-          if (utility === 'gradient-none') {
-            utility = 'bg-none';
-          } else if (/^gradient-to-[trbl]{1,2}$/.test(utility)) {
-            utility = 'bg-' + utility;
-          } else if (/^gradient-(from|via|to)-/.test(utility)) {
-            utility = utility.slice(9);
-          }
-          break;
-        case 'display':
-          utility = utility.slice(8);
-          break;
-        case 'pos':
-          utility = utility.slice(4);
-          break;
-        case 'position':
-          utility = utility.slice(9);
-          break;
-        case 'box':
-          if (/^box-(decoration|shadow)/.test(utility)) {
-            utility = utility.slice(4,);
-          }
-          break;
-        case 'filter':
-          if (utility !== 'filter-none' && utility !== 'filter') {
-            utility = utility.slice(7);
-          }
-          break;
-        case 'backdrop':
-          if (utility === 'backdrop') {
-            utility = 'backdrop-filter';
-          } else if (utility === 'backdrop-none') {
-            utility = 'backdrop-filter-none';
-          }
-          break;
-        case 'transition':
-          if (/transition-(duration|ease|delay)-/.test(utility)) {
-            utility = utility.slice(11);
-          }
-          break;
-        case 'transform':
-          if (!['transform-gpu', 'transform-none', 'transform'].includes(utility)) {
-            utility = utility.slice(10);
-          }
-          break;
-        case 'isolation':
-          if (utility === 'isolation-isolate') utility = 'isolate';
-          break;
-        case 'table':
-          if (utility === 'table-inline') {
-            utility = 'inline-table';
-          } else if (utility.startsWith('table-caption-') || utility.startsWith('table-empty-cells')) {
-            utility = utility.slice(6);
-          }
-          break;
-        case 'pointer':
-          utility = 'pointer-events' + utility.slice(7);
-          break;
-        case 'resize':
-          if (utility === 'resize-both') utility = 'resize';
-          break;
-        case 'ring':
-          break;
-        case 'blend':
-          utility = 'mix-' + utility;
-          break;
-        case 'sr':
-          if (utility === 'sr-not-only') utility = 'not-sr-only';
-          break;
-        }
+
+        // Table de dispatch — remplace le switch géant
+        const transformer = ATTR_TRANSFORMERS[last];
+        if (transformer) utility = transformer(utility);
       }
+
       const style = this.extract(utility, false);
       if (style) {
         const important = importantKey || importantValue;
@@ -909,12 +1029,12 @@ export class Processor {
           style.selector = buildSelector;
           this.markAsImportant(style, important);
         }
-        if (variants.find(i => !(i in this._variants))) {
+        if (variants.find(i => !this._cache.variantSet.has(i))) {
           ignored.push(buildSelector);
         } else {
           const wrapped = this.wrapWithVariants(variants, style);
           if (wrapped) {
-            ignoreProcessed && this._cache.attrs.push(buildSelector);
+            ignoreProcessed && this._cache.attrs.add(buildSelector);
             success.push(buildSelector);
             styleSheet.add(wrapped);
           } else {
@@ -926,7 +1046,6 @@ export class Processor {
       }
     };
 
-    // eslint-disable-next-line prefer-const
     for (let [key, value] of Object.entries(attrs)) {
       let notAllow = false;
       if (prefix) {
@@ -951,15 +1070,12 @@ export class Processor {
     };
   }
 
-  loadPlugin({
-    handler,
-    config,
-  }: PluginOutput): void {
+  loadPlugin({ handler, config }: PluginOutput): void {
     if (config) {
       config = this._resolveFunction(config);
       config = combineConfig(
         config as { [key: string]: unknown },
-        this._config as { [key: string]: unknown }
+        this._config as { [key: string]: unknown },
       );
       const pluginTheme = config.theme as Record<string, ThemeType>;
       const extendTheme = pluginTheme?.extend as undefined | Record<string, ThemeType>;
@@ -967,62 +1083,80 @@ export class Processor {
         for (const [key, value] of Object.entries(extendTheme)) {
           const themeValue = pluginTheme[key];
           if (themeValue && typeof themeValue === 'object') {
-            pluginTheme[key] = { ...(themeValue ?? {}), ...value as { [key:string] : unknown } };
-          } else if (value && typeof value === 'object' ){
-            pluginTheme[key] = value as {[key:string] : unknown};
+            pluginTheme[key] = { ...(themeValue ?? {}), ...value as { [key: string]: unknown } };
+          } else if (value && typeof value === 'object') {
+            pluginTheme[key] = value as { [key: string]: unknown };
           }
         }
       }
       this._config = { ...config, theme: pluginTheme };
-      this._theme = pluginTheme;
+      this._theme = this._buildThemeProxy(pluginTheme);
     }
     this._config = this._resolveFunction(this._config);
-    this._theme = this._config.theme;
+    this._theme = this._config.theme
+      ? this._buildThemeProxy(this._config.theme as Record<string, ThemeType>)
+      : this._config.theme;
     this._variants = { ...this._variants, ...this.resolveVariants() };
+    // Mettre à jour variantSet après chargement de plugin
+    this._cache.variantSet = new Set(Object.keys(this._variants));
+    this._cache.variants = [...this._cache.variantSet];
+    this._invalidateStyleCaches();
+    this._invalidateThemeCache();
     handler(this.pluginUtils);
   }
 
-  loadPluginWithOptions(optionsFunction: PluginWithOptions<any>, userOptions?:DictStr): void {
-    const plugin = optionsFunction(userOptions ?? {});
-    this.loadPlugin(plugin);
+  loadPluginWithOptions(optionsFunction: PluginWithOptions<any>, userOptions?: DictStr): void {
+    const p = optionsFunction(userOptions ?? {});
+    this.loadPlugin(p);
   }
 
-  loadShortcuts(shortcuts: { [ key:string ]: Shortcut }): void {
+  loadShortcuts(shortcuts: { [key: string]: Shortcut }): void {
     for (const [key, value] of Object.entries(shortcuts)) {
-      const prefix = this.config('prefix', '');
+      const prefixStr = this.config('prefix', '') as string;
       if (typeof value === 'string') {
-        this._plugin.shortcuts[key] = this.compile(value, undefined, undefined, false, undefined, cssEscape(prefix + key)).styleSheet.children.map(i => i.updateMeta('components', 'shortcuts', layerOrder['shortcuts'], ++this._cache.count));
+        this._plugin.shortcuts[key] = this.compile(value, undefined, undefined, false, undefined, cssEscape(prefixStr + key))
+          .styleSheet.children.map(i => i.updateMeta('components', 'shortcuts', layerOrder['shortcuts'], ++this._cache.count));
       } else {
         let styles: Style[] = [];
         Style.generate('.' + cssEscape(key), value).forEach(style => {
           for (const prop of style.property) {
             if (!prop.value) continue;
             if (prop.name === '@apply') {
-              styles = styles.concat(this.compile(Array.isArray(prop.value)? prop.value.join(' ') : prop.value).styleSheet.children.map(i => {
-                const newStyle = deepCopy(style);
-                newStyle.property = [];
-                return newStyle.extend(i);
-              }));
+              styles = styles.concat(
+                this.compile(Array.isArray(prop.value) ? prop.value.join(' ') : prop.value)
+                  .styleSheet.children.map(i => {
+                    const newStyle = deepCopy(style);
+                    newStyle.property = [];
+                    return newStyle.extend(i);
+                  }),
+              );
             } else {
               const newStyle = deepCopy(style);
-              newStyle.property = [ prop ];
+              newStyle.property = [prop];
               styles.push(newStyle);
             }
           }
         });
-        this._plugin.shortcuts[key] = styles.map(i => i.updateMeta('components', 'shortcuts', layerOrder['shortcuts'], ++this._cache.count));
+        this._plugin.shortcuts[key] = styles.map(i =>
+          i.updateMeta('components', 'shortcuts', layerOrder['shortcuts'], ++this._cache.count),
+        );
       }
     }
   }
 
-  loadAlias(alias: { [key:string]: string }): void {
+  loadAlias(alias: { [key: string]: string }): void {
+    const separator = this.config('separator', ':') as string;
     for (const [key, value] of Object.entries(alias)) {
-      this._plugin.alias[key] = new ClassParser(value, undefined, this._cache.variants).parse();
+      this._plugin.alias[key] = this._parse(value, separator);
     }
   }
 
   config(path: string, defaultValue?: unknown): unknown {
-    if (path === 'corePlugins') return this._plugin.core ? Object.keys(this._plugin.core).filter(i => this._plugin.core?.[i]) : Object.keys(pluginOrder).slice(Object.keys(pluginOrder).length/2);
+    if (path === 'corePlugins') {
+      return this._plugin.core
+        ? Object.keys(this._plugin.core).filter(i => this._plugin.core?.[i])
+        : Object.keys(pluginOrder).slice(Object.keys(pluginOrder).length / 2);
+    }
     return getNestedValue(this._config, path) ?? defaultValue;
   }
 
@@ -1038,9 +1172,7 @@ export class Processor {
   }
 
   variants(path: string, defaultValue: string[] = []): string[] {
-    if (Array.isArray(this._config.variants)) {
-      return this._config.variants;
-    }
+    if (Array.isArray(this._config.variants)) return this._config.variants;
     return this.config(`variants.${path}`, defaultValue) as string[];
   }
 
@@ -1059,42 +1191,77 @@ export class Processor {
       variants: [],
       respectPrefix: true,
       respectImportant: true,
-    }
+    },
   ): Style[] {
     if (Array.isArray(options)) options = { variants: options };
-    if (Array.isArray(utilities)) utilities = utilities.reduce((previous: {[key:string]:unknown}, current) => combineConfig(previous, current), {}) as DeepNestObject;
+    if (Array.isArray(utilities))
+      utilities = utilities.reduce(
+        (previous: { [key: string]: unknown }, current) => combineConfig(previous, current),
+        {},
+      ) as DeepNestObject;
     let output: Style[] = [];
     const layer = options.layer ?? 'utilities';
     const order = layerOrder[layer] + 1;
     for (const [key, value] of Object.entries(utilities)) {
       let propertyValue = value;
-      if (Array.isArray(value)) {
-        propertyValue = Object.assign({}, ...value);
-      }
-      const styles = Style.generate(key.startsWith('.') && options.respectPrefix ? this.prefix(key) : key, propertyValue);
+      if (Array.isArray(value)) propertyValue = Object.assign({}, ...value);
+      const styles = Style.generate(
+        key.startsWith('.') && options.respectPrefix ? this.prefix(key) : key,
+        propertyValue,
+      );
       if (options.layer) styles.forEach(style => style.updateMeta(layer, 'plugin', order, ++this._cache.count));
-      if (options.respectImportant && this._config.important) styles.forEach(style => style.important = true);
+      if (options.respectImportant && this._config.important) styles.forEach(style => (style.important = true));
       let className = guessClassName(key);
       if (key.charAt(0) === '@') {
         styles.forEach(style => {
           if (style.selector) className = guessClassName(style.selector);
           if (Array.isArray(className)) {
-            className.filter(i => i.isClass).forEach(({ selector, pseudo }) => this._addPluginProcessorCache('utilities', selector, pseudo? style.clone('.' + cssEscape(selector)).wrapSelector(selector => selector + pseudo) : style.clone()));
+            className.filter(i => i.isClass).forEach(({ selector, pseudo }) =>
+              this._addPluginProcessorCache(
+                'utilities',
+                selector,
+                pseudo
+                  ? style.clone('.' + cssEscape(selector)).wrapSelector(s => s + pseudo)
+                  : style.clone(),
+              ),
+            );
             const base = className.filter(i => !i.isClass).map(i => i.selector).join(', ');
             if (base) this._addPluginProcessorCache('static', base, style.clone(base));
           } else {
-            this._addPluginProcessorCache(className.isClass? 'utilities' : 'static', className.selector, className.pseudo? style.clone('.' + cssEscape(className.selector)).wrapSelector(selector => selector + (className as { pseudo: string }).pseudo) : style.clone());
+            this._addPluginProcessorCache(
+              className.isClass ? 'utilities' : 'static',
+              className.selector,
+              className.pseudo
+                ? style.clone('.' + cssEscape(className.selector)).wrapSelector(s => s + (className as { pseudo: string }).pseudo)
+                : style.clone(),
+            );
           }
         });
       } else if (Array.isArray(className)) {
-        className.filter(i => i.isClass).forEach(({ selector, pseudo }) => this._addPluginProcessorCache('utilities', selector, pseudo ? styles.map(i => i.clone('.' + cssEscape(selector)).wrapSelector(selector => selector + pseudo)): deepCopy(styles)));
+        className.filter(i => i.isClass).forEach(({ selector, pseudo }) =>
+          this._addPluginProcessorCache(
+            'utilities',
+            selector,
+            pseudo ? styles.map(i => i.clone('.' + cssEscape(selector)).wrapSelector(s => s + pseudo)) : deepCopy(styles),
+          ),
+        );
         const base = className.filter(i => !i.isClass).map(i => i.selector).join(', ');
         if (base) this._addPluginProcessorCache('static', base, styles.map(i => i.clone(base)));
       } else {
-        this._addPluginProcessorCache(className.isClass? 'utilities': 'static', className.selector, className.pseudo ? styles.map(style => style.clone('.' + cssEscape((className as { selector: string }).selector)).wrapSelector(selector => selector + (className as { pseudo: string }).pseudo)) : styles);
+        this._addPluginProcessorCache(
+          className.isClass ? 'utilities' : 'static',
+          className.selector,
+          className.pseudo
+            ? styles.map(style =>
+              style.clone('.' + cssEscape((className as { selector: string }).selector)).wrapSelector(s => s + (className as { pseudo: string }).pseudo),
+            )
+            : styles,
+        );
       }
       output = [...output, ...styles];
     }
+    // Invalider le cache d'extract après ajout d'utilitaires
+    this._invalidateStyleCaches();
     return output;
   }
 
@@ -1109,74 +1276,124 @@ export class Processor {
       respectPrefix: true,
       respectImportant: true,
       respectSelector: false,
-    }
+    },
   ): UtilityGenerator {
-    const uOptions = Array.isArray(options)? { variants:options } : options;
+    const uOptions = Array.isArray(options) ? { variants: options } : options;
     const layer = uOptions.layer || 'utilities';
     const group = uOptions.group || 'plugin';
     const order = uOptions.order || layerOrder[layer] + 1;
-    if (uOptions.completions) this._plugin.completions[group] = group in this._plugin.completions ? [...this._plugin.completions[group], ...uOptions.completions] : uOptions.completions;
-    const style = (selector: string, property?: Property | Property[], important:boolean = uOptions.respectImportant && this._config.important ? true : false) => new Style(selector, property, important);
-    const prop = (name: string | string[], value?: string, comment?: string, important = uOptions.respectImportant && this._config.important ? true : false) => new Property(name, value, comment, important);
-    const keyframes = (selector: string, property?: Property | Property[], important:boolean = uOptions.respectImportant && this._config.important ? true : false) => new Keyframes(selector, property, important);
+    if (uOptions.completions)
+      this._plugin.completions[group] = group in this._plugin.completions
+        ? [...this._plugin.completions[group], ...uOptions.completions]
+        : uOptions.completions;
+    const important = uOptions.respectImportant && this._config.important ? true : false;
+    const style = (selector: string, property?: Property | Property[], imp = important) =>
+      new Style(selector, property, imp);
+    const prop = (name: string | string[], value?: string, comment?: string, imp = important) =>
+      new Property(name, value, comment, imp);
+    const keyframes = (selector: string, property?: Property | Property[], imp = important) =>
+      new Keyframes(selector, property, imp);
     keyframes.generate = Keyframes.generate;
     style.generate = Style.generate;
     prop.parse = Property.parse;
-    this._plugin.dynamic[key] = (key in this._plugin.dynamic)
-      ? (Utility: Utility) => deepCopy(this._plugin.dynamic[key])(Utility) || generator({ Utility, Style: style, Property: prop, Keyframes: keyframes })
-      : (Utility: Utility) => {
-        const output = generator({ Utility, Style: style, Property: prop, Keyframes: keyframes });
-        if (!output) return;
-        if (Array.isArray(output)) return output.map(i => i.updateMeta(layer, group, order, ++this._cache.count, false, i.meta.respectSelector || uOptions.respectSelector));
-        return output.updateMeta(layer, group, order, ++this._cache.count, false, output.meta.respectSelector || uOptions.respectSelector);
-      };
+    this._plugin.dynamic[key] =
+      key in this._plugin.dynamic
+        ? (Utility: Utility) =>
+          deepCopy(this._plugin.dynamic[key])(Utility) ||
+          generator({ Utility, Style: style, Property: prop, Keyframes: keyframes })
+        : (Utility: Utility) => {
+          const output = generator({ Utility, Style: style, Property: prop, Keyframes: keyframes });
+          if (!output) return;
+          if (Array.isArray(output))
+            return output.map(i =>
+              i.updateMeta(layer, group, order, ++this._cache.count, false, i.meta.respectSelector || uOptions.respectSelector),
+            );
+          return output.updateMeta(
+            layer, group, order, ++this._cache.count, false,
+            output.meta.respectSelector || uOptions.respectSelector,
+          );
+        };
+    this._invalidateStyleCaches();
     return generator;
   }
 
   addComponents(
     components: DeepNestObject | DeepNestObject[],
-    options: PluginUtilOptions = { layer: 'components', variants: [], respectPrefix: false }
+    options: PluginUtilOptions = { layer: 'components', variants: [], respectPrefix: false },
   ): Style[] {
     if (Array.isArray(options)) options = { variants: options };
-    if (Array.isArray(components)) components = components.reduce((previous: {[key:string]:unknown}, current) => combineConfig(previous, current), {}) as DeepNestObject;
+    if (Array.isArray(components))
+      components = components.reduce(
+        (previous: { [key: string]: unknown }, current) => combineConfig(previous, current),
+        {},
+      ) as DeepNestObject;
     let output: Style[] = [];
     const layer = options.layer ?? 'components';
     const order = layerOrder[layer] + 1;
     for (const [key, value] of Object.entries(components)) {
       let propertyValue = value;
-      if (Array.isArray(value)) {
-        propertyValue = Object.assign({}, ...value);
-      }
-      const styles = Style.generate(key.startsWith('.') && options.respectPrefix ? this.prefix(key) : key, propertyValue);
+      if (Array.isArray(value)) propertyValue = Object.assign({}, ...value);
+      const styles = Style.generate(
+        key.startsWith('.') && options.respectPrefix ? this.prefix(key) : key,
+        propertyValue,
+      );
       styles.forEach(style => style.updateMeta(layer, 'plugin', order, ++this._cache.count));
-      if (options.respectImportant && this._config.important) styles.forEach(style => style.important = true);
+      if (options.respectImportant && this._config.important) styles.forEach(style => (style.important = true));
       let className = guessClassName(key);
       if (key.charAt(0) === '@') {
         styles.forEach(style => {
           if (style.selector) className = guessClassName(style.selector);
           if (Array.isArray(className)) {
-            className.filter(i => i.isClass).forEach(({ selector, pseudo }) => this._addPluginProcessorCache('components', selector, pseudo? style.clone('.' + cssEscape(selector)).wrapSelector(selector => selector + pseudo) : style.clone()));
+            className.filter(i => i.isClass).forEach(({ selector, pseudo }) =>
+              this._addPluginProcessorCache(
+                'components',
+                selector,
+                pseudo
+                  ? style.clone('.' + cssEscape(selector)).wrapSelector(s => s + pseudo)
+                  : style.clone(),
+              ),
+            );
             const base = className.filter(i => !i.isClass).map(i => i.selector).join(', ');
             if (base) this._addPluginProcessorCache('static', base, style.clone(base));
           } else {
-            this._addPluginProcessorCache(className.isClass? 'components' : 'static', className.selector, className.pseudo? style.clone('.' + cssEscape(className.selector)).wrapSelector(selector => selector + (className as { pseudo: string }).pseudo) : style.clone());
+            this._addPluginProcessorCache(
+              className.isClass ? 'components' : 'static',
+              className.selector,
+              className.pseudo
+                ? style.clone('.' + cssEscape(className.selector)).wrapSelector(s => s + (className as { pseudo: string }).pseudo)
+                : style.clone(),
+            );
           }
         });
       } else if (Array.isArray(className)) {
-        // one of the selector are not class, treat the entire as static to avoid duplication
         if (className.some(i => !i.isClass)) {
           const base = className.map(i => i.selector).join(', ');
           if (base) this._addPluginProcessorCache('static', base, styles.map(i => i.clone(base)));
-        }
-        // class
-        else {
-          className.forEach(({ selector, pseudo }) => this._addPluginProcessorCache('components', selector, pseudo ? styles.map(i => i.clone('.' + cssEscape(selector)).wrapSelector(selector => selector + pseudo)): deepCopy(styles)));
+        } else {
+          className.forEach(({ selector, pseudo }) =>
+            this._addPluginProcessorCache(
+              'components',
+              selector,
+              pseudo
+                ? styles.map(i => i.clone('.' + cssEscape(selector)).wrapSelector(s => s + pseudo))
+                : deepCopy(styles),
+            ),
+          );
         }
       } else {
-        this._addPluginProcessorCache(className.isClass? 'components': 'static', className.selector, className.pseudo ? styles.map(style => style.clone('.' + cssEscape((className as { selector: string }).selector)).wrapSelector(selector => selector + (className as { pseudo: string }).pseudo)) : styles);
+        this._addPluginProcessorCache(
+          className.isClass ? 'components' : 'static',
+          className.selector,
+          className.pseudo
+            ? styles.map(style =>
+              style.clone('.' + cssEscape((className as { selector: string }).selector)).wrapSelector(s => s + (className as { pseudo: string }).pseudo),
+            )
+            : styles,
+        );
       }
       output = [...output, ...styles];
     }
+    this._invalidateStyleCaches();
     return output;
   }
 
@@ -1184,10 +1401,10 @@ export class Processor {
     let output: Style[] = [];
     for (const [key, value] of Object.entries(baseStyles)) {
       let propertyValue = value;
-      if (Array.isArray(value)) {
-        propertyValue = Object.assign({}, ...value);
-      }
-      const styles = Style.generate(key, propertyValue).map(i => i.updateMeta('base', 'plugin', 10, ++this._cache.count));
+      if (Array.isArray(value)) propertyValue = Object.assign({}, ...value);
+      const styles = Style.generate(key, propertyValue).map(i =>
+        i.updateMeta('base', 'plugin', 10, ++this._cache.count),
+      );
       this._replaceStyleVariants(styles);
       this._addPluginProcessorCache('preflights', key, styles);
       output = [...output, ...styles];
@@ -1195,11 +1412,7 @@ export class Processor {
     return output;
   }
 
-  addVariant(
-    name: string,
-    generator: VariantGenerator,
-  ): Style | Style[] {
-    // name && generator && options;
+  addVariant(name: string, generator: VariantGenerator): Style | Style[] {
     const style = generator({
       ...this.variantUtils,
       separator: this.config('separator', ':') as string,
@@ -1207,27 +1420,26 @@ export class Processor {
     });
     this._variants[name] = () => style;
     this._cache.variants.push(name);
+    this._cache.variantSet.add(name);
     return style;
   }
 
   dumpConfig(): string {
     const processor = new Processor();
     const diff = diffConfig(processor._config, this._config) as Config;
-    let output = { theme: { extend: {} }, plugins: [] } as {[key:string]:any};
+    let output = { theme: { extend: {} }, plugins: [] } as { [key: string]: any };
     if (diff.theme) {
       for (const [key, value] of Object.entries(diff.theme)) {
         if (key !== 'extend') {
-          (output.theme.extend as {[key:string]:unknown})[key] = value;
+          (output.theme.extend as { [key: string]: unknown })[key] = value;
         }
       }
       delete diff.theme;
     }
     if (diff.plugins) {
-      for (const plugin of diff.plugins) {
-        if ('config' in plugin) {
-          delete plugin.config;
-        }
-        output.plugins.push(plugin);
+      for (const p of diff.plugins) {
+        if ('config' in p) delete p.config;
+        output.plugins.push(p);
       }
       delete diff.plugins;
     }
