@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "rootDir": ".",
+    "baseUrl": ".",
     "target": "es2022",
     "module": "esnext",
     "moduleResolution": "bundler",
@@ -12,7 +13,17 @@
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
-    "ignoreDeprecations": "6.0"
+    "ignoreDeprecations": "6.0",
+    "paths": {
+      "@/*": ["src/*"],
+      "@/config/*": ["src/config/*"],
+      "@/helpers/*": ["src/helpers/*"],
+      "@/lang/*": ["src/lang/*"],
+      "@/lib/*": ["src/lib/*"],
+      "@/plugin/*": ["src/plugin/*"],
+      "@/utils/*": ["src/utils/*"],
+      "@/cli/*": ["src/cli/*"]
+    }
   },
   "include": ["./src", "./test", "./test-dts", "./example"],
   "exclude": ["./test/assets", "./test/helpers", "./test/esm-loader.mjs", "./test/register-loader.mjs", "dist"]

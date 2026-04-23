@@ -1,5 +1,5 @@
-import { getNestedValue, hash, deepCopy, testRegexr, guessClassName, toArray } from '../utils/tools';
-import { negative, breakpoints } from '../utils/helpers';
+import { getNestedValue, hash, deepCopy, testRegexr, guessClassName, toArray } from '@/utils';
+import { negative, breakpoints } from '@/utils';
 import { Keyframes, Container, Property, Style, StyleSheet } from '../utils/style';
 import { resolveVariants } from './variants';
 import { staticUtilities, dynamicUtilities } from './utilities';
