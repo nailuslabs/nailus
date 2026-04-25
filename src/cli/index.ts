@@ -4,7 +4,7 @@ import { resolve, dirname, join, extname } from 'path';
 import { pathToFileURL } from 'url';
 import { createRequire } from 'module';
 import { Processor } from '../lib';
-import { mkdirSync, readFileSync, writeFile, watch, unwatchFile, existsSync } from 'fs';
+import { mkdirSync, readFileSync, writeFile, watch, existsSync } from 'fs';
 import { HTMLParser, CSSParser } from '../utils/parser';
 import { StyleSheet } from '../utils/style';
 import {
@@ -14,6 +14,7 @@ import {
   fuzzy,
 } from './utils';
 import type { Extractor, Config } from '../interfaces';
+import type { FSWatcher } from 'fs';
 
 // ─── ESM / CJS / TS Compatibility ────────────────────────────────────────────
 //
@@ -82,7 +83,6 @@ async function loadConfig(configPath: string): Promise<unknown> {
     try {
       delete require.cache[require.resolve(absPath)];
     } catch { /* pas encore en cache */ }
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
     return require(absPath);
   } catch (err: unknown) {
     // Node lève ERR_REQUIRE_ESM si le fichier .js est un module ESM
@@ -191,6 +191,9 @@ async function main() {
   const configFile = args['--config'] ? resolve(args['--config']) : undefined;
   let preflights: { [key: string]: StyleSheet } = {};
   let styleSheets: { [key: string]: StyleSheet } = {};
+  const fileWatchers = new Map<string, FSWatcher>();
+  const dirWatchers = new Map<string, FSWatcher>();
+  let configWatcher: FSWatcher | undefined;
 
   // Chargement initial de la config (CJS, ESM ou TS selon l'extension)
   const rawConfig = configFile ? await loadConfig(configFile) as Config : undefined;
@@ -244,8 +247,24 @@ async function main() {
     });
   }
 
-  function interpret(files: string[]) {
-    files.forEach((file) => {
+  async function collectExtractorClasses(file: string, content: string): Promise<string[]> {
+    const classes: string[] = [];
+    const extractors = processor.config('extract.extractors') as Extractor[] | undefined;
+
+    if (!extractors) return classes;
+
+    for (const { extractor, extensions } of extractors) {
+      if (!extensions.includes(extname(file).slice(1))) continue;
+
+      const result = await extractor(content, file);
+      if (result.classes) classes.push(...result.classes);
+    }
+
+    return classes;
+  }
+
+  async function interpret(files: string[]) {
+    for (const file of files) {
       const content = readFileSync(file).toString();
       let classes: string[] = [];
 
@@ -256,17 +275,7 @@ async function main() {
         classes = parser.parseClasses().map((i) => i.result);
       }
 
-      const extractors = processor.config('extract.extractors') as Extractor[] | undefined;
-      if (extractors) {
-        for (const { extractor, extensions } of extractors) {
-          if (extensions.includes(extname(file).slice(1))) {
-            const result = extractor(content);
-            if ('classes' in result && result.classes) {
-              classes = [...classes, ...result.classes];
-            }
-          }
-        }
-      }
+      classes = [...classes, ...await collectExtractorClasses(file, content)];
 
       if (args['--dev']) {
         const utility = processor.interpret(classes.join(' '), true);
@@ -284,7 +293,7 @@ async function main() {
         styleSheets[file] = utility.styleSheet;
         if (args['--preflight']) preflights[file] = processor.preflight(content);
       }
-    });
+    }
   }
 
   function attributify(files: string[]) {
@@ -321,19 +330,21 @@ async function main() {
     files.forEach((file) => {
       const content = readFileSync(file).toString();
       const block = content.match(/(?<=<style[\r\n]*\s*lang\s?=\s?['"]nailus["']>)[\s\S]*(?=<\/style>)/);
-      if (block && block.index) {
+      if (block && block.index !== undefined) {
         const css = content.slice(block.index, block.index + block[0].length);
         const parser = new CSSParser(css, processor);
-        styleSheets[file] = styleSheets[file].extend(parser.parse());
+        styleSheets[file] = styleSheets[file]
+          ? styleSheets[file].extend(parser.parse())
+          : parser.parse();
       }
     });
   }
 
-  function build(files: string[], update = false) {
+  async function build(files: string[], update = false) {
     if (args['--compile']) {
       compile(files);
     } else {
-      interpret(files);
+      await interpret(files);
     }
     if (args['--attributify']) attributify(files);
     if (args['--style']) styleBlock(files);
@@ -402,21 +413,38 @@ async function main() {
     }
   }
 
+  function closeFileWatcher(file: string) {
+    const watcher = fileWatchers.get(file);
+    if (!watcher) return;
+    watcher.close();
+    fileWatchers.delete(file);
+  }
+
+  function closeConfigWatcher() {
+    configWatcher?.close();
+    configWatcher = undefined;
+  }
+
   // ─── Watch mode ───────────────────────────────────────────────────────────
 
   function watchBuild(file: string) {
-    watch(file, (event, path) => {
+    closeFileWatcher(file);
+
+    const watcher = watch(file, async (event, path) => {
+      const pathValue = path == null ? undefined : String(path);
+      const changedPath = pathValue ? join(dirname(file), pathValue) : undefined;
+
       if (event === 'rename') {
         const newFiles = globArray(patterns);
         const renamed = matchFiles.filter((i) => !newFiles.includes(i))[0];
 
-        if (path && existsSync(path)) {
-          Console.log('File', `'${renamed}'`, 'has been renamed to', `'${path}'`);
+        if (changedPath && existsSync(changedPath)) {
+          Console.log('File', `'${renamed}'`, 'has been renamed to', `'${changedPath}'`);
           matchFiles = newFiles;
           Console.log('Matched files:', matchFiles);
         } else {
           Console.log('File', `'${file}'`, 'has been deleted');
-          unwatchFile(file);
+          closeFileWatcher(file);
           matchFiles = newFiles;
           delete styleSheets[file];
           delete preflights[file];
@@ -425,7 +453,7 @@ async function main() {
             Console.log('Matched files:', matchFiles);
             Console.time('Building');
           }
-          build([], true);
+          await build([], true);
           if (matchFiles.length > 0) {
             Console.timeEnd('Building');
           } else {
@@ -436,12 +464,14 @@ async function main() {
       }
 
       if (event === 'change') {
-        Console.log('File', `'${path}'`, 'has been changed');
+        Console.log('File', `'${pathValue ?? file}'`, 'has been changed');
         Console.time('Building');
-        build([file], true);
+        await build([file], true);
         Console.timeEnd('Building');
       }
     });
+
+    fileWatchers.set(file, watcher);
   }
 
   /**
@@ -450,9 +480,10 @@ async function main() {
    */
   function watchConfig(file?: string) {
     if (!file) return;
+    closeConfigWatcher();
     let stamp = 0;
 
-    watch(file, async (event, path) => {
+    configWatcher = watch(file, async (event, path) => {
       // Debounce : évite le double déclenchement fréquent sur certains éditeurs
       if (event === 'change' && (stamp === 0 || +new Date() - stamp > 500)) {
         stamp = +new Date();
@@ -467,7 +498,7 @@ async function main() {
           styleSheets = {};
           preflights = {};
           buildSafeList(safelist);
-          build(matchFiles, true);
+          await build(matchFiles, true);
         } catch (err) {
           Console.error('Failed to reload config:', err);
         }
@@ -475,6 +506,30 @@ async function main() {
         Console.timeEnd('Building');
       }
     });
+  }
+
+  function watchDirectory(dir: string) {
+    if (dirWatchers.has(dir)) return;
+
+    const watcher = watch(dir, async (event, path) => {
+      const pathValue = path == null ? undefined : String(path);
+      if (event === 'rename' && pathValue && existsSync(join(dir, pathValue))) {
+        const newFiles = globArray(patterns);
+        if (newFiles.length > matchFiles.length) {
+          const newFile = newFiles.filter((i) => !matchFiles.includes(i))[0];
+          Console.log('New file', `'${newFile}'`, 'added');
+          matchFiles.push(newFile);
+          Console.log('Matched files:', matchFiles);
+          Console.time('Building');
+          await build([newFile], true);
+          watchBuild(newFile);
+          watchDirectory(dirname(newFile));
+          Console.timeEnd('Building');
+        }
+      }
+    });
+
+    dirWatchers.set(dir, watcher);
   }
 
   // ─── Exécution ────────────────────────────────────────────────────────────
@@ -491,7 +546,7 @@ async function main() {
   }
 
   buildSafeList(safelist);
-  build(matchFiles);
+  await build(matchFiles);
 
   if (args['--dev']) {
     watchConfig(configFile);
@@ -501,21 +556,7 @@ async function main() {
     }
 
     for (const dir of Array.from(new Set(matchFiles.map((f) => dirname(f))))) {
-      watch(dir, (event, path) => {
-        if (event === 'rename' && path && existsSync(join(dir, path))) {
-          const newFiles = globArray(patterns);
-          if (newFiles.length > matchFiles.length) {
-            const newFile = newFiles.filter((i) => !matchFiles.includes(i))[0];
-            Console.log('New file', `'${newFile}'`, 'added');
-            matchFiles.push(newFile);
-            Console.log('Matched files:', matchFiles);
-            Console.time('Building');
-            build([newFile], true);
-            watchBuild(newFile);
-            Console.timeEnd('Building');
-          }
-        }
-      });
+      watchDirectory(dir);
     }
   }
 }

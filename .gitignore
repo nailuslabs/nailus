@@ -19,6 +19,7 @@ public/css/main.css
 
 # Coverage reports
 coverage
+.npm-cache
 
 # API keys and secrets
 .env

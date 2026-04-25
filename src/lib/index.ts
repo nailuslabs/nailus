@@ -1,5 +1,5 @@
-import { getNestedValue, hash, deepCopy, testRegexr, guessClassName, toArray } from '@/utils';
-import { negative, breakpoints } from '@/utils';
+import { getNestedValue, hash, deepCopy, testRegexr, guessClassName, toArray } from '../utils';
+import { negative, breakpoints } from '../utils';
 import { Keyframes, Container, Property, Style, StyleSheet } from '../utils/style';
 import { resolveVariants } from './variants';
 import { staticUtilities, dynamicUtilities } from './utilities';
@@ -487,7 +487,7 @@ export class Processor {
   resolveConfig(config: Config | undefined, presets: Config): Config {
     // Cloner uniquement config (sera muté), pas presets (lecture seule)
     this._config = this._resolveConfig(
-      { ...((config && typeof config === 'object') ? structuredClone(config) : {}), exclude: config?.exclude },
+      { ...((config && typeof config === 'object') ? deepCopy(config) : {}), exclude: config?.exclude },
       presets, // pas de clone — presets est traité en lecture seule
     );
     this._theme = this._config.theme

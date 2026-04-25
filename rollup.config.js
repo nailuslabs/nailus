@@ -417,6 +417,7 @@ export default [
           ts_plugin,
           resolve(),
           commonjs(),
+          pack(`plugin/${dir}`),
           types(`plugin/${dir}/index.d.ts`, `../../types/plugin/${dir}/index`, "{ default }"),
         ],
       },

@@ -5,6 +5,7 @@ import ts from 'typescript';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const TS_EXTENSIONS = new Set(['.ts', '.tsx', '.mts', '.cts']);
+const PROJECT_ROOT = fileURLToPath(new URL('..', import.meta.url));
 const FILE_CANDIDATES = ['.ts', '.tsx', '.mts', '.mjs', '.js', '.cjs', '.json'];
 const INDEX_CANDIDATES = [
   'index.ts',
@@ -24,6 +25,11 @@ function isPathLike(specifier) {
     specifier.startsWith('file:') ||
     path.isAbsolute(specifier)
   );
+}
+
+function resolveAliasSpecifier(specifier) {
+  if (!specifier.startsWith('@/')) return;
+  return pathToFileURL(path.join(PROJECT_ROOT, 'src', specifier.slice(2))).href;
 }
 
 async function exists(target) {
@@ -99,10 +105,12 @@ export async function resolve(specifier, context, defaultResolve) {
   try {
     return await defaultResolve(specifier, context, defaultResolve);
   } catch (error) {
-    if (!isPathLike(specifier)) throw error;
-
     const parentURL = context.parentURL ?? pathToFileURL(`${process.cwd()}${path.sep}`).href;
-    const resolved = await resolveWithCandidates(specifier, parentURL);
+    const aliasedSpecifier = resolveAliasSpecifier(specifier);
+
+    if (!aliasedSpecifier && !isPathLike(specifier)) throw error;
+
+    const resolved = await resolveWithCandidates(aliasedSpecifier ?? specifier, parentURL);
     if (!resolved) throw error;
 
     return {

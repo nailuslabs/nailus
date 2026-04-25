@@ -25,117 +25,121 @@
   "license": "MIT",
   "author": "nsounda nsilulu naïloth esdras",
   "type": "module",
-  "main": "./index.cjs",
-  "module": "./index.js",
-  "types": "./index.d.ts",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "bin": {
-    "nailuscss": "./cli/index.js"
+    "nailuscss": "./dist/cli/index.js"
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "dev": "rollup -cw",
     "tsd": "tsc -p ./src --emitDeclarationOnly",
-    "lint": "eslint . --ext .ts",
-    "lint:fix": "npm run lint -- --fix",
+    "lint": "eslint src test example",
+    "lint:fix": "eslint src test example --fix",
     "typecheck": "tsc -p ./src --noEmit",
-    "build": "rollup -c && pnpm tsd",
-    "build:prod": "cross-env NODE_ENV=production pnpm build",
+    "build": "rollup -c && npm run tsd",
+    "build:prod": "cross-env NODE_ENV=production npm run build",
+    "prepack": "npm run build",
     "test": "node --import ./test/register-loader.mjs ./test/run.ts",
     "test:update": "cross-env UPDATE_SNAPSHOT=true node --import ./test/register-loader.mjs ./test/run.ts",
     "test:dts": "tsc -p ./test/dts --noEmit",
-    "coverage": "nyc --nycrc-path=.nycrc.json pnpm test",
+    "coverage": "nyc --nycrc-path=.nycrc.json npm test",
     "release": "bumpp --tag --commit --push"
   },
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./index.d.ts",
-      "import": "./index.js",
-      "require": "./index.cjs"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
     },
     "./colors": {
-      "types": "./colors.d.ts",
-      "import": "./colors.js",
-      "require": "./colors.cjs"
+      "types": "./dist/colors.d.ts",
+      "import": "./dist/colors.js",
+      "require": "./dist/colors.cjs"
     },
     "./defaultConfig": {
-      "types": "./defaultConfig.d.ts",
-      "import": "./defaultConfig.js",
-      "require": "./defaultConfig.cjs"
+      "types": "./dist/defaultConfig.d.ts",
+      "import": "./dist/defaultConfig.js",
+      "require": "./dist/defaultConfig.cjs"
     },
     "./defaultTheme": {
-      "types": "./defaultTheme.d.ts",
-      "import": "./defaultTheme.js",
-      "require": "./defaultTheme.cjs"
+      "types": "./dist/defaultTheme.d.ts",
+      "import": "./dist/defaultTheme.js",
+      "require": "./dist/defaultTheme.cjs"
     },
     "./resolveConfig": {
-      "types": "./resolveConfig.d.ts",
-      "import": "./resolveConfig.js",
-      "require": "./resolveConfig.cjs"
+      "types": "./dist/resolveConfig.d.ts",
+      "import": "./dist/resolveConfig.js",
+      "require": "./dist/resolveConfig.cjs"
     },
     "./config": {
-      "types": "./config/index.d.ts",
-      "import": "./config/index.js",
-      "require": "./config/index.cjs"
+      "types": "./dist/config/index.d.ts",
+      "import": "./dist/config/index.js",
+      "require": "./dist/config/index.cjs"
     },
     "./lib": {
-      "types": "./lib/index.d.ts",
-      "import": "./lib/index.js",
-      "require": "./lib/index.cjs"
+      "types": "./dist/lib/index.d.ts",
+      "import": "./dist/lib/index.js",
+      "require": "./dist/lib/index.cjs"
     },
     "./helpers": {
-      "types": "./helpers/index.d.ts",
-      "import": "./helpers/index.js",
-      "require": "./helpers/index.cjs"
+      "types": "./dist/helpers/index.d.ts",
+      "import": "./dist/helpers/index.js",
+      "require": "./dist/helpers/index.cjs"
     },
     "./utils": {
-      "types": "./utils/index.d.ts",
-      "import": "./utils/index.js",
-      "require": "./utils/index.cjs"
+      "types": "./dist/utils/index.d.ts",
+      "import": "./dist/utils/index.js",
+      "require": "./dist/utils/index.cjs"
     },
     "./utils/parser": {
-      "types": "./utils/parser/index.d.ts",
-      "import": "./utils/parser/index.js",
-      "require": "./utils/parser/index.cjs"
+      "types": "./dist/utils/parser/index.d.ts",
+      "import": "./dist/utils/parser/index.js",
+      "require": "./dist/utils/parser/index.cjs"
     },
     "./utils/style": {
-      "types": "./utils/style/index.d.ts",
-      "import": "./utils/style/index.js",
-      "require": "./utils/style/index.cjs"
+      "types": "./dist/utils/style/index.d.ts",
+      "import": "./dist/utils/style/index.js",
+      "require": "./dist/utils/style/index.cjs"
     },
     "./plugin": {
-      "types": "./plugin/index.d.ts",
-      "import": "./plugin/index.js",
-      "require": "./plugin/index.cjs"
+      "types": "./dist/plugin/index.d.ts",
+      "import": "./dist/plugin/index.js",
+      "require": "./dist/plugin/index.cjs"
     },
     "./plugin/aspect-ratio": {
-      "types": "./plugin/aspect-ratio/index.d.ts",
-      "import": "./plugin/aspect-ratio/index.js",
-      "require": "./plugin/aspect-ratio/index.cjs"
+      "types": "./dist/plugin/aspect-ratio/index.d.ts",
+      "import": "./dist/plugin/aspect-ratio/index.js",
+      "require": "./dist/plugin/aspect-ratio/index.cjs"
     },
     "./plugin/filters": {
-      "types": "./plugin/filters/index.d.ts",
-      "import": "./plugin/filters/index.js",
-      "require": "./plugin/filters/index.cjs"
+      "types": "./dist/plugin/filters/index.d.ts",
+      "import": "./dist/plugin/filters/index.js",
+      "require": "./dist/plugin/filters/index.cjs"
     },
     "./plugin/forms": {
-      "types": "./plugin/forms/index.d.ts",
-      "import": "./plugin/forms/index.js",
-      "require": "./plugin/forms/index.cjs"
+      "types": "./dist/plugin/forms/index.d.ts",
+      "import": "./dist/plugin/forms/index.js",
+      "require": "./dist/plugin/forms/index.cjs"
     },
     "./plugin/line-clamp": {
-      "types": "./plugin/line-clamp/index.d.ts",
-      "import": "./plugin/line-clamp/index.js",
-      "require": "./plugin/line-clamp/index.cjs"
+      "types": "./dist/plugin/line-clamp/index.d.ts",
+      "import": "./dist/plugin/line-clamp/index.js",
+      "require": "./dist/plugin/line-clamp/index.cjs"
     },
     "./plugin/typography": {
-      "types": "./plugin/typography/index.d.ts",
-      "import": "./plugin/typography/index.js",
-      "require": "./plugin/typography/index.cjs"
+      "types": "./dist/plugin/typography/index.d.ts",
+      "import": "./dist/plugin/typography/index.js",
+      "require": "./dist/plugin/typography/index.cjs"
     },
     "./plugin/scroll-snap": {
-      "types": "./plugin/scroll-snap/index.d.ts",
-      "import": "./plugin/scroll-snap/index.js",
-      "require": "./plugin/scroll-snap/index.cjs"
+      "types": "./dist/plugin/scroll-snap/index.d.ts",
+      "import": "./dist/plugin/scroll-snap/index.js",
+      "require": "./dist/plugin/scroll-snap/index.cjs"
     }
   },
   "devDependencies": {
