@@ -28,8 +28,13 @@ function isPathLike(specifier) {
 }
 
 function resolveAliasSpecifier(specifier) {
-  if (!specifier.startsWith('@/')) return;
-  return pathToFileURL(path.join(PROJECT_ROOT, 'src', specifier.slice(2))).href;
+  if (specifier.startsWith('@/')) {
+    return pathToFileURL(path.join(PROJECT_ROOT, 'src', specifier.slice(2))).href;
+  }
+  if (specifier === 'nailuscss' || specifier.startsWith('nailuscss/')) {
+    const subpath = specifier === 'nailuscss' ? '' : specifier.slice(11); // remove 'nailuscss/'
+    return pathToFileURL(path.join(PROJECT_ROOT, 'dist', subpath)).href;
+  }
 }
 
 async function exists(target) {
