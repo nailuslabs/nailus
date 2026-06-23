@@ -1,8 +1,0 @@
-.npm-cache/
-.nyc_output/
-coverage/
-example/
-packages-*/
-playground/
-src/
-test/
