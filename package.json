@@ -1,0 +1,36 @@
+{
+  "name": "@nailus/monorepo",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "packageManager": "pnpm@11.1.2",
+  "engines": {
+    "node": ">=22"
+  },
+  "description": "Moteur atomique de génération css, fonts et Icons instantané à la demande.",
+  "keywords": [
+    "nailus",
+    "unocss",
+    "panda-css",
+    "tailwindcss",
+    "windicss",
+    "twind",
+    "atomizer",
+    "css",
+    "ui",
+    "js",
+    "ts"
+  ],
+  "homepage": "https://github.com/nailuslabs/nailus#readme",
+  "bugs": {
+    "url": "https://github.com/nailuslabs/nailus/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nailuslabs/nailus.git"
+  },
+  "license": "MIT",
+  "author": "Naïloth Esdras NSOUNDA NSILULU",
+  "scripts": {},
+  "devDependencies": {}
+}
