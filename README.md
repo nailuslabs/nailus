@@ -7,8 +7,9 @@
   
   **<h3>Moteur atomique de génération css, fonts et Icons instantané à la demande</h3>**
 
-  [![Version NPM](https://img.shields.io/npm/v/nailus)](https://www.npmjs.com/package/nailus)
-  [![Licence MIT](https://img.shields.io/badge/licence-MIT-blue)](https://opensource.org/licenses/MIT)
+  [![Version](https://img.shields.io/npm/v/@nailus/monorepo)](https://www.npmjs.com/package/@nailus/monorepo)
+  [![Téléchargements](https://img.shields.io/npm/dm/@nailus/monorepo)](https://www.npmjs.com/package/@nailus/monorepo)
+  [![Licence](https://img.shields.io/npm/l/@nailus/monorepo)](https://github.com/nailuslabs/nailus/blob/main/LICENSE)
 
 <div align="justify">
 
