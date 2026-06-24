@@ -30,6 +30,16 @@
   },
   "license": "MIT",
   "author": "Naïloth Esdras NSOUNDA NSILULU",
-  "scripts": {},
-  "devDependencies": {}
+  "scripts": {
+    "build": "pnpm -r --filter=./packages/* run build",
+    "build:core": "pnpm --filter @nailus/core build",
+    "build:all": "pnpm -r run build",
+    "clean": "pnpm -r run clean && rm -rf node_modules",
+    "dev": "pnpm -r --parallel run dev",
+    "test": "pnpm -r run test"
+  },
+  "devDependencies": {
+    "@types/node": "^26.0.0",
+    "typescript": "^6.0.3"
+  }
 }
