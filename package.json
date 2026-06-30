@@ -29,15 +29,11 @@
     "url": "git+https://github.com/nailuslabs/nailus.git"
   },
   "license": "MIT",
-  "author": "Naïloth Esdras NSOUNDA NSILULU",
-  "scripts": {
-    "build": "pnpm -r --filter=./packages/* run build",
-    "build:core": "pnpm --filter @nailus/core build",
-    "build:all": "pnpm -r run build",
-    "clean": "pnpm -r run clean && rm -rf node_modules",
-    "dev": "pnpm -r --parallel run dev",
-    "test": "pnpm -r run test"
+  "author": {
+    "name": "Naïloth Esdras NSOUNDA NSILULU",
+    "email": "nailuslab@gmail.com"
   },
+  "scripts": {},
   "devDependencies": {
     "@types/fs-extra": "^11.0.4",
     "@types/js-yaml": "^4.0.9",
@@ -47,7 +43,9 @@
     "eslint": "^10.6.0",
     "fs-extra": "^11.3.6",
     "js-yaml": "^5.2.0",
+    "magic-string": "^0.30.21",
     "rollup": "^4.62.2",
+    "tsup": "^8.5.1",
     "typescript": "^6.0.3"
   }
 }

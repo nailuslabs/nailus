@@ -1,0 +1,45 @@
+{
+  "name": "@nailus/cli",
+  "type": "module",
+  "version": "1.0.1",
+  "description": "CLI for nailus",
+  "author": {
+    "name": "Naïloth Esdras NSOUNDA NSILULU",
+    "email": "nailuslab@gmail.com"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/nailuslabs/nailus#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nailuslabs/nailus.git",
+    "directory": "packages-engine/cli"
+  },
+  "bugs": {
+    "url": "https://github.com/nailuslabs/nailus/issues"
+  },
+  "keywords": [
+    "nailus",
+    "nailusCLI",
+    "cli"
+  ],
+  "exports": {
+    ".": "./dist/index.mjs",
+    "./package.json": "./package.json"
+  },
+  "types": "./dist/index.d.mts",
+  "bin": {
+    "nailus": "./bin/nailus.mjs"
+  },
+  "files": [
+    "bin",
+    "dist"
+  ],
+  "scripts": {},
+  "dependencies": {
+    "@nailus/config": "workspace:*",
+    "@nailus/core": "workspace:*",
+    "@nailus/preset-wind3": "workspace:*",
+    "@nailus/preset-wind4": "workspace:*",
+    "@nailus/transformer-directives": "workspace:*"
+  }
+}

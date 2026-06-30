@@ -1,0 +1,38 @@
+{
+  "name": "@nailus/autocomplete",
+  "type": "module",
+  "version": "1.0.1",
+  "description": "Autocomplete for nailus",
+  "author": {
+    "name": "Naïloth Esdras NSOUNDA NSILULU",
+    "email": "nailuslab@gmail.com"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/nailuslabs/nailus#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nailuslabs/nailus.git",
+    "directory": "packages-engine/autocomplete"
+  },
+  "bugs": {
+    "url": "https://github.com/nailuslabs/nailus/issues"
+  },
+  "keywords": [
+    "nailus",
+    "nailusAutocomplete",
+    "autocomplete"
+  ],
+  "sideEffects": false,
+  "exports": {
+    ".": "./dist/index.mjs",
+    "./package.json": "./package.json"
+  },
+  "types": "./dist/index.d.mts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {},
+  "dependencies": {
+    "@nailus/core": "workspace:*"
+  }
+}

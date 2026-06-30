@@ -3,19 +3,34 @@
     "target": "es2022",
     "jsx": "preserve",
     "lib": [
+      "es2022", 
+      "esnext.disposable", 
+      "dom",
       "esnext"
     ],
     "module": "esnext",
+    "moduleDetection": "force",
+    "allowJs": true,
+    
     "moduleResolution": "Bundler",
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+    "preserveConstEnums": true,
+    "noEmit": true,
+
+    "skipLibCheck": true,
+    "strict": true,
+    "noFallthroughCasesInSwitch": true,
+    "forceConsistentCasingInFileNames": true,
+
     "resolveJsonModule": true,
     "types": [
       "node"
     ],
-    "strict": true,
     "strictNullChecks": true,
     "esModuleInterop": true,
-    "skipDefaultLibCheck": true,
-    "skipLibCheck": true
+    "skipDefaultLibCheck": true
   },
   "exclude": [
     "**/dist/**",
