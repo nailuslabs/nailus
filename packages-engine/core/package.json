@@ -39,7 +39,8 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsup",
+    "clean": "node ../../scripts/clean-dist.mjs",
+    "build": "pnpm run clean && tsup",
     "dev": "tsup --watch"
   },
   "dependencies": {

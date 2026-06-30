@@ -1,8 +1,8 @@
 {
-  "name": "@nailus/preset-wind4",
+  "name": "@nailus/transformer-directives",
   "type": "module",
   "version": "1.0.1",
-  "description": "Preset Wind4 for nailus",
+  "description": "Transformer for directives",
   "license": "MIT",
   "author": {
     "name": "Naïloth Esdras NSOUNDA NSILULU",
@@ -13,7 +13,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsup src/index.ts --format esm --out-dir dist --clean",
-    "dev": "tsup src/index.ts --format esm --dts --out-dir dist --watch"
+    "build": "tsup",
+    "dev": "tsup --watch"
   }
 }

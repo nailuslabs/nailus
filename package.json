@@ -34,8 +34,8 @@
     "email": "nailuslab@gmail.com"
   },
   "scripts": {
-    "build": "pnpm -w -r run build",
-    "dev": "pnpm -w -r run dev"
+    "build": "node ./scripts/build-all.mjs",
+    "dev": "node ./scripts/build-all.mjs"
   },
   "devDependencies": {
     "@types/fs-extra": "^11.0.4",

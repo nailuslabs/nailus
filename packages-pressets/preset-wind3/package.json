@@ -13,7 +13,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsup src/index.ts --format esm --dts --out-dir dist --clean",
+    "build": "tsup src/index.ts --format esm --out-dir dist --clean",
     "dev": "tsup src/index.ts --format esm --dts --out-dir dist --watch"
   }
 }
