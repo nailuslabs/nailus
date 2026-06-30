@@ -1,0 +1,19 @@
+{
+  "name": "@nailus/preset-wind4",
+  "type": "module",
+  "version": "1.0.1",
+  "description": "Preset Wind4 for nailus",
+  "license": "MIT",
+  "author": {
+    "name": "Naïloth Esdras NSOUNDA NSILULU",
+    "email": "nailuslab@gmail.com"
+  },
+  "main": "dist/index.mjs",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --format esm --dts --out-dir dist --clean",
+    "dev": "tsup src/index.ts --format esm --dts --out-dir dist --watch"
+  }
+}

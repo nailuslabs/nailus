@@ -34,7 +34,10 @@
     "bin",
     "dist"
   ],
-  "scripts": {},
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch"
+  },
   "dependencies": {
     "@nailus/config": "workspace:*",
     "@nailus/core": "workspace:*",
