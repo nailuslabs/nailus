@@ -32,6 +32,12 @@
     "esModuleInterop": true,
     "skipDefaultLibCheck": true
   },
+  "include": [
+    "scripts/**/*.ts",
+    "packages-engine/**/*.ts",
+    "packages-pressets/**/*.ts",
+    "packages-integrations/**/*.ts"
+  ],
   "exclude": [
     "**/dist/**",
     "**/node_modules/**",
