@@ -39,7 +39,15 @@
     "test": "pnpm -r run test"
   },
   "devDependencies": {
-    "@types/node": "^26.0.0",
+    "@types/fs-extra": "^11.0.4",
+    "@types/js-yaml": "^4.0.9",
+    "@types/node": "^26.0.1",
+    "@types/react": "^19.2.17",
+    "bumpp": "^11.1.0",
+    "eslint": "^10.6.0",
+    "fs-extra": "^11.3.6",
+    "js-yaml": "^5.2.0",
+    "rollup": "^4.62.2",
     "typescript": "^6.0.3"
   }
 }
