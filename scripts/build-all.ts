@@ -1,7 +1,7 @@
-import { spawnSync } from 'node:child_process'
-import { existsSync, readdirSync, readFileSync } from 'node:fs'
-import path from 'node:path'
-import process from 'node:process'
+import { spawnSync } from 'child_process'
+import { existsSync, readdirSync, readFileSync } from 'fs'
+import path from 'path'
+import process from 'process'
 
 const root = process.cwd()
 const packageRoots = ['packages-engine', 'packages-pressets', 'packages-integrations']
@@ -47,13 +47,19 @@ if (!packages.length) {
 
 for (const pkg of packages) {
   console.log(`\n▶ Building ${pkg.name}`)
-  const result = spawnSync(pnpmBin, ['--dir', pkg.dir, 'run', 'build'], {
+  const cmd = process.platform === 'win32' ? 'cmd.exe' : pnpmBin
+  const args = process.platform === 'win32'
+    ? ['/c', 'pnpm', '--dir', pkg.dir, 'run', 'build']
+    : ['--dir', pkg.dir, 'run', 'build']
+
+  const result = spawnSync(cmd, args, {
     cwd: root,
     stdio: 'inherit',
     shell: false,
   })
 
   if (result.status !== 0) {
+    console.error('Build command failed for', pkg.name, { status: result.status, error: result.error })
     process.exit(result.status ?? 1)
   }
 }

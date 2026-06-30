@@ -1,6 +1,6 @@
-import { existsSync, readdirSync, statSync } from 'node:fs'
-import path from 'node:path'
-import process from 'node:process'
+import { existsSync, readdirSync, statSync } from 'fs'
+import path from 'path'
+import process from 'process'
 
 const root = process.cwd()
 const packageRoots = ['packages-engine', 'packages-pressets', 'packages-integrations']

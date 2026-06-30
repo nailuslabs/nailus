@@ -1,7 +1,7 @@
-import { spawnSync } from 'node:child_process'
-import { existsSync, readdirSync, readFileSync } from 'node:fs'
-import path from 'node:path'
-import process from 'node:process'
+import { spawnSync } from 'child_process'
+import { existsSync, readdirSync, readFileSync } from 'fs'
+import path from 'path'
+import process from 'process'
 
 const root = process.cwd()
 const packageRoots = ['packages-engine', 'packages-pressets', 'packages-integrations']
