@@ -43,7 +43,8 @@
     "build": "pnpm run clean && tsup",
     "dev": "tsup --watch"
   },
-  "dependencies": {
-    "@nailus/core": "workspace:*"
+  "devDependencies": {
+    "magic-string": "^0.30.17",
+    "unconfig": "^7.0.0"
   }
 }
