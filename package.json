@@ -2,6 +2,7 @@
   "name": "@nailus/monorepo",
   "type": "module",
   "version": "1.0.1",
+  "private": true,
   "packageManager": "pnpm@11.1.2",
   "engines": {
     "node": ">=22"
@@ -34,29 +35,41 @@
     "email": "nailuslab@gmail.com"
   },
   "scripts": {
-    "build": "node --import tsx ./scripts/build-all.ts",
-    "dev": "node --import tsx ./scripts/dev.ts",
+    "build": "pnpm -r --filter='./packages-*/*' run build",
+    "dev": "pnpm -r --parallel run dev",
     "clean": "node --import tsx ./scripts/clean.ts",
-    "verify:dist": "node --import tsx ./scripts/verify-dist.ts",
-    "lint": "node --import tsx ./scripts/lint.ts",
-    "test": "node --import tsx ./scripts/test.ts"
+    "lint": "eslint --cache .",
+    "lint:fix": "eslint --cache --fix .",
+    "typecheck": "tsgo --noEmit",
+    "typecheck:full": "tsc --noEmit",
+    "test": "vitest",
+    "release": "bumpp -r --execute=\"pnpm i\""
+  },
+  "simple-git-hooks": {
+    "pre-commit": "npx lint-staged"
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx,vue,md}": [
+      "eslint --cache --fix"
+    ]
   },
   "devDependencies": {
-    "@eslint/js": "^9.0.0",
+    "@eslint/js": "^10.0.1",
     "@types/fs-extra": "^11.0.4",
     "@types/js-yaml": "^4.0.9",
-    "@types/node": "^26.0.1",
+    "@types/node": "^26.1.0",
     "@types/react": "^19.2.17",
+    "@typescript/native-preview": "^7.0.0-dev.20260701.1",
     "bumpp": "^11.1.0",
-    "esbuild": "^0.28.1",
     "eslint": "^10.6.0",
     "fs-extra": "^11.3.6",
-    "globals": "^15.0.0",
-    "js-yaml": "^5.2.0",
+    "lint-staged": "^17.0.8",
     "magic-string": "^0.30.21",
     "rollup": "^4.62.2",
+    "simple-git-hooks": "^2.13.1",
     "tsup": "^8.5.1",
-    "tsx": "^4.20.0",
-    "typescript": "^6.0.3"
+    "tsx": "^4.22.4",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.9"
   }
 }

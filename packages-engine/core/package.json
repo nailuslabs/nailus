@@ -44,7 +44,7 @@
     "dev": "tsup --watch"
   },
   "devDependencies": {
-    "magic-string": "^0.30.17",
-    "unconfig": "^7.0.0"
+    "magic-string": "^0.30.21",
+    "unconfig": "^7.5.0"
   }
 }

@@ -42,24 +42,19 @@
   },
   "dependencies": {
     "@jridgewell/remapping": "^2.3.5",
-    "@nailus/config": "workspace:*",
-    "@nailus/core": "workspace:*",
-    "@nailus/preset-wind3": "workspace:*",
-    "@nailus/preset-wind4": "workspace:*",
-    "@nailus/transformer-directives": "workspace:*",
-    "cac": "^6.7.14",
-    "chokidar": "^4.0.3",
+    "cac": "^7.0.0",
+    "chokidar": "^5.0.0",
     "colorette": "^2.0.20",
     "consola": "^3.4.2",
-    "magic-string": "^0.30.17",
+    "magic-string": "^0.30.21",
     "pathe": "^2.0.3",
-    "perfect-debounce": "^1.0.0",
-    "tinyglobby": "^0.2.12",
-    "unplugin-utils": "^0.2.4"
+    "perfect-debounce": "^2.1.0",
+    "tinyglobby": "^0.2.17",
+    "unplugin-utils": "^0.3.2"
   },
   "devDependencies": {
-    "@types/node": "^22.14.1",
-    "tsup": "^8.4.0",
-    "typescript": "^5.8.3"
+    "@types/node": "^26.1.0",
+    "tsup": "^8.5.1",
+    "typescript": "^6.0.3"
   }
 }
