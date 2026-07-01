@@ -42,6 +42,8 @@
     "**/dist/**",
     "**/node_modules/**",
     "**/playground/**",
-    "**/examples/**"
+    "**/examples/**",
+    "**/windicss/**",
+    "**/unocss/**"
   ]
 }

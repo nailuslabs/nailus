@@ -47,3 +47,6 @@ venv/
 # Generated files
 .DS_Store
 Thumbs.db
+
+windicss
+unocss
