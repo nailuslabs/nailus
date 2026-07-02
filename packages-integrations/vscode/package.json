@@ -154,13 +154,12 @@
     "build": "tsup",
     "dev": "tsx ./scripts/dev.ts && tsup --watch src",
     "publish": "tsx ./scripts/publish.ts",
-    "prepare": "nr update",
+    "prepare": "node -e \"console.log('skip vscode prepare')\"",
     "update": "vscode-ext-gen --scope=nailus --output src/generated/meta.ts",
     "pack": "npx @vscode/vsce package --no-dependencies"
   },
   "devDependencies": {
     "@types/vscode": "^1.125.0",
-    "@nailus/language-server": "workspace:*",
     "tsx": "^4.22.4",
     "vscode-ext-gen": "^1.6.0",
     "vscode-languageclient": "^10.1.0"

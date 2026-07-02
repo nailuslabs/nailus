@@ -54,7 +54,6 @@
     "@nailus/preset-wind4": "workspace:*",
     "@nailus/reset": "workspace:*",
     "@nailus/vite": "workspace:*",
-    "@nailus/webpack": "workspace:*",
-    "nailus": "workspace:*"
+    "@nailus/webpack": "workspace:*"
   }
 }

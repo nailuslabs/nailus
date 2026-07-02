@@ -22,8 +22,8 @@
     "url": "git+https://github.com/nailuslabs/nailus.git"
   },
   "scripts": {
-    "build": "pnpm -r --filter=\"./packages-*/*\" run build",
-    "dev": "pnpm -r --parallel run dev"
+    "build": "pnpm --ignore-workspace -r --filter=\"./packages-*/*\" run build",
+    "dev": "pnpm --ignore-workspace -r --parallel run dev"
   },
   "simple-git-hooks": {
     "pre-commit": "npx lint-staged"

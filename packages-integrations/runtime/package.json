@@ -42,7 +42,6 @@
   },
   "dependencies": {
     "@nailus/core": "workspace:*",
-    "@nailus/preset-attributify": "workspace:*",
-    "@nailus/preset-ns": "workspace:*"
+    "@nailus/preset-attributify": "workspace:*"
   }
 }

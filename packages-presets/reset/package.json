@@ -1,5 +1,5 @@
 {
-  "name": "@nailus/preset-rem-to-px",
+  "name": "@nailus/reset",
   "version": "1.0.1",
   "type": "module",
   "sideEffects": false,
