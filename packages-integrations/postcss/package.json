@@ -1,0 +1,63 @@
+{
+  "name": "@nailus/postcss",
+  "type": "module",
+  "version": "1.0.1",
+  "description": "PostCSS plugin pour nailus",
+  "author": {
+    "name": "Naïloth Esdras NSOUNDA NSILULU",
+    "email": "nailuslab@gmail.com"
+  },
+  "homepage": "https://github.com/nailuslabs/nailus/tree/main#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nailuslabs/nailus.git#main",
+    "directory": "packages-engine/autocomplete"
+  },
+  "bugs": {
+    "url": "https://github.com/nailuslabs/nailus/issues"
+  },
+  "keywords": [
+    "nailus",
+    "postcss",
+    "postcss-plugin",
+    "css"
+  ],
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./esm": "./dist/esm.mjs",
+    "./package.json": "./package.json"
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.cts",
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./dist/*.d.mts",
+        "./dist/*.d.cts",
+        "./*"
+      ]
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup --config-loader unrun",
+    "dev": "tsup --config-loader unrun --watch"
+  },
+  "peerDependencies": {
+    "postcss": "^8.5.16"
+  },
+  "dependencies": {
+    "@nailus/config": "workspace:*",
+    "@nailus/core": "workspace:*",
+    "@nailus/rule-utils": "workspace:*",
+    "css-tree": "^3.2.1",
+    "tinyglobby": "^0.2.17"
+  }
+}

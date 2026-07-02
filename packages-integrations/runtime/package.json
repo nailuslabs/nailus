@@ -1,0 +1,48 @@
+{
+  "name": "@nailus/runtime",
+  "type": "module",
+  "version": "1.0.1",
+  "description": "CSS-in-JS Runtime pour nailus",
+  "author": {
+    "name": "Naïloth Esdras NSOUNDA NSILULU",
+    "email": "nailuslab@gmail.com"
+  },
+  "homepage": "https://github.com/nailuslabs/nailus/tree/main#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nailuslabs/nailus.git#main",
+    "directory": "packages-engine/autocomplete"
+  },
+  "bugs": {
+    "url": "https://github.com/nailuslabs/nailus/issues"
+  },
+  "keywords": [
+    "nailus",
+    "css-in-js"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "unpkg": "./ns.global.js",
+  "jsdelivr": "./ns.global.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "*.global.js",
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "watch": "tsup --watch",
+    "dev": "nr watch & live-server --open=/play"
+  },
+  "dependencies": {
+    "@nailus/core": "workspace:*",
+    "@nailus/preset-attributify": "workspace:*",
+    "@nailus/preset-ns": "workspace:*"
+  }
+}

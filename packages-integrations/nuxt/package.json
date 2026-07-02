@@ -1,0 +1,60 @@
+{
+  "name": "@nailus/nuxt",
+  "type": "module",
+  "version": "1.0.1",
+  "description": "Nuxt module pour nailus",
+  "author": {
+    "name": "Naïloth Esdras NSOUNDA NSILULU",
+    "email": "nailuslab@gmail.com"
+  },
+  "homepage": "https://github.com/nailuslabs/nailus/tree/main#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nailuslabs/nailus.git#main",
+    "directory": "packages-engine/autocomplete"
+  },
+  "bugs": {
+    "url": "https://github.com/nailuslabs/nailus/issues"
+  },
+  "keywords": [
+    "nailus",
+    "nuxt-module",
+    "nuxt",
+    "nuxt3"
+  ],
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.cts",
+  "files": [
+    "dist",
+    "runtime"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch"
+  },
+  "dependencies": {
+    "@nuxt/kit": "^4.4.8",
+    "@nailus/config": "workspace:*",
+    "@nailus/core": "workspace:*",
+    "@nailus/preset-attributify": "workspace:*",
+    "@nailus/preset-icons": "workspace:*",
+    "@nailus/preset-tagify": "workspace:*",
+    "@nailus/preset-typography": "workspace:*",
+    "@nailus/preset-web-fonts": "workspace:*",
+    "@nailus/preset-wind3": "workspace:*",
+    "@nailus/preset-wind4": "workspace:*",
+    "@nailus/reset": "workspace:*",
+    "@nailus/vite": "workspace:*",
+    "@nailus/webpack": "workspace:*",
+    "nailus": "workspace:*"
+  }
+}

@@ -1,0 +1,168 @@
+{
+  "name": "@nailus/vscode",
+  "displayName": "nailus",
+  "type": "module",
+  "version": "1.0.1",
+  "private": true,
+  "description": "nailus for VS Code",
+  "license": "MIT",
+  "author": {
+    "name": "Naïloth Esdras NSOUNDA NSILULU",
+    "email": "nailuslab@gmail.com"
+  },
+  "homepage": "https://github.com/nailuslabs/nailus/tree/main#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nailuslabs/nailus.git#main",
+    "directory": "packages-engine/vscode"
+  },
+  "bugs": {
+    "url": "https://github.com/nailuslabs/nailus/issues"
+  },
+  "categories": [
+    "Other"
+  ],
+  "main": "./dist/index.cjs",
+  "preview": true,
+  "icon": "res/logo.png",
+  "engines": {
+    "vscode": "^1.96.0"
+  },
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "nailus.reload",
+        "title": "Reload nailus",
+        "category": "nailus"
+      },
+      {
+        "command": "nailus.insert-skip-annotation",
+        "title": "Insert `@nailus-skip` for the selection",
+        "category": "nailus"
+      }
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "nailus",
+      "properties": {
+        "nailus.disable": {
+          "type": "boolean",
+          "default": false,
+          "description": "Disable the nailus extension"
+        },
+        "nailus.languageIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "nailus.root": {
+          "type": [
+            "array",
+            "string"
+          ],
+          "items": {
+            "type": "string"
+          },
+          "description": "Project root that contains the nailus configuration file"
+        },
+        "nailus.include": {
+          "type": [
+            "array",
+            "string"
+          ],
+          "items": {
+            "type": "string"
+          },
+          "description": "Directory of files to be detected"
+        },
+        "nailus.exclude": {
+          "type": [
+            "array",
+            "string"
+          ],
+          "items": {
+            "type": "string"
+          },
+          "description": "Directory of files not to be detected"
+        },
+        "nailus.underline": {
+          "type": "boolean",
+          "default": true,
+          "scope": "language-overridable",
+          "description": "Enable/disable underline decoration for class names"
+        },
+        "nailus.colorPreview": {
+          "type": "boolean",
+          "default": true,
+          "scope": "language-overridable",
+          "description": "Enable/disable color preview decorations"
+        },
+        "nailus.colorPreviewRadius": {
+          "type": "string",
+          "default": "50%",
+          "description": "Radius for color preview"
+        },
+        "nailus.remToPxPreview": {
+          "type": "boolean",
+          "default": true,
+          "scope": "language-overridable",
+          "description": "Enable/disable rem to px preview in hover"
+        },
+        "nailus.remToPxRatio": {
+          "type": "number",
+          "default": 16,
+          "scope": "language-overridable",
+          "description": "Ratio of rem to px"
+        },
+        "nailus.selectionStyle": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable/disable selection style decorations"
+        },
+        "nailus.strictAnnotationMatch": {
+          "type": "boolean",
+          "default": false,
+          "description": "Be strict about where to show annotations"
+        },
+        "nailus.autocomplete.matchType": {
+          "type": "string",
+          "default": "prefix",
+          "enum": [
+            "prefix",
+            "fuzzy"
+          ],
+          "description": "The matching type for autocomplete"
+        },
+        "nailus.autocomplete.strict": {
+          "type": "boolean",
+          "default": false,
+          "description": "Be strict about where to show autocomplete"
+        },
+        "nailus.autocomplete.maxItems": {
+          "type": "number",
+          "default": 1000,
+          "description": "The maximum number of items to show in autocomplete"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsx ./scripts/dev.ts && tsup --watch src",
+    "publish": "tsx ./scripts/publish.ts",
+    "prepare": "nr update",
+    "update": "vscode-ext-gen --scope=nailus --output src/generated/meta.ts",
+    "pack": "npx @vscode/vsce package --no-dependencies"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.125.0",
+    "@nailus/language-server": "workspace:*",
+    "tsx": "^4.22.4",
+    "vscode-ext-gen": "^1.6.0",
+    "vscode-languageclient": "^10.1.0"
+  }
+}
