@@ -73,13 +73,13 @@ importers:
         version: link:../core
       '@nailus/preset-wind3':
         specifier: workspace:*
-        version: link:../../packages-pressets/preset-wind3
+        version: link:../../packages-presets/preset-wind3
       '@nailus/preset-wind4':
         specifier: workspace:*
-        version: link:../../packages-pressets/preset-wind4
+        version: link:../../packages-presets/preset-wind4
       '@nailus/transformer-directives':
         specifier: workspace:*
-        version: link:../../packages-pressets/transformer-directives
+        version: link:../../packages-presets/transformer-directives
 
   packages-engine/config:
     dependencies:
@@ -93,11 +93,11 @@ importers:
         specifier: workspace:*
         version: 'link:'
 
-  packages-pressets/preset-wind3: {}
+  packages-presets/preset-wind3: {}
 
-  packages-pressets/preset-wind4: {}
+  packages-presets/preset-wind4: {}
 
-  packages-pressets/transformer-directives: {}
+  packages-presets/transformer-directives: {}
 
 packages:
 

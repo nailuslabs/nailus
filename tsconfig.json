@@ -35,7 +35,7 @@
   "include": [
     "scripts/**/*.ts",
     "packages-engine/**/*.ts",
-    "packages-pressets/**/*.ts",
+    "packages-presets/**/*.ts",
     "packages-integrations/**/*.ts"
   ],
   "exclude": [

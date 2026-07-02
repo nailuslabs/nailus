@@ -2,7 +2,7 @@ packages:
   - 'packages/*'
   - 'packages-engine/*'
   - 'packages-integrations/*'
-  - 'packages-pressets/*'
+  - 'packages-presets/*'
   - 'apps/*'
 allowBuilds:
   esbuild: true
