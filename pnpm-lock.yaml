@@ -405,8 +405,6 @@ importers:
 
   packages-presets/transformer-variant-group: {}
 
-  packages-presets/unocss: {}
-
 packages:
 
   '@astrojs/compiler-binding-darwin-arm64@0.3.0':
