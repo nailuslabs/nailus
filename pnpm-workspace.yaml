@@ -1,9 +1,0 @@
-packages:
-  - 'packages/*'
-  - 'packages-engine/*'
-  - 'packages-integrations/*'
-  - 'packages-presets/*'
-  - 'apps/*'
-allowBuilds:
-  esbuild: true
-  simple-git-hooks: true
