@@ -1,6 +1,7 @@
 import type { Utility } from './lib/utilities/handler';
 
 import type { Property, Style, InlineAtRule, Keyframes } from './utils/style';
+import type { ConfigUtil } from './packages-presets/preset-mini/src/types';
 
 export type DictStr = { [key: string]: string };
 
@@ -40,18 +41,7 @@ export type DefaultFontSize = [
 
 export type Layer = 'base' | 'utilities' | 'components'
 
-export type ThemeUtil = (path: string, defaultValue?: unknown) => any;
-
-export type ConfigUtil = (
-  theme: ThemeUtil,
-  {
-    negative,
-    breakpoints,
-  }: {
-    negative: (config: DictStr) => DictStr;
-    breakpoints: (config: DictStr) => DictStr;
-  }
-) => { [key:string]: any };
+export type { ConfigUtil, ThemeUtil } from './packages-presets/preset-mini/src/types';
 
 export type PluginFunction = (utils: PluginUtils) => void;
 
@@ -413,12 +403,7 @@ export interface DefaultConfig {
   plugins: Plugin[];
 }
 
-export interface StaticUtility {
-  [key: string]: {
-    meta: { group: string, order: number },
-    utility: { [key: string]: string | string[] };
-  }
-}
+export type { StaticUtility } from './packages-presets/preset-mini/src/rules/types';
 
 export interface DynamicUtility {
   [key: string]: (utility: Utility, { theme }: PluginUtils) => Output;

@@ -1,4 +1,4 @@
-import type { ThemeUtil } from '../../../../interfaces';
+import type { ThemeUtil } from '../types';
 
 export const backdropBlur = (theme: ThemeUtil) => theme('blur');
 export const backdropBrightness = (theme: ThemeUtil) => theme('brightness');

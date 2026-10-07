@@ -1,4 +1,4 @@
-import type { ThemeUtil } from '../../../../interfaces';
+import type { ThemeUtil } from '../types';
 
 export const borderColor = (theme: ThemeUtil) => ({
   DEFAULT: theme('colors.gray.200', 'currentColor'),

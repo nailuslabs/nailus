@@ -1,4 +1,4 @@
-import type { ConfigUtil, ThemeUtil } from '../../../../interfaces';
+import type { ConfigUtil, ThemeUtil } from '../types';
 
 export const caretColor = (theme: ThemeUtil) => ({
   auto: 'auto',

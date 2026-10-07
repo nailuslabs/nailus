@@ -1,4 +1,4 @@
-import type { ThemeUtil } from '../../../../interfaces';
+import type { ThemeUtil } from '../types';
 
 export const fontFamily = {
   sans: [

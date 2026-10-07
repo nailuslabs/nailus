@@ -1,4 +1,4 @@
-import type { ConfigUtil } from '../../../../interfaces';
+import type { ConfigUtil } from '../types';
 import { tShirtScale } from './size';
 
 export const height: ConfigUtil = (theme, { breakpoints }) => ({

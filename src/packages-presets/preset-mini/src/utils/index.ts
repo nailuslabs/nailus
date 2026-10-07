@@ -1,0 +1,1 @@
+export { hex2RGB } from './color';
