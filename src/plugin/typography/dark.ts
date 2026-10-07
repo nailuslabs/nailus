@@ -1,4 +1,4 @@
-import { defaultColors as colors } from '../../config/base';
+import { defaultColors as colors } from '../../packages-engine/config/base';
 import type { ThemeUtil } from '../../interfaces';
 
 const styles: (

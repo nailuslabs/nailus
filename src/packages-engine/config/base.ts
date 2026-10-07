@@ -1,8 +1,8 @@
 import { colors } from './colors';
 import { keyframes } from './keyframes';
 import { variantOrder } from './order';
-import plugin from '../plugin';
-import type { Config } from '../interfaces';
+import plugin from '../../plugin';
+import type { Config } from '../../interfaces';
 
 export const defaultColors = {
   transparent: 'transparent',

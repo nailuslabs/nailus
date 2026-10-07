@@ -1,4 +1,4 @@
-import { Console } from '../utils/tools';
+import { Console } from '../../utils/tools';
 
 type Colors =
   'inherit'

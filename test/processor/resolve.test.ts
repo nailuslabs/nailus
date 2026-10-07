@@ -1,6 +1,6 @@
 import { Processor } from '../../src/lib';
 import { resolve } from 'path';
-import { pseudoClassNames } from '../../src/config/order';
+import { pseudoClassNames } from '../../src/packages-engine/config/order';
 
 const processor = new Processor(require(resolve('./test/assets/nailus.plugin.config.js')));
 

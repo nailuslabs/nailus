@@ -1,5 +1,5 @@
 import { Utility } from './handler';
-import { pluginOrder } from '../../config/order';
+import { pluginOrder } from '../../packages-engine/config/order';
 import { dashToCamel, toType } from '../../utils/tools';
 import { Property, Style, Keyframes, Container } from '../../utils/style';
 import { linearGradient, minMaxContent } from '../../utils/style/prefixer';

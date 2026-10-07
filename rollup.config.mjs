@@ -30,7 +30,7 @@ const dump = (file) => path.join(output_dir, file);
 
 const copy = (files) => files.forEach((file) => fs.copyFileSync(file, dump(file)));
 
-const rmdir = (dir) =>  fs.existsSync(dir) && fs.statSync(dir).isDirectory() && fs.rmdirSync(dir, { recursive: true });
+const rmdir = (dir) => fs.existsSync(dir) && fs.statSync(dir).isDirectory() && fs.rmSync(dir, { recursive: true });
 
 const mkdir = (dir) => !(fs.existsSync(dir) && fs.statSync(dir).isDirectory()) && fs.mkdirSync(dir);
 
@@ -223,7 +223,7 @@ export default [
 
   // cli
   {
-    input: 'src/cli/index.ts',
+    input: 'src/packages-engine/cli/index.ts',
     output: [
       {
         file: dump('cli/index.js'),

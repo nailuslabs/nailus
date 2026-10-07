@@ -1,4 +1,4 @@
-import { defaultColors } from '../../config/base';
+import { defaultColors } from '../../packages-engine/config/base';
 import { Property, Style } from '../../utils/style';
 import { toColor } from '../../utils/color';
 import { cssEscape } from '../../utils/algorithm';

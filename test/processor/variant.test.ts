@@ -1,6 +1,6 @@
 import { Property } from '../../src/utils/style';
 import type { Style } from '../../src/utils/style';
-import { baseConfig } from '../../src/config';
+import { baseConfig } from '../../src/packages-engine/config';
 import {
   generateOrientations,
   generateScreens,

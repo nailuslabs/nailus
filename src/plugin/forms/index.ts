@@ -1,5 +1,5 @@
 import plugin from '../index';
-import { colors, baseConfig } from '../../config';
+import { colors, baseConfig } from '../../packages-engine/config';
 import { staticUtilities } from '../../lib/utilities/static';
 import svgToDataUri from 'mini-svg-data-uri';
 import type { DefaultTheme } from '../../interfaces';

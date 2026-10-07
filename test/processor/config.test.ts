@@ -1,7 +1,7 @@
 import { resolve } from 'path';
 import { toType } from '../../src/utils/tools';
 import { Processor } from '../../src/lib';
-import { twExclude } from '../../src/config';
+import { twExclude } from '../../src/packages-engine/config';
 import { CSSParser } from '../../src/utils/parser';
 import type { colorObject } from '../../src/interfaces';
 import aspectRatio from '../../src/plugin/aspect-ratio';

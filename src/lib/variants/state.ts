@@ -1,4 +1,4 @@
-import { pseudoClassNames } from '../../config/order';
+import { pseudoClassNames } from '../../packages-engine/config/order';
 import { Style } from '../../utils/style';
 /*
  * See MDN web docs for more information

@@ -1,7 +1,7 @@
 import { Utility } from './utilities/handler';
 import { deepCopy } from '../utils/tools';
 import { Style, Property } from '../utils/style';
-import { pluginOrder } from '../config/order';
+import { pluginOrder } from '../packages-engine/config/order';
 import { staticUtilities, dynamicUtilities } from './utilities';
 import type { Processor } from './index';
 

@@ -1,6 +1,6 @@
 import { Property, Style, StyleSheet, InlineAtRule, Keyframes } from '../style';
 import { isSpace, searchFrom, searchPropEnd, deepCopy } from '../tools';
-import { layerOrder } from '../../config/order';
+import { layerOrder } from '../../packages-engine/config/order';
 import type { Processor } from '../../lib';
 
 export default class CSSParser {

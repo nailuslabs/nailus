@@ -1,17 +1,17 @@
 import arg from 'arg';
-import { deepCopy, Console } from '../utils/tools';
+import { deepCopy, Console } from '../../utils/tools';
 import { resolve, dirname, join, extname } from 'path';
-import { Processor } from '../lib';
+import { Processor } from '../../lib';
 import { mkdirSync, readFileSync, writeFile, watch, unwatchFile, existsSync } from 'fs';
-import { HTMLParser, CSSParser } from '../utils/parser';
-import { StyleSheet } from '../utils/style';
+import { HTMLParser, CSSParser } from '../../utils/parser';
+import { StyleSheet } from '../../utils/style';
 import {
   getVersion,
   globArray,
   generateTemplate,
   fuzzy,
 } from './utils';
-import type { Extractor } from '../interfaces';
+import type { Extractor } from '../../interfaces';
 
 const doc = `Generate css from text files that containing nailus classes.
 By default, it will use interpretation mode to generate a single css file.
