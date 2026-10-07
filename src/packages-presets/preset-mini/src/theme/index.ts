@@ -1,6 +1,8 @@
 export { breakpoints } from './screens';
 export { spacing } from './spacing';
 export { tShirtScale } from './size';
+export { defaultTheme } from './default';
+export * from './static';
 export * from './animation';
 export * from './aliases';
 export * from './background';
