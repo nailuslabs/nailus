@@ -1,4 +1,4 @@
-import { colors } from './colors';
+import { colors } from '../../packages-presets/preset-mini/src/colors';
 import { keyframes } from './keyframes';
 import { variantOrder } from './order';
 import plugin from '../../plugin';
@@ -34,11 +34,6 @@ export const defaultColors = {
   amber: colors.amber,
   orange: colors.orange,
   sky: colors.sky,
-  'light-blue': colors.sky,
-  'warm-gray': colors.stone,
-  'true-gray': colors.neutral,
-  'cool-gray': colors.gray,
-  'blue-gray': colors.slate,
 };
 
 // tShirtScale describes the sizes xs - 7xl
@@ -54,6 +49,7 @@ export const tShirtScale = {
   '5xl': '64rem',
   '6xl': '72rem',
   '7xl': '80rem',
+  'prose': '65ch',
 };
 
 export const baseConfig: Config = {

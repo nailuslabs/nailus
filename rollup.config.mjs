@@ -238,6 +238,7 @@ export default [
       if (warning.code === 'CIRCULAR_DEPENDENCY') return;
     },
     external: (id) =>
+      !id.includes('packages-presets') &&
       id.match(/\/src\/(lib|utils|plugin|config|colors)/),
     plugins: [
       replace({
@@ -246,7 +247,7 @@ export default [
         __VERSION__: pkg.version,
       }),
       ts_plugin,
-      resolve(),
+      resolve({ extensions: ['.mjs', '.js', '.json', '.node', '.ts'] }),
       commonjs(),
     ],
   },
