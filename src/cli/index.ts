@@ -13,18 +13,18 @@ import {
 } from './utils';
 import type { Extractor } from '../interfaces';
 
-const doc = `Generate css from text files that containing windi classes.
+const doc = `Generate css from text files that containing nailus classes.
 By default, it will use interpretation mode to generate a single css file.
 
 Usage:
-  windicss [filenames]
-  windicss [filenames] -c -m -d
-  windicss [filenames] -c -s -m -d
-  windicss [filenames] [-c | -i] [-a] [-b | -s] [-m] [-d] [-p <prefix:string>] [-o <path:string>] [--args arguments]
+  nailuscss [filenames]
+  nailuscss [filenames] -c -m -d
+  nailuscss [filenames] -c -s -m -d
+  nailuscss [filenames] [-c | -i] [-a] [-b | -s] [-m] [-d] [-p <prefix:string>] [-o <path:string>] [--args arguments]
 
 Options:
   -h, --help            Print this help message and exit.
-  -v, --version         Print windicss current version and exit.
+  -v, --version         Print nailuscss current version and exit.
 
   -i, --interpret       Interpretation mode, generate class selectors. This is the default behavior.
   -c, --compile         Compilation mode, combine the class name in each row into a single class.
@@ -37,11 +37,11 @@ Options:
   -d, --dev             Enable hot reload and watch mode.
   -m, --minify          Generate minimized css file.
   -z, --fuzzy           Enable fuzzy match, only works in interpration mode.
-  -p, --prefix PREFIX   Set the css class name prefix, only valid in compilation mode. The default prefix is 'windi-'.
+  -p, --prefix PREFIX   Set the css class name prefix, only valid in compilation mode. The default prefix is 'nailus-'.
   -o, --output PATH     Set output css file path.
   -f, --config PATH     Set config file path.
 
-  --style               Parse and transform windi style block.
+  --style               Parse and transform nailus style block.
   --init PATH           Start a new project on the path.
 `;
 
@@ -108,7 +108,7 @@ if (configFile) Console.log('Config file:', configFile);
 
 function compile(files: string[]) {
   // compilation mode
-  const prefix = args['--prefix'] ?? 'windi-';
+  const prefix = args['--prefix'] ?? 'nailus-';
   files.forEach((file) => {
     let indexStart = 0;
     const outputStyle: StyleSheet[] = [];
@@ -134,7 +134,7 @@ function compile(files: string[]) {
     );
     styleSheets[file] = args['--dev'] ? (styleSheets[file]? styleSheets[file].extend(added) : added) : added;
 
-    const outputFile = file.replace(/(?=\.\w+$)/, '.windi');
+    const outputFile = file.replace(/(?=\.\w+$)/, '.nailus');
     writeFile(outputFile, outputHTML.join(''), () => null);
     Console.log(`${file} -> ${outputFile}`);
     if (args['--preflight']) {
@@ -214,7 +214,7 @@ function attributify(files: string[]) {
 function styleBlock(files: string[]) {
   files.forEach((file) => {
     const content = readFileSync(file).toString();
-    const block = content.match(/(?<=<style[\r\n]*\s*lang\s?=\s?['"]windi["']>)[\s\S]*(?=<\/style>)/);
+    const block = content.match(/(?<=<style[\r\n]*\s*lang\s?=\s?['"]nailus["']>)[\s\S]*(?=<\/style>)/);
     if (block && block.index) {
       const css = content.slice(block.index, block.index + block[0].length);
       const parser = new CSSParser(css, processor);
@@ -233,7 +233,7 @@ function build(files: string[], update = false) {
   if (args['--style']) styleBlock(files);
   if (args['--separate']) {
     for (const [file, sheet] of Object.entries(styleSheets)) {
-      const outfile = file.replace(/\.\w+$/, '.windi.css');
+      const outfile = file.replace(/\.\w+$/, '.nailus.css');
       writeFile(outfile, (args['--preflight'] ? deepCopy(sheet).extend(preflights[file], false) : sheet).build(args['--minify']), () => null);
       Console.log(`${file} -> ${outfile}`);
     }
@@ -256,7 +256,7 @@ function build(files: string[], update = false) {
         .sort()
         .combine()
         .extend(outputStyle);
-    const filePath = args['--output'] ?? 'windi.css';
+    const filePath = args['--output'] ?? 'nailus.css';
     const dir = dirname(filePath);
     if (!existsSync(dir)) mkdirSync(dir, { recursive: true });
     writeFile(filePath, outputStyle.build(args['--minify']), () => null);

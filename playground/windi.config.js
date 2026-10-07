@@ -5,8 +5,8 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        'windi-dark': '#171717',
-        'windi-blue': '#48b0f1',
+        'nailus-dark': '#171717',
+        'nailus-blue': '#48b0f1',
       },
     },
   },

@@ -24,7 +24,7 @@
 
   ## Caractéristiques
 
-  Inspiré par [unocss](https://unocss.dev/), [Tailwind CSS](https://tailwindcss.com/), [panda-css](https://panda-css.com/), [windicss](https://windicss.org/), et [Twind](https://twind.dev/).
+  Inspiré par [unocss](https://unocss.dev/), [Tailwind CSS](https://tailwindcss.com/), [panda-css](https://panda-css.com/), [nailuscss](https://nailuscss.org/), et [Twind](https://twind.dev/).
   
   ## Documentation
   

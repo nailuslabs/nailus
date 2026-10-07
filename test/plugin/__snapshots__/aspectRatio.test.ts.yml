@@ -60,11 +60,11 @@ Tools / interpret test / aspect-ratio base / 0: |-
     left: 0;
   }
 Tools / works with prefix / aspect-ratio with prefix / 0: |-
-  .windi-aspect-none {
+  .nailus-aspect-none {
     position: static;
     padding-bottom: 0;
   }
-  .windi-aspect-none > * {
+  .nailus-aspect-none > * {
     position: static;
     height: auto;
     width: auto;
@@ -73,21 +73,21 @@ Tools / works with prefix / aspect-ratio with prefix / 0: |-
     bottom: auto;
     left: auto;
   }
-  .windi-aspect-auto {
+  .nailus-aspect-auto {
     aspect-ratio: auto;
   }
-  .windi-aspect-square {
+  .nailus-aspect-square {
     aspect-ratio: 1 / 1;
   }
-  .windi-aspect-video {
+  .nailus-aspect-video {
     aspect-ratio: 16 / 9;
   }
-  .windi-aspect-w-16 {
+  .nailus-aspect-w-16 {
     --tw-aspect-w: 16;
     position: relative;
     padding-bottom: calc(var(--tw-aspect-h) / var(--tw-aspect-w) * 100%);
   }
-  .windi-aspect-w-16 > * {
+  .nailus-aspect-w-16 > * {
     position: absolute;
     height: 100%;
     width: 100%;
@@ -96,15 +96,15 @@ Tools / works with prefix / aspect-ratio with prefix / 0: |-
     bottom: 0;
     left: 0;
   }
-  .windi-aspect-h-9 {
+  .nailus-aspect-h-9 {
     --tw-aspect-h: 9;
   }
   @media (min-width: 640px) {
-    .sm\:windi-aspect-9\/16 {
+    .sm\:nailus-aspect-9\/16 {
       position: relative;
       padding-bottom: 56.25%;
     }
-    .sm\:windi-aspect-9\/16 > * {
+    .sm\:nailus-aspect-9\/16 > * {
       position: absolute;
       height: 100%;
       width: 100%;

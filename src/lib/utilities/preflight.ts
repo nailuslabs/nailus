@@ -32,7 +32,7 @@ Use a better box model (opinionated).
   //     'box-sizing': 'border-box'
   //   }
   // },
-  // overwrite by windi
+  // overwrite by nailus
 
   /**
 Use a more readable tab size (opinionated).
@@ -59,7 +59,7 @@ Use a more readable tab size (opinionated).
     global: true,
     selector: 'html',
     properties: {
-    // 'line-height': '1.15', /* 1 */ overwrite by windi
+    // 'line-height': '1.15', /* 1 */ overwrite by nailus
       '-webkit-text-size-adjust': '100%', /* 2 */
     },
   },
@@ -94,7 +94,7 @@ Improve consistency of default fonts in all browsers. (https://github.com/sindre
   //     'font-family': "system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji'"
   //   }
   // },
-  // overide by windi
+  // overide by nailus
 
   /*
 Grouping content
@@ -152,7 +152,7 @@ Add the correct font weight in Edge and Safari.
   {
     keys: ['code', 'kbd', 'samp', 'pre'],
     properties: {
-    // 'font-family': "ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace", /* 1 */ overwrite by windi
+    // 'font-family': "ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace", /* 1 */ overwrite by nailus
       'font-size': '1em', /* 2 */
     },
   },
@@ -743,7 +743,7 @@ Add the correct display in Chrome and Safari.
   },
 
   // added by ringWidth
-  // https://windicss.org/utilities/borders.html#ring-width
+  // https://nailuscss.org/utilities/borders.html#ring-width
   {
     keys: ['*'],
     global: true,
@@ -759,7 +759,7 @@ Add the correct display in Chrome and Safari.
   },
 
   // added by boxShadow
-  // https://windicss.org/utilities/effects.html#box-shadow
+  // https://nailuscss.org/utilities/effects.html#box-shadow
   {
     keys: ['*'],
     global: true,

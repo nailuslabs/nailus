@@ -10,7 +10,7 @@ const fontVariants = {
 };
 
 export const staticUtilities: StaticUtility = {
-  // https://windicss.org/utilities/behaviors.html#box-decoration-break
+  // https://nailuscss.org/utilities/behaviors.html#box-decoration-break
   'decoration-slice': {
     'utility': {
       '-webkit-box-decoration-break': 'slice',
@@ -33,7 +33,7 @@ export const staticUtilities: StaticUtility = {
     },
   },
 
-  // https://windicss.org/utilities/flexbox.html#flex-basis
+  // https://nailuscss.org/utilities/flexbox.html#flex-basis
   'basis-auto': {
     'utility': {
       'flex-basis': 'auto',
@@ -53,7 +53,7 @@ export const staticUtilities: StaticUtility = {
     },
   },
 
-  // https://windicss.org/utilities/sizing.html#box-sizing
+  // https://nailuscss.org/utilities/sizing.html#box-sizing
   'box-border': {
     'utility': {
       '-webkit-box-sizing': 'border-box',
@@ -75,7 +75,7 @@ export const staticUtilities: StaticUtility = {
     },
   },
 
-  // https://windicss.org/utilities/display.html
+  // https://nailuscss.org/utilities/display.html
   'block': {
     'utility': {
       'display': 'block',
@@ -104,7 +104,7 @@ export const staticUtilities: StaticUtility = {
     },
   },
 
-  // https://windicss.org/utilities/flexbox.html
+  // https://nailuscss.org/utilities/flexbox.html
   'flex': {
     'utility': {
       'display': [
@@ -134,7 +134,7 @@ export const staticUtilities: StaticUtility = {
     },
   },
 
-  // https://windicss.org/utilities/tables.html
+  // https://nailuscss.org/utilities/tables.html
   'table': {
     'utility': {
       'display': 'table',
@@ -235,7 +235,7 @@ export const staticUtilities: StaticUtility = {
     },
   },
 
-  // https://windicss.org/utilities/grid.html
+  // https://nailuscss.org/utilities/grid.html
   'grid': {
     'utility': {
       'display': [
@@ -288,7 +288,7 @@ export const staticUtilities: StaticUtility = {
     },
   },
 
-  // https://windicss.org/utilities/columns.html
+  // https://nailuscss.org/utilities/columns.html
   'break-after-auto': {
     'utility': {
       'break-after': 'auto',
@@ -470,7 +470,7 @@ export const staticUtilities: StaticUtility = {
     },
   },
 
-  // https://windicss.org/utilities/positioning.html#floats
+  // https://nailuscss.org/utilities/positioning.html#floats
   'float-right': {
     'utility': {
       'float': 'right',
@@ -499,7 +499,7 @@ export const staticUtilities: StaticUtility = {
     },
   },
 
-  // https://windicss.org/utilities/positioning.html#clear
+  // https://nailuscss.org/utilities/positioning.html#clear
   'clear-left': {
     'utility': {
       'clear': 'left',
@@ -537,7 +537,7 @@ export const staticUtilities: StaticUtility = {
     },
   },
 
-  // https://windicss.org/utilities/positioning.html#isolation
+  // https://nailuscss.org/utilities/positioning.html#isolation
   'isolate': {
     'utility': {
       'isolation': 'isolate',
@@ -557,7 +557,7 @@ export const staticUtilities: StaticUtility = {
     },
   },
 
-  // https://windicss.org/utilities/positioning.html#object-fit
+  // https://nailuscss.org/utilities/positioning.html#object-fit
   'object-contain': {
     'utility': {
       '-o-object-fit': 'contain',
@@ -609,7 +609,7 @@ export const staticUtilities: StaticUtility = {
     },
   },
 
-  // https://windicss.org/utilities/behaviors.html#overflow
+  // https://nailuscss.org/utilities/behaviors.html#overflow
   'overflow-auto': {
     'utility': {
       'overflow': 'auto',
@@ -746,7 +746,7 @@ export const staticUtilities: StaticUtility = {
     },
   },
 
-  // https://windicss.org/utilities/behaviors.html#overscroll-behavior
+  // https://nailuscss.org/utilities/behaviors.html#overscroll-behavior
   'overscroll-auto': {
     'utility': {
       'overscroll-behavior': 'auto',
@@ -832,7 +832,7 @@ export const staticUtilities: StaticUtility = {
     },
   },
 
-  // https://windicss.org/utilities/positioning.html#position
+  // https://nailuscss.org/utilities/positioning.html#position
   'static': {
     'utility': {
       'position': 'static',
@@ -882,7 +882,7 @@ export const staticUtilities: StaticUtility = {
     },
   },
 
-  // https://windicss.org/utilities/display.html#visibility
+  // https://nailuscss.org/utilities/display.html#visibility
   'visible': {
     'utility': {
       'visibility': 'visible',
@@ -902,7 +902,7 @@ export const staticUtilities: StaticUtility = {
     },
   },
 
-  // https://windicss.org/utilities/display.html#backface-visibility
+  // https://nailuscss.org/utilities/display.html#backface-visibility
   'backface-visible': {
     'utility': {
       '-webkit-backface-visibility': 'visible',
@@ -924,7 +924,7 @@ export const staticUtilities: StaticUtility = {
     },
   },
 
-  // https://windicss.org/utilities/flexbox.html#flex-direction
+  // https://nailuscss.org/utilities/flexbox.html#flex-direction
   'flex-row': {
     'utility': {
       '-webkit-box-orient': 'horizontal',
@@ -978,7 +978,7 @@ export const staticUtilities: StaticUtility = {
     },
   },
 
-  // https://windicss.org/utilities/flexbox.html#flex-wrap
+  // https://nailuscss.org/utilities/flexbox.html#flex-wrap
   'flex-wrap': {
     'utility': {
       '-ms-flex-wrap': 'wrap',
@@ -1013,7 +1013,7 @@ export const staticUtilities: StaticUtility = {
     },
   },
 
-  // https://windicss.org/utilities/grid.html#grid-column-span
+  // https://nailuscss.org/utilities/grid.html#grid-column-span
   'col-auto': {
     'utility': {
       'grid-column': 'auto',
@@ -1024,7 +1024,7 @@ export const staticUtilities: StaticUtility = {
     },
   },
 
-  // https://windicss.org/utilities/grid.html#grid-row-span
+  // https://nailuscss.org/utilities/grid.html#grid-row-span
   'row-auto': {
     'utility': {
       'grid-row': 'auto',
@@ -1035,7 +1035,7 @@ export const staticUtilities: StaticUtility = {
     },
   },
 
-  // https://windicss.org/utilities/grid.html#grid-auto-flow
+  // https://nailuscss.org/utilities/grid.html#grid-auto-flow
   'grid-flow-row': {
     'utility': {
       'grid-auto-flow': 'row',
@@ -1073,7 +1073,7 @@ export const staticUtilities: StaticUtility = {
     },
   },
 
-  // https://windicss.org/utilities/positioning.html#justify-content
+  // https://nailuscss.org/utilities/positioning.html#justify-content
   'justify-start': {
     'utility': {
       '-webkit-box-pack': 'start',
@@ -1146,7 +1146,7 @@ export const staticUtilities: StaticUtility = {
     },
   },
 
-  // https://windicss.org/utilities/positioning.html#justify-items
+  // https://nailuscss.org/utilities/positioning.html#justify-items
   'justify-items-auto': {
     'utility': {
       'justify-items': 'auto',
@@ -1193,7 +1193,7 @@ export const staticUtilities: StaticUtility = {
     },
   },
 
-  // https://windicss.org/utilities/positioning.html#justify-self
+  // https://nailuscss.org/utilities/positioning.html#justify-self
   'justify-self-auto': {
     'utility': {
       '-ms-grid-column-align': 'auto',
@@ -1245,7 +1245,7 @@ export const staticUtilities: StaticUtility = {
     },
   },
 
-  // https://windicss.org/utilities/positioning.html#align-content
+  // https://nailuscss.org/utilities/positioning.html#align-content
   'content-center': {
     'utility': {
       '-ms-flex-line-pack': 'center',
@@ -1313,7 +1313,7 @@ export const staticUtilities: StaticUtility = {
     },
   },
 
-  // https://windicss.org/utilities/positioning.html#align-items
+  // https://nailuscss.org/utilities/positioning.html#align-items
   'items-start': {
     'utility': {
       '-webkit-box-align': 'start',
@@ -1375,7 +1375,7 @@ export const staticUtilities: StaticUtility = {
     },
   },
 
-  // https://windicss.org/utilities/positioning.html#align-self
+  // https://nailuscss.org/utilities/positioning.html#align-self
   'self-auto': {
     'utility': {
       '-ms-flex-item-align': 'auto',
@@ -1435,7 +1435,7 @@ export const staticUtilities: StaticUtility = {
     },
   },
 
-  // https://windicss.org/utilities/positioning.html#place-content
+  // https://nailuscss.org/utilities/positioning.html#place-content
   'place-content-center': {
     'utility': {
       'place-content': 'center',
@@ -1500,7 +1500,7 @@ export const staticUtilities: StaticUtility = {
     },
   },
 
-  // https://windicss.org/utilities/positioning.html#place-items
+  // https://nailuscss.org/utilities/positioning.html#place-items
   'place-items-auto': {
     'utility': {
       'place-items': 'auto',
@@ -1547,7 +1547,7 @@ export const staticUtilities: StaticUtility = {
     },
   },
 
-  // https://windicss.org/utilities/positioning.html#place-self
+  // https://nailuscss.org/utilities/positioning.html#place-self
   'place-self-auto': {
     'utility': {
       '-ms-grid-row-align': 'auto',
@@ -1604,7 +1604,7 @@ export const staticUtilities: StaticUtility = {
     },
   },
 
-  // https://windicss.org/utilities/typography.html#font-smoothing
+  // https://nailuscss.org/utilities/typography.html#font-smoothing
   'antialiased': {
     'utility': {
       '-webkit-font-smoothing': 'antialiased',
@@ -1626,7 +1626,7 @@ export const staticUtilities: StaticUtility = {
     },
   },
 
-  // https://windicss.org/utilities/typography.html#font-style
+  // https://nailuscss.org/utilities/typography.html#font-style
   'italic': {
     'utility': {
       'font-style': 'italic',
@@ -1646,7 +1646,7 @@ export const staticUtilities: StaticUtility = {
     },
   },
 
-  // https://windicss.org/utilities/typography.html#font-variant-numeric
+  // https://nailuscss.org/utilities/typography.html#font-variant-numeric
   'normal-nums': {
     'utility': {
       'font-variant-numeric': 'normal',
@@ -1737,7 +1737,7 @@ export const staticUtilities: StaticUtility = {
     },
   },
 
-  // https://windicss.org/utilities/behaviors.html#list-style-position
+  // https://nailuscss.org/utilities/behaviors.html#list-style-position
   'list-inside': {
     'utility': {
       'list-style-position': 'inside',
@@ -1757,7 +1757,7 @@ export const staticUtilities: StaticUtility = {
     },
   },
 
-  // https://windicss.org/utilities/typography.html#text-alignment
+  // https://nailuscss.org/utilities/typography.html#text-alignment
   'text-left': {
     'utility': {
       'text-align': 'left',
@@ -1795,7 +1795,7 @@ export const staticUtilities: StaticUtility = {
     },
   },
 
-  // https://windicss.org/utilities/typography.html#text-decoration
+  // https://nailuscss.org/utilities/typography.html#text-decoration
   'underline': {
     'utility': {
       '-webkit-text-decoration-line': 'underline',
@@ -1940,7 +1940,7 @@ export const staticUtilities: StaticUtility = {
     },
   },
 
-  // https://windicss.org/utilities/typography.html#text-transform
+  // https://nailuscss.org/utilities/typography.html#text-transform
   'uppercase': {
     'utility': {
       'text-transform': 'uppercase',
@@ -1978,7 +1978,7 @@ export const staticUtilities: StaticUtility = {
     },
   },
 
-  // https://windicss.org/utilities/typography.html#text-overflow
+  // https://nailuscss.org/utilities/typography.html#text-overflow
   'truncate': {
     'utility': {
       'overflow': 'hidden',
@@ -2022,7 +2022,7 @@ export const staticUtilities: StaticUtility = {
     },
   },
 
-  // https://windicss.org/utilities/typography.html#vertical-alignment
+  // https://nailuscss.org/utilities/typography.html#vertical-alignment
   'align-baseline': {
     'utility': {
       'vertical-align': 'baseline',
@@ -2096,7 +2096,7 @@ export const staticUtilities: StaticUtility = {
     },
   },
 
-  // https://windicss.org/utilities/typography.html#whitespace
+  // https://nailuscss.org/utilities/typography.html#whitespace
   'whitespace-normal': {
     'utility': {
       'white-space': 'normal',
@@ -2143,7 +2143,7 @@ export const staticUtilities: StaticUtility = {
     },
   },
 
-  // https://windicss.org/utilities/typography.html#word-break
+  // https://nailuscss.org/utilities/typography.html#word-break
   'break-normal': {
     'utility': {
       'word-break': 'normal',
@@ -2173,7 +2173,7 @@ export const staticUtilities: StaticUtility = {
     },
   },
 
-  // https://windicss.org/utilities/typography.html#writing-mode
+  // https://nailuscss.org/utilities/typography.html#writing-mode
   'write-normal': {
     'utility': {
       '-webkit-writing-mode': 'horizontal-tb',
@@ -2210,7 +2210,7 @@ export const staticUtilities: StaticUtility = {
     },
   },
 
-  // https://windicss.org/utilities/typography.html#writing-orientation
+  // https://nailuscss.org/utilities/typography.html#writing-orientation
   'write-orient-mixed': {
     'utility': {
       '-webkit-text-orientation': 'mixed',
@@ -2244,7 +2244,7 @@ export const staticUtilities: StaticUtility = {
     },
   },
 
-  // https://windicss.org/utilities/typography.html#hyphens
+  // https://nailuscss.org/utilities/typography.html#hyphens
   'hyphens-none': {
     'utility': {
       '-webkit-hyphens': 'none',
@@ -2279,7 +2279,7 @@ export const staticUtilities: StaticUtility = {
     },
   },
 
-  // https://windicss.org/utilities/backgrounds.html#background-attachment
+  // https://nailuscss.org/utilities/backgrounds.html#background-attachment
   'bg-fixed': {
     'utility': {
       'background-attachment': 'fixed',
@@ -2308,7 +2308,7 @@ export const staticUtilities: StaticUtility = {
     },
   },
 
-  // https://windicss.org/utilities/backgrounds.html#background-clip
+  // https://nailuscss.org/utilities/backgrounds.html#background-clip
   'bg-clip-border': {
     'utility': {
       '-webkit-background-clip': 'border-box',
@@ -2350,7 +2350,7 @@ export const staticUtilities: StaticUtility = {
     },
   },
 
-  // https://windicss.org/utilities/backgrounds.html#background-repeat
+  // https://nailuscss.org/utilities/backgrounds.html#background-repeat
   'bg-repeat': {
     'utility': {
       'background-repeat': 'repeat',
@@ -2406,7 +2406,7 @@ export const staticUtilities: StaticUtility = {
     },
   },
 
-  // https://windicss.org/utilities/backgrounds.html#background-origin
+  // https://nailuscss.org/utilities/backgrounds.html#background-origin
   'bg-origin-border': {
     'utility': {
       'background-origin': 'border-box',
@@ -2435,7 +2435,7 @@ export const staticUtilities: StaticUtility = {
     },
   },
 
-  // https://windicss.org/utilities/borders.html#border-style
+  // https://nailuscss.org/utilities/borders.html#border-style
   'border-solid': {
     'utility': {
       'border-style': 'solid',
@@ -2491,7 +2491,7 @@ export const staticUtilities: StaticUtility = {
     },
   },
 
-  // https://windicss.org/utilities/behaviors.html#image-rendering
+  // https://nailuscss.org/utilities/behaviors.html#image-rendering
   'image-render-auto': {
     'utility': {
       'image-rendering': 'auto',
@@ -2521,7 +2521,7 @@ export const staticUtilities: StaticUtility = {
     },
   },
 
-  // https://windicss.org/utilities/effects.html#mix-blend-mode
+  // https://nailuscss.org/utilities/effects.html#mix-blend-mode
   'mix-blend-normal': {
     'utility': {
       'mix-blend-mode': 'normal',
@@ -2666,7 +2666,7 @@ export const staticUtilities: StaticUtility = {
       'order': 16,
     },
   },
-  // https://windicss.org/utilities/backgrounds.html#background-blend-mode
+  // https://nailuscss.org/utilities/backgrounds.html#background-blend-mode
   'bg-blend-normal': {
     'utility': {
       'background-blend-mode': 'normal',
@@ -2812,7 +2812,7 @@ export const staticUtilities: StaticUtility = {
     },
   },
 
-  // https://windicss.org/utilities/filters.html#filter
+  // https://nailuscss.org/utilities/filters.html#filter
   'filter': {
     'utility': {
       '--tw-blur': 'var(--tw-empty,/*!*/ /*!*/)',
@@ -2844,7 +2844,7 @@ export const staticUtilities: StaticUtility = {
     },
   },
 
-  // https://windicss.org/utilities/filters.html#backdrop-filter
+  // https://nailuscss.org/utilities/filters.html#backdrop-filter
   'backdrop-filter': {
     'utility': {
       '--tw-backdrop-blur': 'var(--tw-empty,/*!*/ /*!*/)',
@@ -2876,7 +2876,7 @@ export const staticUtilities: StaticUtility = {
     },
   },
 
-  // https://windicss.org/utilities/tables.html#table-border-collapse
+  // https://nailuscss.org/utilities/tables.html#table-border-collapse
   'border-collapse': {
     'utility': {
       'border-collapse': 'collapse',
@@ -2896,7 +2896,7 @@ export const staticUtilities: StaticUtility = {
     },
   },
 
-  // https://windicss.org/utilities/tables.html#table-caption-side
+  // https://nailuscss.org/utilities/tables.html#table-caption-side
   'caption-top': {
     'utility': {
       'caption-side': 'top',
@@ -2917,7 +2917,7 @@ export const staticUtilities: StaticUtility = {
     },
   },
 
-  // https://windicss.org/utilities/tables.html#table-empty-cells
+  // https://nailuscss.org/utilities/tables.html#table-empty-cells
   'empty-cells-visible': {
     'utility': {
       'empty-cells': 'show',
@@ -2938,7 +2938,7 @@ export const staticUtilities: StaticUtility = {
     },
   },
 
-  // https://windicss.org/utilities/tables.html#table-layout
+  // https://nailuscss.org/utilities/tables.html#table-layout
   'table-auto': {
     'utility': {
       'table-layout': 'auto',
@@ -2958,7 +2958,7 @@ export const staticUtilities: StaticUtility = {
     },
   },
 
-  // https://windicss.org/utilities/transforms.html
+  // https://nailuscss.org/utilities/transforms.html
   'transform': {
     'utility': {
       '--tw-translate-x': '0',
@@ -3017,7 +3017,7 @@ export const staticUtilities: StaticUtility = {
     },
   },
 
-  // https://windicss.org/utilities/transforms.html#transform-type
+  // https://nailuscss.org/utilities/transforms.html#transform-type
   'preserve-flat': {
     'utility': {
       '-webkit-transform-style': 'flat',
@@ -3152,7 +3152,7 @@ export const staticUtilities: StaticUtility = {
     },
   },
 
-  // https://windicss.org/utilities/behaviors.html#appearance
+  // https://nailuscss.org/utilities/behaviors.html#appearance
   'appearance-none': {
     'utility': {
       '-webkit-appearance': 'none',
@@ -3165,7 +3165,7 @@ export const staticUtilities: StaticUtility = {
     },
   },
 
-  // https://windicss.org/utilities/behaviors.html#pointer-events
+  // https://nailuscss.org/utilities/behaviors.html#pointer-events
   'pointer-events-none': {
     'utility': {
       'pointer-events': 'none',
@@ -3185,7 +3185,7 @@ export const staticUtilities: StaticUtility = {
     },
   },
 
-  // https://windicss.org/utilities/behaviors.html#resize
+  // https://nailuscss.org/utilities/behaviors.html#resize
   'resize-none': {
     'utility': {
       'resize': 'none',
@@ -3223,7 +3223,7 @@ export const staticUtilities: StaticUtility = {
     },
   },
 
-  // https://windicss.org/utilities/behaviors.html#user-select
+  // https://nailuscss.org/utilities/behaviors.html#user-select
   'select-none': {
     'utility': {
       '-webkit-user-select': 'none',
@@ -3273,8 +3273,8 @@ export const staticUtilities: StaticUtility = {
     },
   },
 
-  // https://windicss.org/utilities/svg.html#fill-color
-  // https://windicss.org/utilities/svg.html#stroke-color
+  // https://nailuscss.org/utilities/svg.html#fill-color
+  // https://nailuscss.org/utilities/svg.html#stroke-color
   'fill-current': {
     'utility': {
       'fill': 'currentColor',
@@ -3293,7 +3293,7 @@ export const staticUtilities: StaticUtility = {
       'order': 1,
     },
   },
-  // https://windicss.org/utilities/svg.html#stroke-linecap
+  // https://nailuscss.org/utilities/svg.html#stroke-linecap
   'stroke-cap-auto': {
     'utility': {
       'stroke-linecap': 'butt',
@@ -3321,7 +3321,7 @@ export const staticUtilities: StaticUtility = {
       'order': 4,
     },
   },
-  // https://windicss.org/utilities/svg.html#stroke-linejoin
+  // https://nailuscss.org/utilities/svg.html#stroke-linejoin
   'stroke-join-auto': {
     'utility': {
       'stroke-linejoin': 'miter',
@@ -3367,7 +3367,7 @@ export const staticUtilities: StaticUtility = {
       'order': 9,
     },
   },
-  // https://windicss.org/utilities/behaviors.html#screen-readers-access
+  // https://nailuscss.org/utilities/behaviors.html#screen-readers-access
   'sr-only': {
     'utility': {
       'position': 'absolute',
@@ -3402,7 +3402,7 @@ export const staticUtilities: StaticUtility = {
     },
   },
 
-  // https://windicss.org/utilities/behaviors.html#will-change
+  // https://nailuscss.org/utilities/behaviors.html#will-change
   'will-change-auto': {
     'utility': {
       'will-change': 'auto',
@@ -3440,7 +3440,7 @@ export const staticUtilities: StaticUtility = {
     },
   },
 
-  // https://windicss.org/utilities/behaviors.html#touch-action
+  // https://nailuscss.org/utilities/behaviors.html#touch-action
   'touch-auto': {
     'utility': {
       'touch-action': 'auto',
@@ -3532,7 +3532,7 @@ export const staticUtilities: StaticUtility = {
     },
   },
 
-  // https://windicss.org/utilities/behaviors.html#scroll-behavior
+  // https://nailuscss.org/utilities/behaviors.html#scroll-behavior
   'scroll-auto': {
     'utility': {
       'scroll-behavior': 'auto',
@@ -3552,7 +3552,7 @@ export const staticUtilities: StaticUtility = {
     },
   },
 
-  // https://windicss.org/utilities/borders/outline.html
+  // https://nailuscss.org/utilities/borders/outline.html
   'outline-none': {
     'utility': {
       'outline': '2px solid transparent',

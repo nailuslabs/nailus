@@ -40,7 +40,7 @@ Thumbs.db
 dist
 *.css
 *.html
-*.windi
+*.nailus
 src/**/*.js
 example/**/*.js
 

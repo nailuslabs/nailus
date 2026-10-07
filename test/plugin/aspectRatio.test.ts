@@ -20,16 +20,16 @@ describe('aspect ratio plugin', () => {
   });
 
   it('works with prefix', () => {
-    const processor = new Processor({ prefix: 'windi-' });
+    const processor = new Processor({ prefix: 'nailus-' });
     processor.loadPlugin(aspectRatio);
     const classes = `
-      windi-aspect-none
-      windi-aspect-auto
-      windi-aspect-square
-      windi-aspect-video
-      windi-aspect-w-16
-      windi-aspect-h-9
-      sm:windi-aspect-9/16
+      nailus-aspect-none
+      nailus-aspect-auto
+      nailus-aspect-square
+      nailus-aspect-video
+      nailus-aspect-w-16
+      nailus-aspect-h-9
+      sm:nailus-aspect-9/16
       `;
     const utility = processor.interpret(classes);
     expect(utility.ignored.length).toEqual(0);

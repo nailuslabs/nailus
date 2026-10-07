@@ -15,8 +15,8 @@
     "typescript": "^4.5.4",
     "vite": "^2.7.3",
     "vite-plugin-md": "^0.11.6",
-    "vite-plugin-windicss": "^1.5.4",
+    "vite-plugin-nailuscss": "^1.5.4",
     "vue-tsc": "^0.29.8",
-    "windicss": "file:../../../dist"
+    "nailuscss": "file:../../../dist"
   }
 }

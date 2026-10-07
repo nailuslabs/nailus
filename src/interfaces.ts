@@ -352,11 +352,11 @@ export interface Config {
 
   // ===== Depreacted =====
   /**
-   * @deprecated no longer needed for Windi CSS
+   * @deprecated no longer needed for nailus CSS
    */
   purge?: unknown;
   /**
-   * @deprecated no longer needed for Windi CSS
+   * @deprecated no longer needed for nailus CSS
    */
   variants?: { [key: string]: string[] };
   /**

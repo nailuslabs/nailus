@@ -1,13 +1,20 @@
 {
-  "name": "windicss",
+  "name": "nailuscss",
   "version": "3.5.6",
-  "packageManager": "pnpm@7.0.1",
-  "description": "Next generation utility-first CSS framework.",
   "main": "index.js",
+  "packageManager": "pnpm@11.13.1",
+  "engines": {
+    "node": ">=22"
+  },
+  "description": "Moteur atomique de génération css, fonts et Icons instantané à la demande.",
+  "author": {
+    "name": "Naïloth Esdras NSOUNDA NSILULU",
+    "email": "nailuslab@gmail.com"
+  },
   "module": "index.mjs",
   "types": "index.d.ts",
   "bin": {
-    "windicss": "cli/index.js"
+    "nailuscss": "cli/index.js"
   },
   "scripts": {
     "dev": "rollup -cw",
@@ -96,20 +103,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/windicss/windicss.git"
+    "url": "https://github.com/nailuscss/nailuscss.git"
   },
   "keywords": [
-    "windicss",
+    "nailuscss",
     "tailwindcss",
     "css",
     "compiler"
   ],
-  "engines": {
-    "node": ">= 12"
-  },
-  "author": "Veritas Raven",
   "license": "MIT",
-  "homepage": "https://github.com/windicss/windicss",
+  "homepage": "https://github.com/nailuscss/nailuscss",
   "devDependencies": {
     "@rollup/plugin-commonjs": "^29.0.3",
     "@rollup/plugin-json": "^6.1.0",
