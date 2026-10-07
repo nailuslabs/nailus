@@ -17,12 +17,12 @@
     "nailuscss": "cli/index.js"
   },
   "scripts": {
-    "dev": "rollup -cw",
+    "dev": "rollup -cw rollup.config.mjs",
     "tsd": "tsc -p ./src --emitDeclarationOnly",
     "lint": "eslint . --ext .ts",
     "lint:fix": "npm run lint -- --fix",
     "typecheck": "tsc -p ./src --noEmit",
-    "build": "rollup -c && pnpm tsd",
+    "build": "rollup -c rollup.config.mjs && pnpm tsd",
     "build:prod": "cross-env NODE_ENV=production pnpm build",
     "test": "sucrase-node test/run.ts",
     "test:update": "cross-env UPDATE_SNAPSHOT=true sucrase-node test/run.ts",

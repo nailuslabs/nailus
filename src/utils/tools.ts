@@ -199,9 +199,9 @@ export function toType(
 
 export function deepCopy<T>(source: T): T {
   return Array.isArray(source)
-    ? (source as unknown[]).map((item: unknown) => deepCopy(item))
+    ? (source as unknown[]).map((item: unknown) => deepCopy(item)) as T
     : source instanceof Date
-      ? new Date(source.getTime())
+      ? new Date(source.getTime()) as T
       : source && typeof source === 'object'
         ? Object.getOwnPropertyNames(source).reduce((o, prop) => {
           const descriptor = Object.getOwnPropertyDescriptor(source, prop);

@@ -303,6 +303,7 @@ build(matchFiles);
 
 function watchBuild(file: string) {
   watch(file, (event, path) => {
+    if (!path) return;
     if (event === 'rename') {
       const newFiles = globArray(patterns);
       const renamed = matchFiles.filter(i => !(newFiles.includes(i)))[0];
@@ -366,6 +367,7 @@ if (args['--dev']) {
   }
   for (const dir of Array.from(new Set(matchFiles.map(f => dirname(f))))) {
     watch(dir, (event, path) => {
+      if (!path) return;
       if (event === 'rename' && existsSync(join(dir, path))) {
         // when create new file
         const newFiles = globArray(patterns);

@@ -6,7 +6,9 @@ import sucrase from '@rollup/plugin-sucrase';
 import typescript from '@rollup/plugin-typescript';
 import commonjs from '@rollup/plugin-commonjs';
 import json from '@rollup/plugin-json';
-import pkg from './package.json';
+import ts from 'typescript';
+
+const pkg = JSON.parse(fs.readFileSync(new URL('./package.json', import.meta.url), 'utf8'));
 
 const output_dir = './dist';
 
@@ -17,7 +19,7 @@ const ts_plugin = prod
     target: 'es5',
     include: 'src/**',
     outDir: output_dir,
-    typescript: require('typescript'),
+    typescript: ts,
   })
   : sucrase({
     exclude: ['node_modules/**'],
