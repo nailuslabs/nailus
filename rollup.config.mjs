@@ -104,7 +104,6 @@ export default [
         paths: (id) => `./${path.relative('./src', id)}/index.mjs`,
       },
     ],
-    external: (id) => id.startsWith('./'),
     plugins: [
       ts_plugin,
       types("colors.d.ts", "./types/config", "{ colors as default }"),

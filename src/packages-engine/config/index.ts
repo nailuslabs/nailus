@@ -1,5 +1,5 @@
 export { baseConfig } from './base';
-export { colors } from '../../packages-presets/preset-mini/src/colors';
+export { colors } from '../../packages-presets/preset-mini/src';
 export const twExclude = [
   /-hex-/,                          // disable hex color
   /-\$/,                            // disable variable

@@ -1,1 +1,1 @@
-export { colors as default } from './packages-engine/config';
+export { colors as default } from './packages-presets/preset-mini/src';

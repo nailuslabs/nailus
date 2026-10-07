@@ -1,4 +1,4 @@
-import { pseudoClassNames } from '../../packages-engine/config/order';
+import { pseudoClassNames } from '../../packages-presets/preset-mini/src/variants';
 import { Style } from '../../utils/style';
 /*
  * See MDN web docs for more information

@@ -1,56 +1,9 @@
-import { colors } from '../../packages-presets/preset-mini/src/colors';
+import { breakpoints, defaultColors, spacing, tShirtScale, variantOrder } from '../../packages-presets/preset-mini/src';
 import { keyframes } from './keyframes';
-import { variantOrder } from './order';
 import plugin from '../../plugin';
 import type { Config } from '../../interfaces';
 
-export const defaultColors = {
-  transparent: 'transparent',
-  current: 'currentColor',
-  inherit: 'inherit',
-  light: colors.light,
-  dark: colors.dark,
-  black: colors.black,
-  white: colors.white,
-  slate: colors.slate,
-  gray: colors.gray,
-  zinc: colors.zinc,
-  neutral: colors.neutral,
-  stone: colors.stone,
-  red: colors.red,
-  yellow: colors.amber,
-  green: colors.emerald,
-  blue: colors.blue,
-  indigo: colors.indigo,
-  purple: colors.violet,
-  pink: colors.pink,
-  rose: colors.rose,
-  fuchsia: colors.fuchsia,
-  violet: colors.violet,
-  cyan: colors.cyan,
-  teal: colors.teal,
-  emerald: colors.emerald,
-  lime: colors.lime,
-  amber: colors.amber,
-  orange: colors.orange,
-  sky: colors.sky,
-};
-
-// tShirtScale describes the sizes xs - 7xl
-export const tShirtScale = {
-  'xs': '20rem',
-  'sm': '24rem',
-  'md': '28rem',
-  'lg': '32rem',
-  'xl': '36rem',
-  '2xl': '42rem',
-  '3xl': '48rem',
-  '4xl': '56rem',
-  '5xl': '64rem',
-  '6xl': '72rem',
-  '7xl': '80rem',
-  'prose': '65ch',
-};
+export { defaultColors, tShirtScale } from '../../packages-presets/preset-mini/src';
 
 export const baseConfig: Config = {
   // purge: [],
@@ -63,52 +16,9 @@ export const baseConfig: Config = {
       portrait: 'portrait',
       landscape: 'landscape',
     },
-    screens: {
-      sm: '640px',
-      md: '768px',
-      lg: '1024px',
-      xl: '1280px',
-      '2xl': '1536px',
-    },
+    screens: breakpoints,
     colors: defaultColors,
-    spacing: {
-      px: '1px',
-      0: '0px',
-      0.5: '0.125rem',
-      1: '0.25rem',
-      1.5: '0.375rem',
-      2: '0.5rem',
-      2.5: '0.625rem',
-      3: '0.75rem',
-      3.5: '0.875rem',
-      4: '1rem',
-      5: '1.25rem',
-      6: '1.5rem',
-      7: '1.75rem',
-      8: '2rem',
-      9: '2.25rem',
-      10: '2.5rem',
-      11: '2.75rem',
-      12: '3rem',
-      14: '3.5rem',
-      16: '4rem',
-      20: '5rem',
-      24: '6rem',
-      28: '7rem',
-      32: '8rem',
-      36: '9rem',
-      40: '10rem',
-      44: '11rem',
-      48: '12rem',
-      52: '13rem',
-      56: '14rem',
-      60: '15rem',
-      64: '16rem',
-      72: '18rem',
-      80: '20rem',
-      96: '24rem',
-      // float -> float/4 rem
-    },
+    spacing,
     animation: {
       none: 'none',
       spin: 'spin 1s linear infinite',
