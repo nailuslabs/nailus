@@ -67,7 +67,7 @@ describe('Utilities', () => {
     expect(result.styleSheet.build()).toMatchSnapshot('css');
   });
 
-  it('animation test', () => {
+  it('custom animation test', () => {
     expect(processor.interpret('animate-ping').styleSheet.build()).toMatchSnapshot('animate-ping');
     expect(processor.interpret('sm:animate-ping').styleSheet.build()).toMatchSnapshot('sm:animate-ping');
   });

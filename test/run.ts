@@ -4,14 +4,18 @@
 import Jasmine from 'jasmine';
 import { addHook } from 'pirates';
 import { resolve } from 'path';
-import { compareDiff, compareSnapshot, context, finishSnapshots } from './snapshot';
+import { compareDiff, compareSnapshot } from './snapshot';
 
 addHook(
   (code, ) => code.replace(/(?<=toMatchSnapshot\([^,)]+)\)/g, ', __filename)'),
   { exts: ['.ts'], ignoreNodeModules: true }
 );
 
-const jasmine = new Jasmine(undefined);
+const jasmine = new Jasmine({
+  loader: {
+    load: (file: string) => Promise.resolve(require(file)),
+  },
+});
 
 beforeEach(() => {
   jasmine.addMatchers({
@@ -30,24 +34,7 @@ beforeEach(() => {
   });
 });
 
-const _describe = jasmine.env.describe.bind(jasmine.env);
-const _it = jasmine.env.it.bind(jasmine.env);
-jasmine.env.describe = (msg: string, fn: () => void) => _describe(msg, () => {
-  context.describe = msg;
-  context.count = 0;
-  return fn();
-});
-jasmine.env.it = (msg: string, fn: () => void) => _it(msg, () => {
-  context.it = msg;
-  context.count = 0;
-  return fn();
-});
-
 jasmine.loadConfigFile(resolve(__dirname, '..', 'jasmine.json'));
 jasmine.configureDefaultReporter({ showColors: true });
 jasmine.loadConfig(resolve(__dirname, '..', 'jasmine.json'));
-jasmine.onComplete((passed) => {
-  finishSnapshots(passed);
-  if (!passed) setTimeout(() => process.exit(1));
-});
 jasmine.execute();

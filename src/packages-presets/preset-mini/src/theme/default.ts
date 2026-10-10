@@ -13,23 +13,25 @@ import * as typography from './typography';
 import { breakpoints } from './screens';
 import { spacing } from './spacing';
 
+const { minHeight, minWidth, ...themeAliases } = aliases;
+
 export const defaultTheme = {
   ...staticTheme,
   screens: breakpoints,
   colors: defaultColors,
   spacing,
   ...animation,
-  ...aliases,
+  ...themeAliases,
   ...background,
   ...borders,
   ...filters,
   ...grid,
   container: {},
   keyframes,
-  minHeight: aliases.minHeight,
-  minWidth: aliases.minWidth,
   padding: aliases.padding,
   ...sizing,
+  minHeight,
+  minWidth,
   ...transitions,
   ...typography,
 };

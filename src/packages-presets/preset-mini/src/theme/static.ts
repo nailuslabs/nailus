@@ -2,13 +2,15 @@ import { tShirtScale } from './size';
 
 export const orientation = { portrait: 'portrait', landscape: 'landscape' };
 
+export const gridNumber = {
+  1: '1', 2: '2', 3: '3', 4: '4', 5: '5', 6: '6',
+  7: '7', 8: '8', 9: '9', 10: '10', 11: '11', 12: '12',
+};
+
 export const columns = {
   ...tShirtScale,
   auto: 'auto',
-  1: '1', 2: '2', 3: '3', 4: '4', 5: '5', 6: '6',
-  7: '7', 8: '8', 9: '9', 10: '10', 11: '11', 12: '12',
-  '3xs': '16rem',
-  '2xs': '18rem',
+  ...gridNumber,
 };
 
 export const content = {
@@ -32,9 +34,36 @@ export const cursor = {
   move: 'move',
   help: 'help',
   'not-allowed': 'not-allowed',
+  'none': 'none',
+  'context-menu': 'context-menu',
+  'progress': 'progress',
+  'cell': 'cell',
+  'crosshair': 'crosshair',
+  'vertical-text': 'vertical-text',
+  'alias': 'alias',
+  'copy': 'copy',
+  'no-drop': 'no-drop',
+  'grab': 'grab',
+  'grabbing': 'grabbing',
+  'all-scroll': 'all-scroll',
+  'col-resize': 'col-resize',
+  'row-resize': 'row-resize',
+  'n-resize': 'n-resize',
+  's-resize': 's-resize',
+  'w-resize': 'w-resize',
+  'ne-resize': 'ne-resize',
+  'nw-resize': 'nw-resize',
+  'se-resize': 'se-resize',
+  'sw-resize': 'sw-resize',
+  'ew-resize': 'ew-resize',
+  'ns-resize': 'ns-resize',
+  'nesw-resize': 'nesw-resize',
+  'nwse-resize': 'nwse-resize',
+  'zoom-in': 'zoom-in',
+  'zoom-out': 'zoom-out',
 };
 
-export const flex = { 1: '1 1 0%', auto: '1 1 auto', initial: '0 1 auto', none: 'none' };
+export const flex = { 1: '1 1 0%', 0: '0 1 auto', auto: '1 1 auto', initial: '0 auto', none: 'none'};
 export const flexGrow = { DEFAULT: '1', 0: '0' };
 export const flexShrink = { DEFAULT: '1', 0: '0' };
 
@@ -72,8 +101,7 @@ export const opacity = {
 
 export const order = {
   first: '-9999', last: '9999', none: '0',
-  1: '1', 2: '2', 3: '3', 4: '4', 5: '5', 6: '6',
-  7: '7', 8: '8', 9: '9', 10: '10', 11: '11', 12: '12',
+  ...gridNumber,
 };
 
 export const perspectiveOrigin = {

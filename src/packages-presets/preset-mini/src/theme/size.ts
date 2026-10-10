@@ -1,4 +1,6 @@
 export const tShirtScale = {
+  '3xs': '16rem',
+  '2xs': '18rem',
   xs: '20rem',
   sm: '24rem',
   md: '28rem',

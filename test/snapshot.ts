@@ -1,6 +1,6 @@
 import { basename, dirname, join } from 'path';
 import fs from 'fs-extra';
-import yaml from 'js-yaml';
+import * as yaml from 'js-yaml';
 import colors from 'picocolors';
 import { diffLines } from 'diff';
 
