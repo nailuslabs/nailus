@@ -39,6 +39,27 @@ export type DefaultFontSize = [
   options: { letterSpacing?: string; lineHeight: string }
 ];
 
+export type FontFaceDeclaration = {
+  src: string | string[];
+  fontFamily?: string;
+  fontStyle?: string | string[];
+  fontWeight?: string | string[];
+  fontDisplay?: string;
+  unicodeRange?: string | string[];
+  fontStretch?: string | string[];
+  ascentOverride?: string;
+  descentOverride?: string;
+  lineGapOverride?: string;
+  sizeAdjust?: string;
+  fontFeatureSettings?: string;
+  fontVariationSettings?: string;
+  [key: string]: string | string[] | undefined;
+};
+
+export type FontFaceConfig = {
+  [family: string]: FontFaceDeclaration | FontFaceDeclaration[];
+};
+
 export type Layer = 'base' | 'utilities' | 'components'
 
 export type { ConfigUtil, ThemeUtil } from './packages-presets/preset-mini/src/types';
@@ -128,6 +149,7 @@ export interface BaseTheme {
   flexGrow: ThemeType
   flexShrink: ThemeType
   fontFamily: ThemeType
+  fontFace: ThemeType
   fontSize: ThemeType
   fontWeight: ThemeType
   gap: ThemeType

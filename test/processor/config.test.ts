@@ -343,6 +343,43 @@ describe('Config', () => {
     expect(processor.preflight(undefined, false, false, true).build()).toMatchSnapshot('css');
   });
 
+  it('fontFace theme config', () => {
+    const processor = new Processor({
+      theme: {
+        fontFace: {
+          'Nailus Sans': [
+            {
+              src: [
+                'url("/fonts/nailus-sans.woff2") format("woff2")',
+                'url("/fonts/nailus-sans.woff") format("woff")',
+              ],
+              fontWeight: '400',
+              fontDisplay: 'swap',
+            },
+            {
+              src: 'url("/fonts/nailus-sans-700.woff2") format("woff2")',
+              fontWeight: '700',
+              fontDisplay: 'swap',
+            },
+          ],
+        },
+      },
+    });
+    expect(processor.preflight(undefined, false, false, true).build()).toBe(`@font-face {
+  src: url("/fonts/nailus-sans.woff2") format("woff2");
+  src: url("/fonts/nailus-sans.woff") format("woff");
+  font-weight: 400;
+  font-display: swap;
+  font-family: "Nailus Sans";
+}
+@font-face {
+  src: url("/fonts/nailus-sans-700.woff2") format("woff2");
+  font-weight: 700;
+  font-display: swap;
+  font-family: "Nailus Sans";
+}`);
+  });
+
   it('config for alpha channel', () => {
     const processor = new Processor({
       theme: {

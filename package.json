@@ -1,6 +1,6 @@
 {
   "name": "nailuscss",
-  "version": "3.5.6",
+  "version": "1.0.0",
   "main": "index.js",
   "packageManager": "pnpm@11.13.1",
   "engines": {

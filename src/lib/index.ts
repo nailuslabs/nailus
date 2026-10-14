@@ -27,6 +27,8 @@ import type {
   DefaultTheme,
   Element,
   Shortcut,
+  FontFaceConfig,
+  FontFaceDeclaration,
   PluginUtils,
   PluginUtilOptions,
   PluginOutput,
@@ -212,6 +214,27 @@ export class Processor {
     this.addBase({ ':root': Object.assign({}, ...Object.keys(config).map(i => ({ [`--${i}`]: config[i] }))) as NestObject });
   }
 
+  private _fontFamilyName(name: string): string {
+    if (/^(['"]).*\1$/.test(name) || /^var\(/.test(name) || name.includes(',')) {
+      return name;
+    }
+    return /\s/.test(name) ? `"${name.replace(/"/g, '\\"')}"` : name;
+  }
+
+  private _loadFontFaces() {
+    const config = this.theme('fontFace') as FontFaceConfig | undefined;
+    if (!config || typeof config !== 'object') return;
+
+    for (const [family, faces] of Object.entries(config)) {
+      toArray(faces).forEach((face) => {
+        if (!face || typeof face !== 'object' || !('src' in face)) return;
+        const declaration: FontFaceDeclaration = { ...face };
+        if (!declaration.fontFamily) declaration.fontFamily = this._fontFamilyName(family);
+        this.addBase({ '@font-face': declaration as NestObject });
+      });
+    }
+  }
+
   loadConfig(config?: Config): Config {
     this._config = this.resolveConfig(config, baseConfig);
     this._theme = this._config.theme;
@@ -229,6 +252,7 @@ export class Processor {
     this._variants = { ...this._variants, ... this.resolveVariants() };
     this._cache.variants = Object.keys(this._variants);
     this._loadVariables();
+    this._loadFontFaces();
     if (this._config.corePlugins) this._plugin.core = Array.isArray(this._config.corePlugins) ? Object.assign({}, ...(this._config.corePlugins as string[]).map(i => ({ [i]: true }))) : { ...Object.assign({}, ...Object.keys(pluginOrder).slice(Object.keys(pluginOrder).length/2).map(i => ({ [i]: true }))), ...this._config.corePlugins };
     return this._config;
   }
