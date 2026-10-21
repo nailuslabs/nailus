@@ -1,7 +1,8 @@
 import { getNestedValue, hash, deepCopy, testRegexr, guessClassName, toArray } from '../utils/tools';
 import { negative, breakpoints } from '../utils/helpers';
 import { Keyframes, Container, Property, Style, StyleSheet } from '../utils/style';
-import { resolveVariants } from './variants';
+import { resolveVariants, generateDynamicVariants } from './variants';
+import type { VariantResolver } from './variants';
 import { staticUtilities, dynamicUtilities } from './utilities';
 import { createHandler, HandlerCreator } from './utilities/handler';
 import extract, { generateStaticStyle } from './extract';
@@ -54,6 +55,8 @@ export class Processor {
   private _config: Config;
   private _theme: Config['theme'];
   private _variants: ResolvedVariants = {};
+  private _dynamicVariants: VariantResolver[] = [];
+  private _variantCache: Map<string, (() => Style) | null> = new Map();
   private _cache: ProcessorCache = {
     count: 0,
     html: [],
@@ -251,6 +254,8 @@ export class Processor {
     this._config = this._resolveFunction(this._config);
     this._variants = { ...this._variants, ... this.resolveVariants() };
     this._cache.variants = Object.keys(this._variants);
+    this._dynamicVariants = generateDynamicVariants(this._config);
+    this._variantCache.clear();
     this._loadVariables();
     this._loadFontFaces();
     if (this._config.corePlugins) this._plugin.core = Array.isArray(this._config.corePlugins) ? Object.assign({}, ...(this._config.corePlugins as string[]).map(i => ({ [i]: true }))) : { ...Object.assign({}, ...Object.keys(pluginOrder).slice(Object.keys(pluginOrder).length/2).map(i => ({ [i]: true }))), ...this._config.corePlugins };
@@ -294,6 +299,27 @@ export class Processor {
     return this._cache.variants;
   }
 
+  /**
+   * Retourne la fabrique de Style d'un variant : statique (hover, md, dark…)
+   * ou dynamique (aria-[x=y], min-[500px], has-[:checked], [&>div]…).
+   */
+  getVariant(name: string): (() => Style) | undefined {
+    if (Object.prototype.hasOwnProperty.call(this._variants, name)) return this._variants[name];
+    const cached = this._variantCache.get(name);
+    if (cached !== undefined) return cached ?? undefined;
+    let found: (() => Style) | undefined;
+    for (const resolve of this._dynamicVariants) {
+      found = resolve(name);
+      if (found) break;
+    }
+    this._variantCache.set(name, found ?? null);
+    return found;
+  }
+
+  hasVariant(name: string): boolean {
+    return !!this.getVariant(name);
+  }
+
   wrapWithVariants(variants: string[], styles: Style | Style[]): Style[] | undefined {
     // apply variant to style
     if (!Array.isArray(styles)) styles = [styles];
@@ -303,8 +329,9 @@ export class Processor {
       if (style instanceof Keyframes) return style;
       const atrules:string[] = [];
       let wrapped = variants
-        .filter(i => this._variants?.[i])
-        .map(i => this._variants[i]())
+        .map(i => this.getVariant(i))
+        .filter((factory): factory is () => Style => !!factory)
+        .map(factory => factory())
         .reduce((previousValue: Style, currentValue: Style) => {
           const output = previousValue.extend(currentValue);
           if (previousValue.isAtrule) atrules.push((previousValue.atRules as string[])[0]);
@@ -365,7 +392,7 @@ export class Processor {
     ignoreProcessed = false,
     handleIgnored?: (ignored:string) => Style | Style[] | undefined
   ): { success: string[]; ignored: string[]; styleSheet: StyleSheet } {
-    const ast = new ClassParser(classNames, this.config('separator', ':') as string, this._cache.variants).parse();
+    const ast = new ClassParser(classNames, this.config('separator', ':') as string, (variant) => this.hasVariant(variant)).parse();
     const success: string[] = [];
     const ignored: string[] = [];
     const styleSheet = new StyleSheet();
@@ -379,8 +406,9 @@ export class Processor {
         } else {
           ignored.push(className);
         }
+      } else {
+        ignored.push(className);
       }
-      ignored.push(className);
     };
 
     const _gStyle = (
@@ -482,7 +510,7 @@ export class Processor {
   }
 
   validate(classNames: string): { success: Validata[]; ignored: Validata[] } {
-    const ast = new ClassParser(classNames, this.config('separator', ':') as string, this._cache.variants).parse();
+    const ast = new ClassParser(classNames, this.config('separator', ':') as string, (variant) => this.hasVariant(variant)).parse();
     const success: Validata[] = [];
     const ignored: Validata[] = [];
 
@@ -520,7 +548,7 @@ export class Processor {
         _hSuccess(selector, self, parent);
         return;
       }
-      if (this.test(baseClass, prefix) && variants.filter(i => !(i in this._variants)).length === 0) {
+      if (this.test(baseClass, prefix) && variants.every(i => this.hasVariant(i))) {
         _hSuccess(selector, self, parent);
       } else {
         _hIgnored(selector, self, parent);
@@ -588,7 +616,7 @@ export class Processor {
     className?: string;
     styleSheet: StyleSheet;
   } {
-    const ast = new ClassParser(classNames, this.config('separator', ':') as string, this._cache.variants).parse();
+    const ast = new ClassParser(classNames, this.config('separator', ':') as string, (variant) => this.hasVariant(variant)).parse();
     const success: string[] = [];
     const ignored: string[] = [];
     const styleSheet = new StyleSheet();
@@ -605,8 +633,9 @@ export class Processor {
         } else {
           ignored.push(className);
         }
+      } else {
+        ignored.push(className);
       }
-      ignored.push(className);
     };
 
     const _gStyle = (
@@ -726,7 +755,7 @@ export class Processor {
       let keys = key.split(separator || ':');
       const lastKey = keys.slice(-1)[0];
 
-      if (lastKey in this._variants && lastKey !== 'svg') {
+      if (this.hasVariant(lastKey) && lastKey !== 'svg') {
         variants = [...keys, ...variants];
       } else if (id in this._variants && id !== 'svg') {
         // sm = ... || sm:hover = ... || sm-hover = ...
@@ -933,7 +962,7 @@ export class Processor {
           style.selector = buildSelector;
           this.markAsImportant(style, important);
         }
-        if (variants.find(i => !(i in this._variants))) {
+        if (!variants.every(i => this.hasVariant(i))) {
           ignored.push(buildSelector);
         } else {
           const wrapped = this.wrapWithVariants(variants, style);
@@ -1003,6 +1032,7 @@ export class Processor {
     this._config = this._resolveFunction(this._config);
     this._theme = this._config.theme;
     this._variants = { ...this._variants, ...this.resolveVariants() };
+    this._variantCache.clear();
     handler(this.pluginUtils);
   }
 
@@ -1041,7 +1071,7 @@ export class Processor {
 
   loadAlias(alias: { [key:string]: string }): void {
     for (const [key, value] of Object.entries(alias)) {
-      this._plugin.alias[key] = new ClassParser(value, undefined, this._cache.variants).parse();
+      this._plugin.alias[key] = new ClassParser(value, undefined, (variant) => this.hasVariant(variant)).parse();
     }
   }
 
@@ -1230,6 +1260,7 @@ export class Processor {
       style: new Style(),
     });
     this._variants[name] = () => style;
+    this._variantCache.clear();
     this._cache.variants.push(name);
     return style;
   }

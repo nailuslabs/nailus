@@ -22,6 +22,9 @@ export function resolveVariants(config: Config): Variants {
   };
 }
 
+export { generateDynamicVariants } from './dynamic';
+export type { VariantFactory, VariantResolver } from './dynamic';
+
 export {
   generateOrientations,
   generateScreens,

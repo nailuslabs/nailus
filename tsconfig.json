@@ -1,9 +1,16 @@
 {
   "compilerOptions": {
+    "target": "es2022",
+    "jsx": "preserve",
+    "lib": [
+      "es2022", 
+      "esnext.disposable", 
+      "dom",
+      "esnext"
+    ],
+
     "rootDir": ".",
-    "target": "es2017",
     "module": "esnext",
-    "lib": ["dom", "es2017", "dom.iterable", "scripthost"],
     "allowJs": true,
     "strict": true,
     "esModuleInterop": true,

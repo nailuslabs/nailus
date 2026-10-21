@@ -6,11 +6,22 @@ export default class ClassParser {
   separator: string;
   variants: string[];
   classNames?: string;
+  private _isVariant: (variant: string) => boolean;
 
-  constructor(classNames?: string, separator = ':', variants?: string[]) {
+  /**
+   * @param variants liste statique de variants connus, ou prédicat permettant de
+   * reconnaître aussi des variants dynamiques (`aria-[x=y]`, `min-[500px]`…).
+   */
+  constructor(classNames?: string, separator = ':', variants?: string[] | ((variant: string) => boolean)) {
     this.classNames = classNames;
     this.separator = separator;
-    this.variants = variants || [];
+    if (typeof variants === 'function') {
+      this.variants = [];
+      this._isVariant = variants;
+    } else {
+      this.variants = variants || [];
+      this._isVariant = (variant) => this.variants.includes(variant);
+    }
     this.index = 0;
   }
 
@@ -56,7 +67,7 @@ export default class ClassParser {
         if (this.classNames.slice(this.index, this.index + sepLength) === this.separator) {
           variant = this.classNames.slice(variantStart, this.index);
           if (variant.charAt(0) === '!') variant = variant.slice(1,);
-          if (this.variants.includes(variant)) {
+          if (this._isVariant(variant)) {
             variants.push(variant);
             this.index += sepLength - 1;
             variantStart = this.index + 1;
