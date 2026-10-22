@@ -1,22 +1,41 @@
 import { Lexer } from './lexer';
 import { Parser } from './parser';
 import { connect } from './utils';
-import { TokenType, BinOp, UnaryOp, Num, Var, Assign, Update, Import, Load, JS, NoOp, Str, Template, Program, Block, PropDecl, StyleDecl, Console, List, Tuple, Params, Dict, Bool, None, Func, Lambda, Return, Yield, Raise, Continue, Break, If, While, With, Try, Apply, Attr, Del, Instance, Await, For } from './tokens';
-import type { Operand } from './tokens';
+import { 
+  TokenType, BinOp, UnaryOp, Num, Var, Assign, Update, Import, Load, JS, 
+  NoOp, Str, Template, Program, Block, PropDecl, StyleDecl, Console, List, 
+  Tuple, Params, Dict, Bool, None, Func, Lambda, Return, Yield, Raise, 
+  Continue, Break, If, While, With, Try, Apply, Attr, Del, Instance, Await, For 
+} from './tokens';
+import type { Statement, Expression } from './tokens';
 
+/**
+ * Le Transformer (ou Générateur de code) parcourt l'AST généré par le Parser
+ * et produit le code JavaScript équivalent sous forme de chaîne de caractères.
+ */
 export default class Transformer {
-  parser: Parser;
-  code: string[] = [];
+  private readonly parser: Parser;
+  private code: string[] = [];
 
   constructor(parser: Parser) {
     this.parser = parser;
   }
 
-  error(msg = 'Transformer Error'): never {
-    throw Error(msg);
+  /**
+   * Lève une erreur de transformation.
+   */
+  private error(msg = 'Transformer Error'): never {
+    throw new Error(`[Transformer Error] ${msg}`);
   }
 
-  visit(node: Operand): string | number | boolean | string[] | void {
+  /**
+   * Point d'entrée pour visiter un nœud. Redirige vers la bonne méthode `visit_*`.
+   * NOTE : Le retour est typé `any` car les littéraux renvoient des primitives 
+   * (number, boolean) tandis que les structures renvoient du code (string).
+   * La méthode `stringify` s'assure que tout finit en string.
+   */
+  private visit(node: Statement | Expression | null | undefined): any {
+    if (!node) return '';
     if (node instanceof Program) return this.visit_Program(node);
     if (node instanceof Block) return this.visit_Block(node);
     if (node instanceof PropDecl) return this.visit_PropDecl(node);
@@ -48,7 +67,7 @@ export default class Transformer {
     if (node instanceof Num) return this.visit_Num(node);
     if (node instanceof Bool) return this.visit_Boolean(node);
     if (node instanceof Await) return this.visit_Await(node);
-    if (node instanceof None) return this.visit_None(node);
+    if (node instanceof None) return this.visit_None();
     if (node instanceof List) return this.visit_List(node);
     if (node instanceof Instance) return this.visit_Instance(node);
     if (node instanceof Tuple) return this.visit_Tuple(node);
@@ -57,325 +76,424 @@ export default class Transformer {
     if (node instanceof UnaryOp) return this.visit_UnaryOp(node);
     if (node instanceof BinOp) return this.visit_BinOp(node);
     if (node instanceof NoOp) return this.visit_NoOp();
-    this.error();
+    
+    this.error(`Unknown node type: ${(node as any).constructor.name}`);
   }
 
-  visit_Num(node: Num): number {
+  /**
+   * Force la conversion du résultat d'un `visit` en chaîne de caractères.
+   * Utile pour les littéraux (Num renvoie un number, Bool renvoie un boolean).
+   */
+  private stringify(node: Statement | Expression): string {
+    const result = this.visit(node);
+    return String(result);
+  }
+
+  // =========================================================================
+  // LITTERALS & PRIMITIVES
+  // =========================================================================
+
+  private visit_Num(node: Num): number {
     return node.value;
   }
 
-  visit_Boolean(node: Bool): boolean {
+  private visit_Boolean(node: Bool): boolean {
     return node.value;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  visit_None(node: None): undefined {
-    return undefined;
+  private visit_None(): string {
+    // En JS, l'équivalent de Python's None est null (ou undefined)
+    return 'null';
   }
 
-  visit_List(node: List): string {
-    return `[${node.values.map(i => this.visit(i)).join(', ')}]`;
+  private visit_Str(node: Str): string {
+    return `"${node.value}"`;
   }
 
-  visit_Tuple(node: Tuple): string {
-    return `[${node.values.map(i => this.visit(i)).join(', ')}]`;
+  private visit_JS(node: JS): string {
+    return node.code;
   }
 
-  visit_Params(node: Params): string {
-    return node.values.map(i => this.visit(i)).join(', ');
+  // =========================================================================
+  // COLLECTIONS
+  // =========================================================================
+
+  private visit_List(node: List): string {
+    return `[${node.values.map(i => this.stringify(i)).join(', ')}]`;
   }
 
-  visit_Dict(node: Dict): string {
-    const output:string[] = [];
+  private visit_Tuple(node: Tuple): string {
+    // En JS, on simule les tuples avec des tableaux
+    return `[${node.values.map(i => this.stringify(i)).join(', ')}]`;
+  }
+
+  private visit_Params(node: Params): string {
+    return node.values.map(i => this.stringify(i)).join(', ');
+  }
+
+  private visit_Dict(node: Dict): string {
+    const output: string[] = [];
     for (const [key, value] of node.pairs) {
-      output.push(`${typeof key === 'number'? key: '"' + key + '"'}: ${this.visit(value)}`);
+      const keyStr = typeof key === 'number' ? key : `"${key}"`;
+      output.push(`${keyStr}: ${this.stringify(value)}`);
     }
-    return `{  \n  ${output.join(',\n  ')}\n}`;
+    return `{\n  ${output.join(',\n  ')}\n}`;
   }
 
-  visit_Func(node: Func): string {
-    return node.name ? `${node.async?'async ':''}function ${node.name}(${node.params.join(', ')}) {
-${connect(this.visit_Block(node.block))}
-}` : `(${node.async?'async ':''}function (${node.params.join(', ')}) {
-${connect(this.visit_Block(node.block))}
-})`;
+  // =========================================================================
+  // VARIABLES & OPÉRATIONS
+  // =========================================================================
+
+  private visit_Var(node: Var): string {
+    return node.value;
   }
 
-  visit_Instance(node: Instance): string {
-    return `new ${node.name}${node.params ? `(${node.params.map(i => this.visit(i)).join(', ')})`: ''}`;
+  private visit_Assign(node: Assign): string {
+    return `let ${node.left.value} = ${this.stringify(node.right)}`;
   }
 
-  visit_Lambda(node: Lambda): string {
-    return node.name ? `const ${node.name} = ${node.async?'async ':''}(${node.params.join(', ')}) => ${this.visit(node.expr)}`: `(${node.async?'async ':''}(${node.params.join(', ')}) => ${this.visit(node.expr)})`;
+  private visit_Update(node: Update): string {
+    return `${node.left.value} = ${this.stringify(node.right)}`;
   }
 
-  visit_If(node: If): string {
-    let state = `if (${this.visit(node.if_block[0])}) {\n  ${connect(this.visit_Block(node.if_block[1]))}\n}`;
-    state += node.elif_blocks?.map(([expr, block]) => {
-      return ` else if (${this.visit(expr)}) {\n  ${connect(this.visit_Block(block))}\n}`;
-    }).join('') ?? '';
-    if (node.else_block) state += ` else {\n  ${connect(this.visit_Block(node.else_block))}\n}`;
+  private visit_Apply(node: Apply): string {
+    return `__interpret__(${this.stringify(node.value)})`;
+  }
+
+  private visit_Attr(node: Attr): string {
+    return `__attributify__("${node.attr}", ${this.stringify(node.value)})`;
+  }
+
+  private visit_BinOp(node: BinOp): string {
+    const left = this.stringify(node.left);
+    const right = this.stringify(node.right);
+
+    switch (node.op.type) {
+      case TokenType.PLUS: return `__add__(${left}, ${right})`;
+      case TokenType.MINUS: return `__minus__(${left}, ${right})`;
+      case TokenType.MUL: return `__mul__(${left}, ${right})`;
+      case TokenType.DIV: return `__div__(${left}, ${right})`;
+      case TokenType.MOD: return `__mod__(${left}, ${right})`;
+      case TokenType.EXP: return `__exp__(${left}, ${right})`;
+      case TokenType.EQUAL: return `${left} === ${right}`;
+      case TokenType.NOTEQUAL: return `${left} !== ${right}`;
+      case TokenType.GERATER: return `${left} > ${right}`;
+      case TokenType.GERATEREQUAL: return `${left} >= ${right}`;
+      case TokenType.LESS: return `${left} < ${right}`;
+      case TokenType.LESSEQUAL: return `${left} <= ${right}`;
+      case TokenType.OR: return `${left} || ${right}`;
+      case TokenType.AND: return `${left} && ${right}`;
+      case TokenType.IN: return `__in__(${left}, ${right})`;
+      case TokenType.NOTIN: return `!(__in__(${left}, ${right}))`;
+      case TokenType.LPAREN: return `${left}(${right})`;
+      case TokenType.LSQUARE: return `${left}[${right}]`;
+      case TokenType.DOT: return `${left}.${right}`;
+      case TokenType.COMMA: return `${left}, ${right}`;
+    }
+    this.error(`Unknown binary operator: ${node.op.type}`);
+  }
+
+  private visit_UnaryOp(node: UnaryOp): string {
+    const value = this.stringify(node.expr);
+    switch (node.op.type) {
+      case TokenType.PLUS: return `__positive__(${value})`;
+      case TokenType.MINUS: return `__negative__(${value})`;
+      case TokenType.NO:
+      case TokenType.NOT: return `!(${value})`;
+    }
+    this.error(`Unknown unary operator: ${node.op.type}`);
+  }
+
+  // =========================================================================
+  // FONCTIONS & CLASSES
+  // =========================================================================
+
+  private visit_Func(node: Func): string {
+    const asyncKw = node.async ? 'async ' : '';
+    const body = connect(this.visit_Block(node.block));
+    
+    if (node.name) {
+      return `${asyncKw}function ${node.name}(${node.params.join(', ')}) {\n${body}\n}`;
+    }
+    return `(${asyncKw}function (${node.params.join(', ')}) {\n${body}\n})`;
+  }
+
+  private visit_Lambda(node: Lambda): string {
+    const asyncKw = node.async ? 'async ' : '';
+    const params = node.params.join(', ');
+    const expr = this.stringify(node.expr);
+    
+    if (node.name) {
+      return `const ${node.name} = ${asyncKw}(${params}) => ${expr}`;
+    }
+    return `(${asyncKw}(${params}) => ${expr})`;
+  }
+
+  private visit_Instance(node: Instance): string {
+    const params = node.params ? `(${node.params.map(i => this.stringify(i)).join(', ')})` : '';
+    return `new ${node.name}${params}`;
+  }
+
+  // =========================================================================
+  // STRUCTURES DE CONTRÔLE
+  // =========================================================================
+
+  private visit_If(node: If): string {
+    const cond = this.stringify(node.if_block[0]);
+    const body = connect(this.visit_Block(node.if_block[1]));
+    
+    let state = `if (${cond}) {\n${body}\n}`;
+    
+    if (node.elif_blocks) {
+      for (const [elifCond, elifBlock] of node.elif_blocks) {
+        state += ` else if (${this.stringify(elifCond)}) {\n${connect(this.visit_Block(elifBlock))}\n}`;
+      }
+    }
+    
+    if (node.else_block) {
+      state += ` else {\n${connect(this.visit_Block(node.else_block))}\n}`;
+    }
+    
     return state;
   }
 
-  visit_For(node: For): string {
+  private visit_For(node: For): string {
     const vars = node.variables.length === 1 ? node.variables[0] : `[${node.variables.join(', ')}]`;
-    let state = `for (let ${vars} of ${this.visit(node.iterable)}) {\n  ${connect(this.visit_Block(node.for_block))}\n}`;
-    if (node.else_block) state += `;\nif (true) {\n  ${connect(this.visit_Block(node.else_block))}\n}`;
-    return state;
-  }
-
-  visit_Try(node: Try): string {
-    let state = `try {\n  ${connect([...this.visit_Block(node.try_block), ...node.else_block? this.visit_Block(node.else_block): []])}\n}`;
-    let excepts = node.except_blocks?.map(([expr, block, alias], index) => {
-      return `${index === 0 ? 'if': 'else if'} (e${expr === 'Exception' ? '' : ` instanceof ${expr}`}) {\n  ${connect(alias ? [`let ${alias} = e`, ...this.visit_Block(block)]: this.visit_Block(block))}\n}`;
-    });
-    if (node.finally_except_block) excepts? excepts.push(`else {\n  ${connect(this.visit_Block(node.finally_except_block))}\n}`): excepts = [`  ${connect(this.visit_Block(node.finally_except_block))}`];
-    if (excepts) {
-      state += `catch(e) {\n  ${excepts.join(' ')}}`;
+    const iterable = this.stringify(node.iterable);
+    const body = connect(this.visit_Block(node.for_block));
+    
+    // NOTE : Le `else` d'une boucle Python s'exécute seulement si aucun `break` n'est survenu.
+    // Ici, on simule cela avec une variable booléenne (si le parser gère les breaks correctement).
+    // Pour rester compatible avec ton implémentation d'origine, on utilise la structure actuelle.
+    let state = `for (let ${vars} of ${iterable}) {\n${body}\n}`;
+    
+    if (node.else_block) {
+      // Simulation approximative d'un for-else : on l'exécute après la boucle.
+      state += `;\nif (true) {\n${connect(this.visit_Block(node.else_block))}\n}`;
     }
-    state += node.finally_block ? ` finally {\n  ${connect(this.visit_Block(node.finally_block))}\n}` : '';
+    
     return state;
   }
 
-  visit_While(node: While): string {
-    let state = `while (${this.visit(node.if_block[0])}) {\n  ${connect(this.visit_Block(node.if_block[1]))}\n}`;
-    if (node.else_block) state += `;\nif (!(${this.visit(node.if_block[0])})) {\n  ${connect(this.visit_Block(node.else_block))}\n}`;
+  private visit_While(node: While): string {
+    const cond = this.stringify(node.if_block[0]);
+    const body = connect(this.visit_Block(node.if_block[1]));
+    
+    let state = `while (${cond}) {\n${body}\n}`;
+    
+    if (node.else_block) {
+      // Même remarque que pour le For
+      state += `;\nif (!(${cond})) {\n${connect(this.visit_Block(node.else_block))}\n}`;
+    }
+    
     return state;
   }
 
-  visit_With(node: With): string {
-    return `() => {
-  let ${node.name} = ${this.visit(node.expr)};
-  ${connect(this.visit_Block(node.block))}
-}`;
+  private visit_Try(node: Try): string {
+    const tryBody = connect([
+      ...this.visit_Block(node.try_block), 
+      ...(node.else_block ? this.visit_Block(node.else_block) : [])
+    ]);
+    let state = `try {\n${tryBody}\n}`;
+
+    let excepts: string[] | undefined;
+    if (node.except_blocks) {
+      excepts = node.except_blocks.map(([expr, block, alias], index) => {
+        const kw = index === 0 ? 'if' : 'else if';
+        const condition = expr === 'Exception' ? '' : ` (e instanceof ${expr})`;
+        const aliasCode = alias ? `let ${alias} = e;\n  ` : '';
+        return `${kw}${condition} {\n  ${aliasCode}${connect(this.visit_Block(block))}\n}`;
+      });
+    }
+
+    if (node.finally_except_block) {
+      if (excepts) {
+        excepts.push(`else {\n  ${connect(this.visit_Block(node.finally_except_block))}\n}`);
+      } else {
+        excepts = [`  ${connect(this.visit_Block(node.finally_except_block))}`];
+      }
+    }
+
+    if (excepts) {
+      state += ` catch(e) {\n  ${excepts.join(' ')}\n}`;
+    }
+    
+    if (node.finally_block) {
+      state += ` finally {\n${connect(this.visit_Block(node.finally_block))}\n}`;
+    }
+    
+    return state;
   }
 
-  visit_Apply(node: Apply): string {
-    return `__interpret__(${this.visit(node.value)})`;
+  private visit_With(node: With): string {
+    return `(() => {\n  let ${node.name} = ${this.stringify(node.expr)};\n  ${connect(this.visit_Block(node.block))}\n})()`;
   }
 
-  visit_Attr(node: Attr): string {
-    return `__attributify__("${node.attr}", ${this.visit(node.value)})`;
+  // =========================================================================
+  // INSTRUCTIONS DIVERSES
+  // =========================================================================
+
+  private visit_Return(node: Return): string {
+    return `return ${this.stringify(node.value)}`;
   }
 
-  visit_Return(node: Return): string {
-    return `return ${this.visit(node.value)}`;
+  private visit_Await(node: Await): string {
+    return `await ${this.stringify(node.value)}`;
   }
 
-  visit_Await(node: Await): string {
-    return `await ${this.visit(node.value)}`;
+  private visit_Yield(node: Yield): string {
+    return `yield ${this.stringify(node.value)}`;
   }
 
-  visit_Yield(node: Yield): string {
-    return `yield ${this.visit(node.value)}`;
+  private visit_Del(node: Del): string {
+    return `delete ${this.stringify(node.value)}`;
   }
 
-  visit_Del(node: Del): string {
-    return `delete ${this.visit(node.value)}`;
+  private visit_Raise(node: Raise): string {
+    return `throw ${this.stringify(node.value)}`;
   }
 
-  visit_Raise(node: Raise): string {
-    return `throw ${this.visit(node.value)}`;
-  }
-
-  visit_Continue(): string {
+  private visit_Continue(): string {
     return 'continue';
   }
 
-  visit_Break(): string {
+  private visit_Break(): string {
     return 'break';
   }
 
-  visit_Template(node: Template): string {
+  private visit_Console(node: Console): string {
+    const expr = this.stringify(node.expr);
+    switch (node.type) {
+      case TokenType.LOG: return `console.log(${expr})`;
+      case TokenType.WARN: return `console.warn(${expr})`;
+      case TokenType.ERROR: return `console.error(${expr})`;
+      case TokenType.ASSERT: return `console.assert(${expr})`;
+    }
+    this.error(`Unknown console method: ${node.type}`);
+  }
+
+  // =========================================================================
+  // TEMPLATES & IMPORTS
+  // =========================================================================
+
+  private visit_Template(node: Template): string {
     const value = node.value;
     const len = value.length;
     let index = 0;
-    const output:string[] = [];
+    const output: string[] = [];
+
     while (index < len) {
       const char = value.charAt(index);
-      if(char === '$') {
-        if (value.charAt(index + 1) === '{') {
-          index += 2;
-          let exp = '';
-          while (value.charAt(index) !== '}' || value.charAt(index - 1) === '\\') {
-            exp += value.charAt(index);
-            index ++;
-          }
-          output.push(`\${${this.visit(new Parser(new Lexer(exp)).expr())}}`);
-          index ++;
-        } else {
-          output.push(char);
-          index ++;
+      if (char === '$' && value.charAt(index + 1) === '{') {
+        index += 2;
+        let exp = '';
+        
+        // CORRECTION : Ajout de la vérification `index < len` pour éviter le dépassement de tableau
+        while (index < len && (value.charAt(index) !== '}' || value.charAt(index - 1) === '\\')) {
+          exp += value.charAt(index);
+          index++;
         }
+        
+        // Parse l'expression interne et la génère
+        const parsedExpr = new Parser(new Lexer(exp)).parseExp();
+        output.push(`\${${this.stringify(parsedExpr)}}`);
+        index++; // Saute le '}'
       } else {
         output.push(char);
-        index ++;
+        index++;
       }
     }
     return `\`${output.join('')}\``;
   }
 
-  visit_Str(node: Str): string {
-    return `"${node.value}"`;
-  }
-
-  visit_JS(node: JS): string {
-    return node.code;
-  }
-
-  visit_Import(node: Import): string {
+  private visit_Import(node: Import): string {
     return node.urls.map(i => `__import__("${i}")`).join(';\n');
   }
 
-  visit_Load(node: Load): string {
-    const make_exports = (exports: {
-      [key: string]: string;
-    }) => {
-      const output:string[] = [];
+  private visit_Load(node: Load): string {
+    const make_exports = (exports: Record<string, string>): string => {
+      const output: string[] = [];
       for (const [key, value] of Object.entries(exports)) {
         output.push(key === value ? key : `${value} as ${key}`);
       }
       const items = output.join(', ');
-      return items.charAt(0) === '*' ? items :`{ ${items} }`;
+      return items.startsWith('*') ? items : `{ ${items} }`;
     };
 
     return node.modules.map(i => {
       if (i.default && i.exports) return `import ${i.default}, ${make_exports(i.exports)} from "${i.url}"`;
-      if (i.default) return `import ${i.default} from "${i.url}`;
+      if (i.default) return `import ${i.default} from "${i.url}"`; // Correction : guillemet manquant
       if (i.exports) return `import ${make_exports(i.exports)} from "${i.url}"`;
       return `import "${i.url}"`;
     }).join(';\n');
   }
 
-  visit_BinOp(node: BinOp): string {
-    const left_value = this.visit(node.left);
-    const right_value = this.visit(node.right);
+  // =========================================================================
+  // STYLES & BLOCS
+  // =========================================================================
 
-    switch (node.op.type) {
-    case TokenType.PLUS:
-      return `__add__(${left_value}, ${right_value})`;
-    case TokenType.MINUS:
-      return `__minus__(${left_value}, ${right_value})`;
-    case TokenType.MUL:
-      return `__mul__(${left_value}, ${right_value})`;
-    case TokenType.DIV:
-      return `__div__(${left_value}, ${right_value})`;
-    case TokenType.MOD:
-      return `__mod__(${left_value}, ${right_value})`;
-    case TokenType.EXP:
-      return `__exp__(${left_value}, ${right_value})`;
-    case TokenType.EQUAL:
-      return `${left_value} === ${right_value}`;
-    case TokenType.NOTEQUAL:
-      return `${left_value} !== ${right_value}`;
-    case TokenType.GERATER:
-      return `${left_value} > ${right_value}`;
-    case TokenType.GERATEREQUAL:
-      return `${left_value} >= ${right_value}`;
-    case TokenType.LESS:
-      return `${left_value} < ${right_value}`;
-    case TokenType.LESSEQUAL:
-      return `${left_value} <= ${right_value}`;
-    case TokenType.OR:
-      return `${left_value} || ${right_value}`;
-    case TokenType.AND:
-      return `${left_value} && ${right_value}`;
-    case TokenType.IN:
-      return `__in__(${left_value}, ${right_value})`;
-    case TokenType.NOTIN:
-      return `!(__in__(${left_value}, ${right_value}))`;
-    case TokenType.LPAREN:
-      return `${left_value}(${right_value})`;
-    case TokenType.LSQUARE:
-      return `${left_value}[${right_value}]`;
-    case TokenType.DOT:
-      return `${left_value}.${right_value}`;
-    case TokenType.COMMA:
-      return `${left_value}, ${right_value}`;
-    }
-    this.error();
+  private visit_PropDecl(node: PropDecl): string {
+    return `new Property("${node.name}", ${this.stringify(node.value)})`;
   }
 
-  visit_UnaryOp(node: UnaryOp): string {
-    const value = this.visit(node.expr);
-    switch (node.op.type) {
-    case TokenType.PLUS:
-      return `__positive__(${value})`;
-    case TokenType.MINUS:
-      return `__negative__(${value})`;
-    case TokenType.NO:
-    case TokenType.NOT:
-      return `!(${value})`;
-    }
-    this.error();
-  }
+  private visit_StyleDecl(node: StyleDecl): string {
+    const output: string[] = [];
+    output.push(`(() => {`);
+    output.push(`  const style = new Style("${node.selector}");`);
 
-  visit_Program(node: Program): void {
-    this.code = this.visit_Block(node.block);
-  }
-
-  visit_Console(node: Console): string {
-    switch (node.type) {
-    case TokenType.LOG:
-      return `console.log(${this.visit(node.expr)})`;
-    case TokenType.WARN:
-      return `console.warn(${this.visit(node.expr)})`;
-    case TokenType.ERROR:
-      return `console.error(${this.visit(node.expr)})`;
-    case TokenType.ASSERT:
-      return `console.assert(${this.visit(node.expr)})`;
-    }
-  }
-
-  visit_Block(node: Block): string[] {
-    const output:string[] = [];
-    [...node.statement_list, ...node.style_list].forEach(i => {
-      const result = this.visit(i);
-      if (result !== undefined) output.push(`${result}`);
+    // Traitement des instructions à l'intérieur du bloc style
+    node.children.statement_list.forEach(i => {
+      if (!(i instanceof NoOp)) {
+        output.push(`  ${this.stringify(i)};`);
+      }
     });
+
+    // Traitement des propriétés de style
+    node.children.style_list.forEach(i => {
+      const styleCode = this.visit(i);
+      if (styleCode) {
+        // CORRECTION : On utilise "styleCode" au lieu d'écraser la variable "style"
+        output.push(`  style.add(${styleCode});`);
+      }
+    });
+
+    output.push(`  return style;`);
+    output.push(`})()`);
+    
+    return output.join('\n');
+  }
+
+  // =========================================================================
+  // BLOCS & PROGRAMME
+  // =========================================================================
+
+  private visit_Block(node: Block): string[] {
+    const output: string[] = [];
+    
+    // On visite d'abord les instructions, puis les styles
+    const nodes = [...node.statement_list, ...node.style_list];
+    for (const n of nodes) {
+      const result = this.visit(n);
+      if (result !== undefined && result !== '') {
+        output.push(String(result));
+      }
+    }
+    
     return output;
   }
 
-  visit_PropDecl(node: PropDecl): string {
-    return `new Property("${node.name}", ${this.visit(node.value) as string})`;
+  private visit_Program(node: Program): void {
+    this.code = this.visit_Block(node.block);
   }
 
-  visit_StyleDecl(node: StyleDecl): string {
-    const output:string[] = [];
-    // const children = this.visit(node.children);
-    const block = node.children;
-    output.push(`(() => {\nconst style = new Style("${node.selector}")`);
-    block.statement_list.forEach(i => {
-      if (!(i instanceof NoOp)) {
-        output.push(`${this.visit(i)}`);
-      }
-    });
-    block.style_list.forEach(i => {
-      const style = this.visit(i);
-      if (style) output.push(`style.add(${style.toString()})`);
-    });
-    output.push('return style;\n})()');
-    return output.join(';\n');
-  }
-
-  visit_Assign(node: Assign): string {
-    return `let ${node.left.value} = ${this.visit(node.right)}`;
-  }
-
-  visit_Update(node: Update): string {
-    return `${node.left.value} = ${this.visit(node.right)}`;
-  }
-
-  visit_Var(node: Var): string {
-    return node.value;
-  }
-
-  visit_NoOp(): void {
+  private visit_NoOp(): void {
     return;
   }
 
-  transform(): string {
+  /**
+   * Lance la transformation et retourne le code JavaScript final.
+   */
+  public transform(): string {
     this.visit(this.parser.parse());
     return connect(this.code);
   }
